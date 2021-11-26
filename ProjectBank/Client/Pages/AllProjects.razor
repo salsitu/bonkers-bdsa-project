@@ -7,12 +7,7 @@
 
 
 
-@if(projects == null)
-{
-    <p><em>Loading...</em></p>
-}
-
-else if (projects != null)
+@if(projects != null)
 {
     <table class="table">
         <thead>
@@ -33,7 +28,21 @@ else if (projects != null)
     </table>
 }
 else{
-<p>test</p>}
+<table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+            </tr>
+            <tbody>
+                <tr>
+                    <td>Test</td>
+                    <td>ing</td>
+                </tr>
+            </tbody>
+        </thead>
+        
+    </table>}
 
 @code {
 
@@ -41,8 +50,12 @@ private Project[]? projects;
 
     protected override async Task OnInitializedAsync()
     {       
-      try  {
-                projects = await Http.GetFromJsonAsync<Project[]>("project");
+
+    projects = new Project[]{new Project{Title = "Project1", Description = "Project1Description"},
+                             new Project{Title = "Project2", Description = "Project2Description"},
+                             new Project{Title = "Project3", Description = "Project3Description"}};
+     /* try  {
+                projects = await Http.GetFromJsonAsync<Project[]>>("project");
                 
                 Console.WriteLine(projects);
             }
@@ -50,5 +63,6 @@ private Project[]? projects;
             {
                 
             }
+    */
     }
 }

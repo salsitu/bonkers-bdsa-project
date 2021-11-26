@@ -2,6 +2,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Identity.Web;
+using System.Data.SqlClient;
+using System.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Server.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,4 +46,20 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
+var configuration = LoadConfiguration();
+var connectionString = configuration.GetConnectionString("brave_archimedes");
+
+var optionsBuilder = new DbContextOptionsBuilder<ProjectBankContext>().UseSqlServer(connectionString);
+using var context = new ProjectBankContext(optionsBuilder.Options);
+
+
 app.Run();
+
+static IConfiguration LoadConfiguration() {
+    var builder = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json")
+        .AddUserSecrets<Program>();
+    
+    return builder.Build();
+}

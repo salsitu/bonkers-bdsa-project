@@ -5,10 +5,10 @@ using ProjectBank.Shared;
 
 namespace ProjectBank.Server.Controllers;
 
-//[Authorize]
+[Authorize]
 [ApiController]
-[Route("api/[controller]")]
-//[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+[Route("[controller]")]
+[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 public class WeatherForecastController : ControllerBase
 {
     private static readonly string[] Summaries = new[]

@@ -1,0 +1,19 @@
+@page "/project/{id:int}"
+@using ProjectBank.Shared;
+<h1>Project</h1>
+
+
+
+@code{
+[Parameter]
+public int Id {get; set;}
+
+private Project p;
+
+protected override async Task OnInitializedAsync()
+{
+
+}
+
+
+}

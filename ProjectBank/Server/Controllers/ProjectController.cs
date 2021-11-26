@@ -26,7 +26,6 @@ public class ProjectController : ControllerBase
         => await _repository.ReadAsync();
     */
 
-    [AllowAnonymous]
     [HttpGet]
     public IEnumerable<Project> Get()
     {

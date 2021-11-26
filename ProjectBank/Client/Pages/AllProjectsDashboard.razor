@@ -1,0 +1,48 @@
+@page "/projects"
+@inject HttpClient HttpClient
+@using ProjectBank.Shared
+
+<h1>All Projects</h1>
+<p>These are all projects currently available on Project Bank!</p>
+
+
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var project in Projects)
+            {
+                <tr>
+                    <td>@project.id</td>
+                    <td>@project.desc</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+@code {
+
+    private List<Project> Projects = new();
+    private Project SelectedProject = new();
+
+    protected override async Task OnInitializedAsync()
+    {       
+
+       Projects = await HttpClient.GetFromJsonAsync<List<Project>>("Project/List");
+    
+    
+    }
+    private async Task GetDetails(int Id)
+    {
+    SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{Id}");
+    }
+}

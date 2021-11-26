@@ -1,39 +1,39 @@
 using ProjectBank.Shared;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace ProjectBank.Server.Controllers;
 
-
-[ApiController]
 [Route("[controller]")]
-
+[ApiController]
 public class ProjectController : ControllerBase
 {
-    private readonly ILogger<ProjectController> _logger;
-    //private readonly ICharacterRepository _repository;
-
-    public ProjectController(ILogger<ProjectController> logger)
+    private List<Project> Projects = new()
     {
-        _logger = logger;
+        new(1, "Bennys bog1", "Desc1", "Benny", 2, 0.5f),
+        new(2, "Bennys bog2", "Desc2", "Benny", 2, 0.5f),
+        new(3, "Bennys bog3", "Desc3", "Benny", 2, 0.5f)
+    };
+
+    [HttpGet("{id}")]
+    public ActionResult Get(int id)
+    {
+        var project = Projects.Find(o => o.id == id);
+        if (project != null)
+        {
+            return Ok(project);
+        }
+        return NotFound();
     }
 
-    /*
-    [AllowAnonymous]
-    [HttpGet]
-    public async Task<IReadOnlyCollection<ProjectDTO>> Get()
-        => await _repository.ReadAsync();
-    */
-
-    [HttpGet]
-    public IEnumerable<Project> Get()
+    [HttpGet("List")]
+    public ActionResult Get()
     {
-        return Enumerable.Range(1, 5).Select(index => new Project
-        {
-            Title = "Test",
-            Description = "testing"
-        })
-       .ToArray();
+        return Ok(Projects);
     }
 }

@@ -1,7 +1,9 @@
 
-
-    public interface IUser
+namespace ProjectBank.Server
 {
-    int Id { get; set; }
-    string name { get; set; }
+    public interface IUser
+    {
+        int Id { get; set; }
+        string Name { get; set; }
+    }
 }

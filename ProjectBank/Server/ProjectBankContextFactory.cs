@@ -3,21 +3,24 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
-public class ProjectBankContextFactory: IDesignTimeDbContextFactory<ProjectBankContext>
+namespace ProjectBank.Server
 {
-    public ProjectBankContext CreateDbContext(string[] args)
+    public class ProjectBankContextFactory : IDesignTimeDbContextFactory<ProjectBankContext>
     {
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddUserSecrets<Program>()
-            .AddJsonFile("appsettings.json")
-            .Build();
-        
-        var connectionString = configuration.GetConnectionString("brave_archimedes");
+        public ProjectBankContext CreateDbContext(string[] args)
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddUserSecrets<Program>()
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-        var optionsBuilder = new DbContextOptionsBuilder<ProjectBankContext>()
-            .UseSqlServer(connectionString);
+            var connectionString = configuration.GetConnectionString("brave_archimedes");
 
-        return new ProjectBankContext(optionsBuilder.Options);
+            var optionsBuilder = new DbContextOptionsBuilder<ProjectBankContext>()
+                .UseSqlServer(connectionString);
+
+            return new ProjectBankContext(optionsBuilder.Options);
+        }
     }
 }

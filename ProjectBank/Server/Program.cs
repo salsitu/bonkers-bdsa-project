@@ -7,6 +7,7 @@ using System.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Server.Entities;
+using ProjectBank.Server;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,7 +1,11 @@
 
 
-    public class Student: IUser
+namespace ProjectBank.Server
 {
-    public int Id { get; set; }
-    public string name { get; set; }
+    public class Student : IUser
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public ICollection<Project>? Applications { get; set; }
+    }
 }

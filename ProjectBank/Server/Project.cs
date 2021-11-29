@@ -1,12 +1,18 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-    public class Project
+namespace ProjectBank.Server
 {
-    public int Id { get; set; }
-    public string name { get; set; }
-    public string desc { get; set; }
-    public string author { get; set; }
-    //public ICollection<int> applications { get; set; }
-    public int nrOfViews { get; set; }
-    public float ratio { get; set; }
+    public class Project
+    {
+        public int Id { get; set; }
+        [Required, StringLength(50)]
+        public string Name { get; set; }
+        [Required, StringLength(500)]
+        public string Desc { get; set; }
+        [Required]
+        public int AuthorId { get; set; }
+        public int NrOfViews { get; set; }
+        public ICollection<int>? Applicants { get; set; }
+    }
 }

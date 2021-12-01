@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProjectBank.Server
 {
-    public record ProjectCreateDTO([Required] string Name, string Desc, int AuthorId);
-    public record ProjectDTO(int Id, [Required] string Name, string Desc, int AuthorId) : ProjectCreateDTO(Name, Desc, AuthorId);
+    public record ProjectCreateDTO([Required] string Name, string Description, int AuthorId);
+    public record ProjectDTO(int Id, [Required] string Name, string Description, int AuthorId) : ProjectCreateDTO(Name, Description, AuthorId);
+    public record SimplifiedProjectDTO(int Id, [Required] string Name);
 }

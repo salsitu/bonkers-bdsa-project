@@ -25,20 +25,18 @@ public class ProjectRepositoryTests
         context.Database.EnsureCreated();
         context.Projects.Add(new Project{ Id = 1,
                                             Name = "huhu",
-                                            Desc = "jaja",
-                                            AuthorId = 1,
-                                            NrOfViews = 12,
-                                            Applicants = new HashSet<int>{ 1, 2 }});
+                                            Description = "jaja",
+                                            AuthorId = 1});
         context.Projects.Add(new Project { Id = 2, 
                                             Name = "hihi",
-                                            Desc = "dada",
-                                            AuthorId = 2,
-                                            NrOfViews = 10,
-                                            Applicants = new HashSet<int>{ 1, 2 }});
-        context.Supervisors.Add(new Supervisor{ Id = 1,
-                                                Name = "paolo"});
-        context.Students.Add(new Student {Id = 1,
-                                            Name = "Jakob"});
+                                            Description = "dada",
+                                            AuthorId = 2});
+        context.Users.Add(new User{ Id = 1,
+                                    Name = "paolo",
+                                    IsSupervisor = true});
+        context.Users.Add(new User{ Id = 2,
+                                    Name = "jakob",
+                                    IsSupervisor = false});
         context.SaveChanges();
         _context = context;
         _repo = new ProjectRepository(_context);
@@ -91,8 +89,28 @@ public class ProjectRepositoryTests
         Assert.Equal(Deleted, response);
     }
     [Fact]
-    public async Task UpdateViewsAsync_updates_NrOfViews_returns_response()
+    public async Task ListAllProjectsAsync_returns_all_existing_projects()
     {
-        var project = new ProjectDTO(2, "hihi", "dada", 2);
+        var projectList = await _repo.ListAllProjectsAsync();
+
+
+        Assert.Equal(new List<SimplifiedProjectDTO>{ new SimplifiedProjectDTO(1, "huhu"), new SimplifiedProjectDTO(2, "hihi")}, projectList);
     }
+    [Fact]
+    public async Task ListAllProjectsAsync_with_no_projects_returns_empty_list()
+    {
+        await _repo.DeleteAsync(1);
+        await _repo.DeleteAsync(2);
+        var projectList = await _repo.ListAllProjectsAsync();
+        var emptyList = new List<SimplifiedProjectDTO>();
+        Assert.Equal(emptyList, projectList);
+    }
+    [Fact]
+    public async Task ShowCreatedProjectsAsync_returns_authors_projects()
+    {
+        var createdProjects = await _repo.ShowCreatedProjectsAsync(1);
+
+        Assert.Equal(new List<SimplifiedProjectDTO> { new SimplifiedProjectDTO(1, "huhu") }, createdProjects);
+    }
+    
 }

@@ -20,7 +20,7 @@ namespace ProjectBank.Server
             var conflict =
                 await _context.Projects
                     .Where(p => p.Name == project.Name)
-                    .Select(p => new ProjectDTO(p.Id, p.Name, p.Desc, p.AuthorId))
+                    .Select(p => new ProjectDTO(p.Id, p.Name, p.Description, p.AuthorId))
                     .FirstOrDefaultAsync();
 
             if (conflict != null)
@@ -28,19 +28,19 @@ namespace ProjectBank.Server
                 return (Conflict, conflict);
             }
 
-            var entity = new Project { Name = project.Name, Desc = project.Desc, AuthorId = project.AuthorId };
+            var entity = new Project { Name = project.Name, Description = project.Description, AuthorId = project.AuthorId };
 
             _context.Projects.Add(entity);
 
             await _context.SaveChangesAsync();
 
-            return (Created, new ProjectDTO(entity.Id, entity.Name, entity.Desc, entity.AuthorId));
+            return (Created, new ProjectDTO(entity.Id, entity.Name, entity.Description, entity.AuthorId));
         }
         public async Task<ProjectDTO> ReadAsync(int projectId)
         {
             var projects = from p in _context.Projects
                            where p.Id == projectId
-                           select new ProjectDTO(p.Id, p.Name, p.Desc, p.AuthorId);
+                           select new ProjectDTO(p.Id, p.Name, p.Description, p.AuthorId);
 
             return await projects.FirstOrDefaultAsync();
         }
@@ -49,6 +49,7 @@ namespace ProjectBank.Server
             var entity =
                 await _context.Projects
                                 .FirstOrDefaultAsync(p => p.Id == projectId);
+            
 
             if (entity == null)
             {
@@ -60,13 +61,18 @@ namespace ProjectBank.Server
 
             return Deleted;
         }
-        public async Task<float> getRatio(int projectId)
+        public async Task<List<SimplifiedProjectDTO>> ListAllProjectsAsync()
         {
-            var project = ReadAsync(projectId);
-            if (project == null)
-            {
-                
-            }
+            var projects = from p in _context.Projects
+                           select new SimplifiedProjectDTO(p.Id, p.Name);
+            return projects.ToList();
+        }
+        public async Task<List<SimplifiedProjectDTO>> ShowCreatedProjectsAsync(int id)
+        {
+            var projects = from p in _context.Projects
+                           where p.Id == id
+                           select new SimplifiedProjectDTO(p.Id, p.Name);
+            return projects.ToList();
         }
     }
 }

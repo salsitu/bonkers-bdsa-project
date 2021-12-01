@@ -9,7 +9,7 @@ namespace ProjectBank.Server
         [Required, StringLength(50)]
         public string Name { get; set; }
         [Required, StringLength(500)]
-        public string Desc { get; set; }
+        public string Description { get; set; }
         [Required]
         public int AuthorId { get; set; }
     }

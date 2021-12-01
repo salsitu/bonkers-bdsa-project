@@ -15,7 +15,7 @@ namespace ProjectBank.Server
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            var connectionString = configuration.GetConnectionString("brave_archimedes");
+            var connectionString = configuration.GetConnectionString("elated_babbage");
 
             var optionsBuilder = new DbContextOptionsBuilder<ProjectBankContext>()
                 .UseSqlServer(connectionString);

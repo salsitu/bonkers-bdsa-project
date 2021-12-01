@@ -12,7 +12,5 @@ namespace ProjectBank.Server
         public string Desc { get; set; }
         [Required]
         public int AuthorId { get; set; }
-        public int NrOfViews { get; set; }
-        public ICollection<int>? Applicants { get; set; }
     }
 }

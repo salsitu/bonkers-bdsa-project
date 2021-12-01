@@ -17,7 +17,8 @@ public class ProjectController : ControllerBase
     {
         new(1, "Bennys bog1", "Desc1", "Benny", 2, 0.5f),
         new(2, "Bennys bog2", "Desc2", "Benny", 2, 0.5f),
-        new(3, "Bennys bog3", "Desc3", "Benny", 2, 0.5f)
+        new(3, "Bennys bog3", "Desc3", "Benny", 2, 0.5f),
+        new(4, "Bennys bog4", "Desc4", "Benny", 2, 0.5f)
     };
 
     [HttpGet("{id}")]
@@ -30,7 +31,7 @@ public class ProjectController : ControllerBase
         }
         return NotFound();
     }
-
+    
     [HttpGet("List")]
     public ActionResult Get()
     {

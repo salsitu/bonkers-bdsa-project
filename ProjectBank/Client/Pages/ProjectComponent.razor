@@ -1,19 +1,42 @@
 @page "/project/{id:int}"
+@inject HttpClient HttpClient
 @using ProjectBank.Shared;
-<h1>Project</h1>
+<h1>Project is @id</h1>
 
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Author</th>
+                <th>Number of Views</th>
+                <th>Ratio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@SelectedProject.id</td>
+                <td>@SelectedProject.desc</td>
+                <td>@SelectedProject.author</td>
+                <td>@SelectedProject.nrOfViews</td>
+                <td>@SelectedProject.ratio</td>
+            </tr>
+        </tbody>
+    </table>
 
 
 @code{
-[Parameter]
-public int Id {get; set;}
 
-private Project p;
+[Parameter] public int id {get; set;}
+private Project SelectedProject = new();
 
-protected override async Task OnInitializedAsync()
-{
 
-}
+
+     protected override async Task OnInitializedAsync()
+    {
+        SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
+    }
 
 
 }

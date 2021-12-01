@@ -4,31 +4,72 @@
 <h1>@SelectedProject.name</h1>
 
 
- <table class="table">
-    <thead>
-        <th>Description</th>
-        <th>Number of views</th>
-    </thead>
-    <tbody>
-        <td>@SelectedProject.desc</td>
-        <td>@SelectedProject.nrOfViews</td>
-    </tbody>
-  </table>
+<div>
+    <div> <!--Statistics Div-->
+        <table>
+            <tr>
+                <th>Views</th>
+                <th>Applications</th>
+                <th>Ratio</th>
+            </tr>
+            <tr>
+                <th>20</th>
+                <th>3</th>
+                <th>@GetRatio(20, 3)</th>
+            </tr>
+        </table>
+    </div>
+    <div> <!--Div containing Title and desc-->
+        <div> <!-- Title-->
+
+        </div>
+        <div> <!-- Desc-->
+
+        </div>
+    </div>
+</div>
 
 <button>Apply for project</button>
 
 
 @code{
 
-[Parameter] public int id {get; set;}
-private Project SelectedProject = new();
+    [Parameter] public int id {get; set;}
+
+    private bool IsSupervisor;
+    private Project SelectedProject = new(1, "Bennys bog1", "Desc1", "Benny", 2, 0.5f);
+
 
 
 
     protected override async Task OnInitializedAsync()
     {
         SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
-        
+
+        SetPage()
+
+    }
+
+    public int GetRatio(int views, int applications) 
+    {
+        return views < 1 ? 0 : views/applications;
+    }
+
+    public int GetViews() 
+    {
+        return
+    }
+
+    public void SetPage() 
+    {
+       
+
+       GetViews()
+    }
+
+    public (int id, string name, supervisor boolean) GetUser()
+    {
+        return (1,Paolo, true);
     }
 
     

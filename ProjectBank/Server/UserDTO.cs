@@ -2,5 +2,6 @@
 
 namespace ProjectBank.Server
 {
-    public record UserCreateDTO([Required] int UserId, [Required] string Name, [Required] bool IsSupervisor);
+    public record UserCreateDTO([Required] string Name, [Required] bool IsSupervisor);
+    public record UserDTO(int Id, [Required] string Name, [Required] bool IsSupervisor);
 }

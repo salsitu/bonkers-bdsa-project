@@ -15,7 +15,6 @@
             <tr>
                 <th>20</th>
                 <th>3</th>
-                <th>@GetRatio(20, 3)</th>
             </tr>
         </table>
     </div>
@@ -37,7 +36,7 @@
     [Parameter] public int id {get; set;}
 
     private bool IsSupervisor;
-    private Project SelectedProject = new(1, "Bennys bog1", "Desc1", "Benny", 2, 0.5f);
+    private Project SelectedProject = new();
 
 
 
@@ -46,31 +45,10 @@
     {
         SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
 
-        SetPage()
-
+      
     }
 
-    public int GetRatio(int views, int applications) 
-    {
-        return views < 1 ? 0 : views/applications;
-    }
-
-    public int GetViews() 
-    {
-        return
-    }
-
-    public void SetPage() 
-    {
-       
-
-       GetViews()
-    }
-
-    public (int id, string name, supervisor boolean) GetUser()
-    {
-        return (1,Paolo, true);
-    }
+    
 
     
 

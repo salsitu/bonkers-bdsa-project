@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazored.Toast" Version="3.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.0" />
+    <PackageReference Include="Syncfusion.Blazor.Notifications" Version="19.3.0.56" />
   </ItemGroup>
 
   <ItemGroup>

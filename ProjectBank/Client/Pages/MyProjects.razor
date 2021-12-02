@@ -1,8 +1,53 @@
 @page "/myprojects"
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using ProjectBank.Shared
-@attribute [Authorize]
+@inject HttpClient HttpClient
+
+
 
 <h1>My Projects</h1>
 <p>These are all your projects on Project Bank!</p>
+
+  <table class="table">
+        <thead>
+            <tr>
+                <th>Project Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Author Id</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var project in Projects)
+            {
+                <tr>
+                   <td><a href="project/@project.id">@project.id</a></td>
+                    <td>@project.name</td>
+                    <td>@project.desc</td>
+                    <td>@project.authorid</td>
+                    <td><button>Delete Project</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+<style>
+    button{
+    background-color: #f44336;
+    }
+</style>
+
+
+@code
+{
+    
+
+ private List<Project> Projects = new();
+
+    protected override async Task OnInitializedAsync()
+    {       
+
+       Projects = await HttpClient.GetFromJsonAsync<List<Project>>("Project/Author/2");
+   
+    }
+}

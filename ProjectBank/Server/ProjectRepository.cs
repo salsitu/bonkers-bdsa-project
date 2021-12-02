@@ -63,16 +63,16 @@ namespace ProjectBank.Server
         }
         public async Task<List<SimplifiedProjectDTO>> ListAllProjectsAsync()
         {
-            var projects = from p in _context.Projects
-                           select new SimplifiedProjectDTO(p.Id, p.Name);
-            return projects.ToList();
+            var projects = await (from p in _context.Projects
+                           select new SimplifiedProjectDTO(p.Id, p.Name)).ToListAsync();
+            return projects;
         }
         public async Task<List<SimplifiedProjectDTO>> ShowCreatedProjectsAsync(int id)
         {
-            var projects = from p in _context.Projects
+            var projects = await (from p in _context.Projects
                            where p.Id == id
-                           select new SimplifiedProjectDTO(p.Id, p.Name);
-            return projects.ToList();
+                           select new SimplifiedProjectDTO(p.Id, p.Name)).ToListAsync();
+            return projects;
         }
     }
 }

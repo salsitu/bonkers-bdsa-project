@@ -2,6 +2,7 @@
 @using ProjectBank.Shared
 @inject HttpClient HttpClient
 @inject NavigationManager MyNavigationManager
+@inject IToastService toastService
 <h1>Create a project!</h1>
 <p>Fill in the form and click create!</p>
 
@@ -63,7 +64,11 @@
         project.name = Title;
         project.desc = Description;
         project.authorid = 2;
-        MyNavigationManager.NavigateTo("myprojects");        
+        if (true)
+        {
+             MyNavigationManager.NavigateTo("myprojects");
+            toastService.ShowSuccess("You successfully created the project");
+        }
 
     }
 }

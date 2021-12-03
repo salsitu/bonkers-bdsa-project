@@ -159,18 +159,18 @@ public class DBFacadeTests
         Assert.Equal(emptyListOfDTO,projects);
     }
 
-    /*
+    
     [Fact]
     public async Task ApplyToProject_returns_created_if_application_is_new()
     {
         var newProject = _repo.CreateProject("Machine Learning", "Body", 1);
 
-        var application = await _repo.ApplyToProject(newProject.id,2);
+        var application = await _repo.ApplyToProject(newProject.Result.Item2.Id,2);
 
         Assert.Equal(Created, application);
 
     }
-    */
+    
 
 
 

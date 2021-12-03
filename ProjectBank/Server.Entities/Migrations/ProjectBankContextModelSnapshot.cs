@@ -3,12 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProjectBank.Server;
 using ProjectBank.Server.Entities;
 
 #nullable disable
 
-namespace ProjectBank.Server.Migrations
+namespace Server.Entities.Migrations
 {
     [DbContext(typeof(ProjectBankContext))]
     partial class ProjectBankContextModelSnapshot : ModelSnapshot

@@ -4,16 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProjectBank.Server;
 using ProjectBank.Server.Entities;
 
 #nullable disable
 
-namespace ProjectBank.Server.Migrations
+namespace Server.Entities.Migrations
 {
     [DbContext(typeof(ProjectBankContext))]
-    [Migration("20211201152143_initialMigration")]
-    partial class initialMigration
+    [Migration("20211203163323_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +23,7 @@ namespace ProjectBank.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("ProjectBank.Server.Applicant", b =>
+            modelBuilder.Entity("ProjectBank.Server.Entities.Applicant", b =>
                 {
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
@@ -37,7 +36,7 @@ namespace ProjectBank.Server.Migrations
                     b.ToTable("Applicants");
                 });
 
-            modelBuilder.Entity("ProjectBank.Server.Project", b =>
+            modelBuilder.Entity("ProjectBank.Server.Entities.Project", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,7 +62,7 @@ namespace ProjectBank.Server.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("ProjectBank.Server.User", b =>
+            modelBuilder.Entity("ProjectBank.Server.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,7 +82,7 @@ namespace ProjectBank.Server.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ProjectBank.Server.View", b =>
+            modelBuilder.Entity("ProjectBank.Server.Entities.View", b =>
                 {
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");

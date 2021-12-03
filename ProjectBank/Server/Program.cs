@@ -48,7 +48,7 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 var configuration = LoadConfiguration();
-var connectionString = configuration.GetConnectionString("elated_babbage");
+var connectionString = configuration.GetConnectionString("serene_kepler");
 
 var optionsBuilder = new DbContextOptionsBuilder<ProjectBankContext>().UseSqlServer(connectionString);
 using var context = new ProjectBankContext(optionsBuilder.Options);

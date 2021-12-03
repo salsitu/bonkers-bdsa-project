@@ -15,24 +15,22 @@
                 <h2>Create Project</h2>
             </div>
             <div class="card-body">
-               
+                
 
                 <EditForm Model="@project" >
                     <DataAnnotationsValidator />
                
 
                     <div>
-                        <label>Project Title</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="project.name" @bind-Value:event="onchange" />
-                          
-                        </div>
+                         <div class="form-group">
+                               <label for="name">Title</label>
+                               <InputText id="name" @bind-Value="project.name" class="form-control" />
+                         </div>
                     </div>
                     <div class="desc-field">
-                        <label class="control-label col-md-12">Project Description</label>
+                        <label class="control-label col-md-12">Description</label>
                         <div class="col">
-                           <textarea @bind="Description" @bind:event="oninput" style="width: 100%; height: 100%">  </textarea>
-                          
+                           <textarea @bind="project.desc" @bind:event="oninput" style="width: 100%; height: 100%">  </textarea>
                         </div>
                     </div>
     
@@ -45,29 +43,26 @@
     </div>
 </div>
 
-<div>
-    Description: @Description
-</div>
-
 
 
 
 
 @code
 {
-    public string Description {get; set;} = string.Empty;
-    public string Title {get; set;} = string.Empty;
+
     private Project project = new();  
 
-    void createProject()
+    public async Task createProject()
     {
-        project.name = Title;
-        project.desc = Description;
         project.authorid = 2;
-        if (true)
-        {
-             MyNavigationManager.NavigateTo("myprojects");
-            toastService.ShowSuccess("You successfully created the project");
+        var response = await HttpClient.PostAsJsonAsync("Project/Post", project);
+ 
+        if (response.IsSuccessStatusCode)
+        {  MyNavigationManager.NavigateTo("myprojects");
+            toastService.ShowSuccess("You successfully created a project");
+            var created = await response.Content.ReadFromJsonAsync<Project>();
+            
+            
         }
 
     }

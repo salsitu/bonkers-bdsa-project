@@ -58,6 +58,7 @@ public class ProjectController : ControllerBase
         return Ok(Projects);
     }
 
+
     [HttpGet("Views/{id}")]
     public ActionResult GetViews(int projectid)
     {
@@ -77,3 +78,28 @@ public class ProjectController : ControllerBase
 
 
 }
+   
+    [HttpPost("Post")]
+    
+    public ActionResult Post(Project project)
+    {
+        var author = Supervisors.Find(o => o.Id == 2);
+        author.CreatedProjects.Add(project);
+
+        return Ok(author.CreatedProjects);
+    }
+
+    [HttpDelete("Delete/{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var project = Projects.Find(o => o.id == id);
+        if(project != null)
+        {
+            Projects.Remove(project);
+            return(Ok(project));
+        }
+        return NotFound();
+    }
+       
+}
+

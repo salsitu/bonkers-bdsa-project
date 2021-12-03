@@ -79,9 +79,6 @@ public class ProjectController : ControllerBase
         return Ok(); //Return enum, when merging with DB
     }
 
-
-
-  
     [HttpPost("Post")]
     public ActionResult Post(Project project)
     {

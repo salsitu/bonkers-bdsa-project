@@ -91,9 +91,9 @@
         Ratio =  Views < 1 ? 0 : Views/Applications;
     }
 
-    public void DeleteProject()
+    public async void DeleteProject()
     {
-
+         await HttpClient.DeleteAsync($"Project/Delete/{id}");
     }
 
     public async void ApplyForProject()

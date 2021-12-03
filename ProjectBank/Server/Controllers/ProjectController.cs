@@ -57,4 +57,23 @@ public class ProjectController : ControllerBase
     {
         return Ok(Projects);
     }
+
+    [HttpGet("Views/{id}")]
+    public ActionResult GetViews(int projectid)
+    {
+        Console.WriteLine("Me get views");
+        return Ok(22);
+    }
+
+    [HttpGet("Applications/{id}")]
+    public ActionResult GetApplications(int projectid)
+    {
+        Console.WriteLine("Trying to get applic");
+        return Ok(2);
+    }
+
+
+
+
+
 }

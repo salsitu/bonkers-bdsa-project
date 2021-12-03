@@ -5,7 +5,7 @@
 
 
 <div class="border">
-    <div> <!--Statistics Div-->
+    <div class="stats"> <!--Statistics Div-->
         <table>
             <tr>
                 <th>Views</th>
@@ -29,8 +29,8 @@
     </div>
 </div>
 
-<button hidden="@(!IsSupervisor)">Apply for project</button>
-<button hidden="@IsSupervisor">Delete project</button>
+<button hidden="@(!IsSupervisor)" @onclick="ApplyForProject">Apply for project</button>
+<button hidden="@IsSupervisor" @onclick="DeleteProject">Delete project</button>
 
 <button @onclick ="@Toggle">Toogle Supervisor</button>
 
@@ -41,8 +41,8 @@
     private bool IsSupervisor;
     private Project SelectedProject = new();
 
-    private int Views;
-    private int Applications;
+    private int Views = 0;
+    private int Applications = 0;
     private double Ratio;
 
 
@@ -52,9 +52,26 @@
     {
         SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
 
+        Views = await HttpClient.GetFromJsonAsync<int>($"Project/Views/{id}");
 
-        SetPage();
+        Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
 
+        SetRatio();
+
+        IsSupervisor = GetUser().supervisor;
+
+
+    }
+
+    public async Task SetViews() 
+    {
+        Views = await HttpClient.GetFromJsonAsync<int>($"Project/Views/{id}");
+
+    }
+
+    public async Task SetApplicants()
+    {
+        Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
     }
 
     public void Toggle()
@@ -62,37 +79,26 @@
         IsSupervisor = !IsSupervisor;
     }
 
-    public int GetRatio(int views, int applications) 
-    {
-        return views < 1 ? 0 : views/applications;
-    }
 
-
-
-    public void SetPage() 
-    {
-        Views = GetViews();
-        Applications = GetApplicants();
-        Ratio = GetRatio(Views, Applications);
-
-        IsSupervisor = GetUser().supervisor;
-    }
 
     public (int id, string name, bool supervisor) GetUser()
     {
         return (1,"Paolo", true);
     }
 
-
-
-    public int GetViews() 
+    public void SetRatio() 
     {
-        return 20;
+        Ratio =  Views < 1 ? 0 : Views/Applications;
     }
 
-    public int GetApplicants()
+    public void DeleteProject()
     {
-        return 4;
+        
+    }
+
+    public void ApplyForProject()
+    {
+        
     }
 
 }

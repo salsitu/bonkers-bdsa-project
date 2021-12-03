@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectBank.Server;
 
-namespace ProjectBank.Server
+namespace ProjectBank.Server.Entities
 {
     public class ProjectBankContext : DbContext
     {

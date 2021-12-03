@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using ProjectBank.Server;
-using static ProjectBank.Server.Response;
+using ProjectBank.Server.Entities;
+using static ProjectBank.Server.Entities.Response;
 using Xunit;
 
 

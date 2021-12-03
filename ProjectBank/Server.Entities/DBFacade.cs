@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using static ProjectBank.Server.Response;
+using static ProjectBank.Server.Entities.Response;
 using ProjectBank.Server;
 
-namespace ProjectBank.Server
+namespace ProjectBank.Server.Entities
 {
     public class DBFacade
     {

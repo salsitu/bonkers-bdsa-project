@@ -1,5 +1,5 @@
 
-namespace ProjectBank.Server
+namespace ProjectBank.Server.Entities
 {
     public enum Response
     {

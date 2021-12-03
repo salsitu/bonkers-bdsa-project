@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ProjectBank.Server
+namespace ProjectBank.Server.Entities
 {
     public class User
     {

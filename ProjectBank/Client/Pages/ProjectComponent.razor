@@ -93,12 +93,16 @@
 
     public void DeleteProject()
     {
-        
+
     }
 
-    public void ApplyForProject()
+    public async void ApplyForProject()
     {
-        
+        var studentid = 2;
+
+        var result = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}",studentid);
+        Console.WriteLine("Applied for project");
+
     }
 
 }

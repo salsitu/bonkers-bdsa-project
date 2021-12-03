@@ -72,6 +72,15 @@ public class ProjectController : ControllerBase
         Console.WriteLine("Trying to get applic");
         return Ok(2);
     }
+
+    [HttpPut("Apply/{projectId}")]
+    public ActionResult ApplyForProject(int projectid, [FromBody] int studentid)
+    {
+        return Ok(); //Return enum, when merging with DB
+    }
+
+
+
   
     [HttpPost("Post")]
     public ActionResult Post(Project project)

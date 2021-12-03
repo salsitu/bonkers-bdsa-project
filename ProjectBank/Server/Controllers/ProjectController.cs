@@ -13,12 +13,20 @@ namespace ProjectBank.Server.Controllers;
 [ApiController]
 public class ProjectController : ControllerBase
 {
-    private List<Project> Projects = new()
+    public List<Project> Projects = new()
     {
-        new(1, "Bennys bog1", "Desc1", "Benny", 2, 0.5f),
-        new(2, "Bennys bog2", "Desc2", "Benny", 2, 0.5f),
-        new(3, "Bennys bog3", "Desc3", "Benny", 2, 0.5f),
-        new(4, "Bennys bog4", "Desc4", "Benny", 2, 0.5f)
+        new(1, "Bennys bog1", "Desc1", 2, 2, 0.5f),
+        new(2, "Bennys bog2", "Desc2", 2, 2, 0.5f),
+        new(3, "Bennys bog3", "Desc3", 2, 2, 0.5f),
+        new(4, "Bennys bog4", "Desc4", 2, 2, 0.5f)
+    };
+
+    private List<Supervisor> Supervisors = new()
+    {
+        new(1, "Benny", new List<Project>() { new Project(1, "Bennys bog", "Bennys beskrivelse", 2, 2, 0.5f) }),
+        new(2, "Fanny", new List<Project>() { new Project(1, "Fannys bog", "Fannys beskrivelse", 2, 2, 0.5f) }),
+        new(3, "Dorte", new List<Project>() { new Project(1, "Dortes bog", "Dortes beskrivelse", 2, 2, 0.5f) }),
+        new(4, "Bentes", new List<Project>() { new Project(1, "Bentes bog", "Bentes beskrivelse", 2, 2, 0.5f) }),
     };
 
     [HttpGet("{id}")]
@@ -31,7 +39,19 @@ public class ProjectController : ControllerBase
         }
         return NotFound();
     }
-    
+
+    [HttpGet("Author/{authorid}")]
+    public ActionResult GetByAuthor(int authorid)
+    {
+        var author = Supervisors.Find(o => o.Id == authorid);
+        if (author != null)
+        {
+            return Ok(author.CreatedProjects);
+        }
+        return NotFound();
+    }
+
+
     [HttpGet("List")]
     public ActionResult Get()
     {

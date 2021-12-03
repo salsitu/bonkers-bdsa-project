@@ -39,7 +39,7 @@
     [Parameter] public int id {get; set;}
 
     private bool IsSupervisor;
-    private Project SelectedProject = new(1, "Bennys bog1", "Desc1", "Benny", 2, 0.5f);
+    private Project SelectedProject = new();
 
     private int Views;
     private int Applications;
@@ -51,6 +51,7 @@
     protected override async Task OnInitializedAsync()
     {
         SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
+
 
         SetPage();
 
@@ -81,6 +82,7 @@
     {
         return (1,"Paolo", true);
     }
+
 
 
     public int GetViews() 

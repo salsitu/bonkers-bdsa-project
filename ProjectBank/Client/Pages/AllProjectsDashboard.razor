@@ -25,7 +25,7 @@
                     <td><a href="project/@project.id">@project.id</a></td>
                     <td>@project.name</td>
                     <td>@project.desc</td>
-                    <td>@project.author</td>
+                    <td>@project.authorid</td>
                 </tr>
             }
         </tbody>
@@ -41,6 +41,6 @@
     {       
 
        Projects = await HttpClient.GetFromJsonAsync<List<Project>>("Project/List");
-   
+        
     }
 }

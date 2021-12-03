@@ -48,11 +48,11 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 var configuration = LoadConfiguration();
-var connectionString = configuration.GetConnectionString("brave_archimedes");
+var connectionString = configuration.GetConnectionString("elated_babbage");
 
 var optionsBuilder = new DbContextOptionsBuilder<ProjectBankContext>().UseSqlServer(connectionString);
 using var context = new ProjectBankContext(optionsBuilder.Options);
-
+ProjectBankContextFactory.Seed(context);
 
 app.Run();
 

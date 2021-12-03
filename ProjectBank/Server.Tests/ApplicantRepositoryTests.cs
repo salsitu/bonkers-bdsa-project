@@ -123,4 +123,18 @@ public class ApplicantRepositoryTests
 
         Assert.Equal(0, application);
     }
+    [Fact]
+    public async Task DeleteApplicationAsync_returns_deleted()
+    {
+        var application = await _repo.DeleteApplicationAsync(1);
+
+        Assert.Equal(Deleted, application);
+    }
+    [Fact]
+    public async Task DeleteApplicationAsync_returns_notFound()
+    {
+        var application = await _repo.DeleteApplicationAsync(120);
+
+        Assert.Equal(NotFound, application);
+    }
 }

@@ -44,5 +44,24 @@ namespace ProjectBank.Server
                                   select v).CountAsync();
             return projects;
         }
+        public async Task<Response> DeleteViewAsync(int projectId)
+        {
+            var entities =
+                    await (from v in _context.Views
+                           where v.ProjectId == projectId
+                           select new ViewCreateDTO(v.ProjectId, v.StudentId)).ToListAsync();
+
+
+            if (entities.Count == 0)
+            {
+                return NotFound;
+            }
+
+            _context.Views.RemoveRange(_context.Views.Where(v => v.ProjectId == projectId));
+
+            await _context.SaveChangesAsync();
+
+            return Deleted;
+        }
     }
 }

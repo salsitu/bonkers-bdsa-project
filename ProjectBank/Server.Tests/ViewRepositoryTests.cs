@@ -59,6 +59,11 @@ public class ViewRepositoryTests
             ProjectId = 1,
             StudentId = 2
         });
+        context.Views.Add(new View
+        {
+            ProjectId = 1,
+            StudentId = 5
+        });
         context.SaveChanges();
         _context = context;
         _repo = new ViewRepository(_context);
@@ -83,6 +88,20 @@ public class ViewRepositoryTests
     {
         var application = await _repo.GetViewsOfProjectAsync(1);
 
-        Assert.Equal(1, application);
+        Assert.Equal(2, application);
+    }
+    [Fact]
+    public async Task DeleteViewAsync_returns_deleted()
+    {
+        var application = await _repo.DeleteViewAsync(1);
+
+        Assert.Equal(Deleted, application);
+    }
+    [Fact]
+    public async Task DeleteViewAsync_returns_notFound()
+    {
+        var application = await _repo.DeleteViewAsync(120);
+
+        Assert.Equal(NotFound, application);
     }
 }

@@ -73,5 +73,24 @@ namespace ProjectBank.Server
                             select a).CountAsync();
             return projects;
         }
+        public async Task<Response> DeleteApplicationAsync(int projectId)
+        {
+            var entities =
+                    await (from a in _context.Applicants
+                           where a.ProjectId == projectId
+                           select new ApplicantCreateDTO(a.ProjectId, a.StudentId)).ToListAsync();
+
+
+            if (entities.Count == 0)
+            {
+                return NotFound;
+            }
+
+            _context.Applicants.RemoveRange(_context.Applicants.Where(a => a.ProjectId == projectId));
+
+            await _context.SaveChangesAsync();
+
+            return Deleted;
+        }
     }
 }

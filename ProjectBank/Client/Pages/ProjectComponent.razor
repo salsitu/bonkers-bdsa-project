@@ -4,7 +4,7 @@
 <h1>@SelectedProject.name</h1>
 
 
-<div>
+<div class="border">
     <div> <!--Statistics Div-->
         <table>
             <tr>
@@ -13,23 +13,26 @@
                 <th>Ratio</th>
             </tr>
             <tr>
-                <th>20</th>
-                <th>3</th>
+                <th>@Views</th>
+                <th>@Applications</th>
+                <th>@Ratio</th>
             </tr>
         </table>
     </div>
-    <div> <!--Div containing Title and desc-->
+    <div>
         <div> <!-- Title-->
-
+            <span>@SelectedProject.name</span>
         </div>
         <div> <!-- Desc-->
-
+            @SelectedProject.desc
         </div>
     </div>
 </div>
 
-<button>Apply for project</button>
+<button hidden="@(!IsSupervisor)">Apply for project</button>
+<button hidden="@IsSupervisor">Delete project</button>
 
+<button @onclick ="@Toggle">Toogle Supervisor</button>
 
 @code{
 
@@ -38,6 +41,10 @@
     private bool IsSupervisor;
     private Project SelectedProject = new();
 
+    private int Views;
+    private int Applications;
+    private double Ratio;
+
 
 
 
@@ -45,12 +52,47 @@
     {
         SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
 
-      
+
+        SetPage();
+
     }
 
-    
+    public void Toggle()
+    {
+        IsSupervisor = !IsSupervisor;
+    }
 
-    
+    public int GetRatio(int views, int applications) 
+    {
+        return views < 1 ? 0 : views/applications;
+    }
 
+
+
+    public void SetPage() 
+    {
+        Views = GetViews();
+        Applications = GetApplicants();
+        Ratio = GetRatio(Views, Applications);
+
+        IsSupervisor = GetUser().supervisor;
+    }
+
+    public (int id, string name, bool supervisor) GetUser()
+    {
+        return (1,"Paolo", true);
+    }
+
+
+
+    public int GetViews() 
+    {
+        return 20;
+    }
+
+    public int GetApplicants()
+    {
+        return 4;
+    }
 
 }

@@ -57,4 +57,17 @@ public class ProjectController : ControllerBase
     {
         return Ok(Projects);
     }
+    
+    [HttpDelete("Delete/{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var project = Projects.Find(o => o.id == id);
+        if(project != null)
+        {
+            Projects.Remove(project);
+            return(Ok(project));
+        }
+        return NotFound();
+    }
+       
 }

@@ -49,19 +49,20 @@
 
 @code
 {
-   
-    public Project project = new();  
 
-    void createProject()
+    private Project project = new();  
+
+    public async Task createProject()
     {
-        
-      
         project.authorid = 2;
-        if (true)
-        {
-            string success = "You successfully created Project: " + project.name;
-            MyNavigationManager.NavigateTo("myprojects");
-            toastService.ShowSuccess(success);
+        var response = await HttpClient.PostAsJsonAsync("Project/Post", project);
+ 
+        if (response.IsSuccessStatusCode)
+        {  MyNavigationManager.NavigateTo("myprojects");
+            toastService.ShowSuccess("You successfully created a project");
+            var created = await response.Content.ReadFromJsonAsync<Project>();
+            
+            
         }
 
     }

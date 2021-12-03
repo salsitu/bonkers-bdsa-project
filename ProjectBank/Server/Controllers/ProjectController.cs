@@ -57,7 +57,18 @@ public class ProjectController : ControllerBase
     {
         return Ok(Projects);
     }
+
     
+    [HttpPost("Post")]
+    
+    public ActionResult Post(Project project)
+    {
+        var author = Supervisors.Find(o => o.Id == 2);
+        author.CreatedProjects.Add(project);
+
+        return Ok(author.CreatedProjects);
+    }
+
     [HttpDelete("Delete/{id}")]
     public async Task<IActionResult> Delete(int id)
     {

@@ -91,14 +91,18 @@
         Ratio =  Views < 1 ? 0 : Views/Applications;
     }
 
-    public void DeleteProject()
+    public async void DeleteProject()
     {
-        
+         await HttpClient.DeleteAsync($"Project/Delete/{id}");
     }
 
-    public void ApplyForProject()
+    public async void ApplyForProject()
     {
-        
+        var studentid = 2;
+
+        var result = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}",studentid);
+        Console.WriteLine("Applied for project");
+
     }
 
 }

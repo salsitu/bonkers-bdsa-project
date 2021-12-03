@@ -72,15 +72,8 @@ public class ProjectController : ControllerBase
         Console.WriteLine("Trying to get applic");
         return Ok(2);
     }
-
-
-
-
-
-}
-   
+  
     [HttpPost("Post")]
-    
     public ActionResult Post(Project project)
     {
         var author = Supervisors.Find(o => o.Id == 2);

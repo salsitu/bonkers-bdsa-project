@@ -12,11 +12,13 @@ namespace ProjectBank.Server.Entities
         private readonly ProjectBankContext _context;
         private readonly ProjectRepository _projectRepo;
         private readonly ApplicantRepository _applicantRepo;
+        private readonly ViewRepository _viewRepo;
         public DBFacade(ProjectBankContext context)
         {
             _context = context;
             _projectRepo = new ProjectRepository(context);
             _applicantRepo = new ApplicantRepository(context);
+            _viewRepo = new ViewRepository(context);
         }
 
         public Task<(Response, ProjectDTO)> CreateProject(string name, string description, int authorId)
@@ -46,9 +48,44 @@ namespace ProjectBank.Server.Entities
             return _projectRepo.ShowCreatedProjectsAsync(authorId);
         }
 
-        public Task<Response> ApplyToProject(int projectId, int StudentId)
+        public Task<Response> ApplyToProject(int projectId, int studentId)
         {
-            return _applicantRepo.ApplyToProjectAsync(projectId,StudentId);
+            return _applicantRepo.ApplyToProjectAsync(projectId, studentId);
+        }
+
+        public Task<Response> HasAlreadyAppliedToProject(int projectid, int studentId)
+        {
+            return _applicantRepo.HasAlreadyAppliedToProjectAsync(projectid,studentId);
+        }
+
+        public Task<List<SimplifiedProjectDTO>> ShowListOfAppliedProjects(int studentId)
+        {
+            return _applicantRepo.ShowListOfAppliedProjectsAsync(studentId);
+        }
+
+        public Task<int> SelectNrOfProjectApplications(int projectId)
+        {
+            return _applicantRepo.SelectNrOfProjectApplicationsAsync(projectId);
+        }
+
+        public Task<Response> DeleteApplications(int projectId)
+        {
+            return _applicantRepo.DeleteApplicationsAsync(projectId);
+        }
+
+        public Task<Response> AddView(int projectId, int studentId)
+        {
+            return _viewRepo.AddViewAsync(projectId,studentId);
+        }
+
+        public Task<int> GetViewsOfProject(int projectId)
+        {
+            return _viewRepo.GetViewsOfProjectAsync(projectId);
+        }
+
+        public Task<Response> DeleteViews(int projectId)
+        {
+            return _viewRepo.DeleteViewAsync(projectId);
         }
     }
 

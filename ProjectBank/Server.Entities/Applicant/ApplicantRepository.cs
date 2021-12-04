@@ -74,7 +74,7 @@ namespace ProjectBank.Server.Entities
                             select a).CountAsync();
             return projects;
         }
-        public async Task<Response> DeleteApplicationAsync(int projectId)
+        public async Task<Response> DeleteApplicationsAsync(int projectId)
         {
             var entities =
                     await (from a in _context.Applicants

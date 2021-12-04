@@ -39,6 +39,12 @@ public class DBFacadeTests
         context.Users.Add(new User{ Id = 2,
                                     Name = "jakob",
                                     IsSupervisor = false});
+        context.Users.Add(new User{ Id = 3,
+                                    Name = "Barto",
+                                    IsSupervisor = false});
+        context.Users.Add(new User{ Id = 4,
+                                    Name = "Dennis",
+                                    IsSupervisor = false});
         context.Applicants.Add(new Applicant
         {
             ProjectId = 1,
@@ -53,6 +59,16 @@ public class DBFacadeTests
         {
             ProjectId = 1,
             StudentId = 3,
+        });
+        context.Views.Add(new View
+        {
+            ProjectId = 1,
+            StudentId = 2
+        });
+        context.Views.Add(new View
+        {
+            ProjectId = 1,
+            StudentId = 5
         });
         context.SaveChanges();
         _context = context;
@@ -171,7 +187,143 @@ public class DBFacadeTests
         Assert.Equal(Created, application);
 
     }
-    
+
+
+    [Fact]
+
+    public async Task ApplyToProject_returns_conflict_if_application_already_exists()
+    {
+        var application = await _repo.ApplyToProject(1,2);
+
+        Assert.Equal(Conflict,application);
+    }
+
+    [Fact]
+
+    public async Task HasAlreadyAppliedToProject_returns_Exists_if_application_exists()
+    {
+        var application = await _repo.HasAlreadyAppliedToProject(1,2);
+
+        Assert.Equal(Exists,application);
+    }
+
+
+    [Fact]
+    public async Task HasAlreadyAppliedToProject_returns_NotFound_if_student_has_not_applied_yet()
+    {
+        var application = await _repo.HasAlreadyAppliedToProject(2,3);
+
+        Assert.Equal(NotFound,application);
+    }
+
+    [Fact]
+    public async Task ShowListOfApppliedProjects_returns_students_applications()
+    {
+        var projects = await _repo.ShowListOfAppliedProjects(2);
+
+        var expectedList = new List<SimplifiedProjectDTO>{new SimplifiedProjectDTO(1,"huhu"), new SimplifiedProjectDTO(2, "hihi")};
+
+        Assert.Equal(expectedList,projects);
+    }
+
+    [Fact]
+
+    public async Task ShowListOfAppliedProjects_returns_empty_list_if_student_has_no_applications()
+    {
+        var projects = await _repo.ShowListOfAppliedProjects(4);
+
+        Assert.Equal(new List<SimplifiedProjectDTO>{},projects);
+    }
+
+    [Fact]
+    public async Task SelectNrOfProjectApplications_returns_2_if_project_has_two_applications()
+    {
+        var applications = await _repo.SelectNrOfProjectApplications(2);
+
+        Assert.Equal(2,2);
+
+
+    }
+
+    [Fact]
+    public async Task SelectNrOfProjectApplications_returns_0_as_default_is_project_has_no_applications()
+    {
+        var applications = await _repo.SelectNrOfProjectApplications(4);
+
+        Assert.Equal(0,0);
+    }
+
+    [Fact]
+    public async Task DeleteApplications_returns_deleted_if_applications_for_a_project_have_been_deleted()
+    {
+        var response = await _repo.DeleteApplications(1);
+
+        Assert.Equal(Deleted,response);
+    }
+
+    [Fact]
+    public async Task DeleteApplications_returns_NotFound_if_project_has_no_applications()
+    {
+        var response = await _repo.DeleteApplications(4);
+
+        Assert.Equal(NotFound,response);
+    }
+
+    [Fact]
+
+    public async Task AddView_returns_created_if_student_had_not_previously_applied()
+    {
+        var response = await _repo.AddView(3,4);
+
+        Assert.Equal(Created,response);
+    }
+
+    [Fact]
+    public async Task AddView_returns_conflict_if_student_has_already_applied_for_project()
+    {
+        var response = await _repo.AddView(1,2);
+
+        Assert.Equal(Conflict,response);
+    }
+
+    [Fact]
+
+    public async Task GetViewsOfProject_returns_2_if_two_users_have_viewed_the_project()
+    {
+        var response = await _repo.GetViewsOfProject(1);
+
+        Assert.Equal(2,2);
+    }
+
+    [Fact]
+
+    public async Task GetViewsOfProjectReturns_0_If_no_users_have_viewed_the_project()
+    {
+        var project = _repo.CreateProject("temp project","body", 1);
+        var response = await _repo.GetViewsOfProject(3);
+
+        Assert.Equal(0,0);
+    }
+
+    [Fact]
+
+    public async Task DeleteViews_returns_deleted_if_views_of_project_have_been_deleted()
+    {
+        var response = await _repo.DeleteViews(1);
+
+        Assert.Equal(Deleted,response);
+    }
+
+    public async Task DeleteViews_returns_NotFound_if_project_has_no_views()
+    {
+        var response = await _repo.DeleteViews(4);
+
+        Assert.Equal(NotFound,response);
+    }
+
+
+
+
 
 
 

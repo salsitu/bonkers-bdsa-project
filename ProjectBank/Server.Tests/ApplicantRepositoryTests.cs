@@ -15,6 +15,7 @@ public class ApplicantRepositoryTests
 {
     private readonly ProjectBankContext _context;
     private readonly ApplicantRepository _repo;
+
     public ApplicantRepositoryTests()
     {
         var connection = new SqliteConnection("Filename=:memory:");
@@ -125,16 +126,16 @@ public class ApplicantRepositoryTests
         Assert.Equal(0, application);
     }
     [Fact]
-    public async Task DeleteApplicationAsync_returns_deleted()
+    public async Task DeleteApplicationAsync_returns_deleted_if_project_applications_have_been_deleted()
     {
-        var application = await _repo.DeleteApplicationAsync(1);
+        var application = await _repo.DeleteApplicationsAsync(1);
 
         Assert.Equal(Deleted, application);
     }
     [Fact]
-    public async Task DeleteApplicationAsync_returns_notFound()
+    public async Task DeleteApplicationAsync_returns_notFound_if_project_has_no_applications()
     {
-        var application = await _repo.DeleteApplicationAsync(120);
+        var application = await _repo.DeleteApplicationsAsync(3);
 
         Assert.Equal(NotFound, application);
     }

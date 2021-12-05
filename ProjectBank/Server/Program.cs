@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using ProjectBank.Server.Entities;
 using ProjectBank.Server;
+using Server.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.AddDbContext<ProjectBankContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("serene_kepler")));
+builder.Services.AddScoped<ProjectBankContext>();
+builder.Services.AddScoped<DBFacade>();
+
+
 
 var app = builder.Build();
 
@@ -47,20 +54,6 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
-var configuration = LoadConfiguration();
-var connectionString = configuration.GetConnectionString("serene_kepler");
-
-var optionsBuilder = new DbContextOptionsBuilder<ProjectBankContext>().UseSqlServer(connectionString);
-using var context = new ProjectBankContext(optionsBuilder.Options);
-ProjectBankContextFactory.Seed(context);
+await app.SeedAsync();
 
 app.Run();
-
-static IConfiguration LoadConfiguration() {
-    var builder = new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json")
-        .AddUserSecrets<Program>();
-    
-    return builder.Build();
-}

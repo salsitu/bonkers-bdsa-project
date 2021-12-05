@@ -23,15 +23,5 @@ namespace ProjectBank.Server.Entities
 
             return new ProjectBankContext(optionsBuilder.Options);
         }
-        public static async void Seed(ProjectBankContext context)
-        {
-            var facade = new DBFacade(context);
-            await facade.CreateProject("mAchine", "something about AI", 2);
-            var applicant = new ApplicantRepository(context);
-            await applicant.ApplyToProjectAsync(1, 2);
-            var view = new ViewRepository(context);
-            await view.AddViewAsync(1, 2);
-            context.SaveChanges();
-        }
     }
 }

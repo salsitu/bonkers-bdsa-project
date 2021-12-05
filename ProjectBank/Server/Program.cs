@@ -54,6 +54,7 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
+
 await app.SeedAsync();
 
 app.Run();

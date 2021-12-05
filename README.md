@@ -1,7 +1,7 @@
 # bonkers-bdsa-project
 BDSA2021 Final Project
 
-## How to setup SQL database and start up server (using powershell)
+## How to setup SQL database connection (using powershell)
 
 Navigate to `ProjectBank/Server` in a terminal.
 
@@ -33,6 +33,14 @@ Apply migration to database:
 
 `dotnet ef database update`
 
-Run server:
+## Start up server 
+Navigate to `ProjectBank/Server` in a terminal.
 
+Run the following command:
 `dotnet run`
+
+## Start client session
+Open browser (Firefox/Chrome/Safari/Edge)
+
+Input the following in the address bar: `localhost:5001`
+

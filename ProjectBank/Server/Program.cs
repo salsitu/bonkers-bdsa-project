@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectBank.Server.Entities;
 using ProjectBank.Server;
 using Server.Entities;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +23,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ProjectBankContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("serene_kepler")));
 builder.Services.AddScoped<ProjectBankContext>();
 builder.Services.AddScoped<DBFacade>();
-
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();
 

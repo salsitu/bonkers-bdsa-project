@@ -8,7 +8,7 @@
 
 
 <AuthorizeView>
-    Hello, @context.User.Claims.First( cl => cl.Type.ToString()=="preferred_username").Value
+    Hello, @context.User.Claims.First( cl => cl.Type.ToString()=="email").Value
 </AuthorizeView>
 
 Welcome to your new app.
@@ -18,6 +18,5 @@ Welcome to your new app.
 @code {
 
     //var authenticationState = await authenticationStateTask;
-    
-}
 
+}

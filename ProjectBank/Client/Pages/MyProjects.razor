@@ -1,0 +1,65 @@
+@page "/myprojects"
+@using ProjectBank.Shared
+@inject HttpClient HttpClient
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@inject IToastService toastService
+
+
+
+<h1>My Projects</h1>
+<p>These are all your projects on Project Bank!</p>
+
+
+    
+            @foreach(var project in Projects)
+            {
+               <div class="row justify-content-center">
+                  <div class="col-md-10">
+                     <div class="card mt-3 mb-3">
+                         <div class="card-header">
+                             <h2>@project.name</h2>
+                         </div>
+                        <div class="card-body">
+                            <h3>@project.desc</h3>
+                            <button @onclick="Delete">Delete</button>
+                        </div>
+                      </div>
+                   </div>
+                </div>
+
+            }
+<style>
+    h1, p, h2{
+        text-align:center !important;
+    }
+</style>
+
+
+@code
+{
+    
+
+ private List<Project> Projects = new();
+
+    protected override async Task OnInitializedAsync()
+    {       
+
+       Projects = await HttpClient.GetFromJsonAsync<List<Project>>("Project/Author/2");
+   
+    }
+    private async Task Delete()
+    {
+        if (await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the project?"))
+        {
+            await HttpClient.DeleteAsync($"Project/Delete/2");
+            string success = "You successfully deleted the project";
+     
+            toastService.ShowSuccess(success);
+
+            var uri = $"{NavigationManager.BaseUri}myprojects";
+
+            NavigationManager.NavigateTo(uri);
+        }
+    }
+}

@@ -1,0 +1,108 @@
+@page "/project/{id:int}"
+@inject HttpClient HttpClient
+@using ProjectBank.Shared;
+<h1>@SelectedProject.name</h1>
+
+
+<div class="border">
+    <div class="stats"> <!--Statistics Div-->
+        <table>
+            <tr>
+                <th>Views</th>
+                <th>Applications</th>
+                <th>Ratio</th>
+            </tr>
+            <tr>
+                <th>@Views</th>
+                <th>@Applications</th>
+                <th>@Ratio</th>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <div> <!-- Title-->
+            <span>@SelectedProject.name</span>
+        </div>
+        <div> <!-- Desc-->
+            @SelectedProject.desc
+        </div>
+    </div>
+</div>
+
+<button hidden="@(!IsSupervisor)" @onclick="ApplyForProject">Apply for project</button>
+<button hidden="@IsSupervisor" @onclick="DeleteProject">Delete project</button>
+
+<button @onclick ="@Toggle">Toogle Supervisor</button>
+
+@code{
+
+    [Parameter] public int id {get; set;}
+
+    private bool IsSupervisor;
+    private Project SelectedProject = new();
+
+    private int Views = 0;
+    private int Applications = 0;
+    private double Ratio;
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
+
+        Views = await HttpClient.GetFromJsonAsync<int>($"Project/Views/{id}");
+
+        Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
+
+        SetRatio();
+
+        IsSupervisor = GetUser().supervisor;
+
+
+    }
+
+    public async Task SetViews() 
+    {
+        Views = await HttpClient.GetFromJsonAsync<int>($"Project/Views/{id}");
+
+    }
+
+    public async Task SetApplicants()
+    {
+        Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
+    }
+
+    public void Toggle()
+    {
+        IsSupervisor = !IsSupervisor;
+    }
+
+
+
+    public (int id, string name, bool supervisor) GetUser()
+    {
+        return (1,"Paolo", true);
+    }
+
+    public void SetRatio() 
+    {
+        Ratio =  Views < 1 ? 0 : Views/Applications;
+    }
+
+    public async void DeleteProject()
+    {
+         await HttpClient.DeleteAsync($"Project/Delete/{id}");
+    }
+
+    public async void ApplyForProject()
+    {
+        var studentid = 2;
+
+        var result = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}",studentid);
+        Console.WriteLine("Applied for project");
+
+    }
+
+}

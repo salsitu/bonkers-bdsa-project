@@ -1,0 +1,9 @@
+div {
+    border-style: solid;
+    border-color: coral;
+}
+
+.stats {
+    height: 20%;
+    width: 10%;
+}

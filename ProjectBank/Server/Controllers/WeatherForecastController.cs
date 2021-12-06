@@ -23,6 +23,7 @@ public class WeatherForecastController : ControllerBase
         _logger = logger;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public IEnumerable<WeatherForecast> Get()
     {

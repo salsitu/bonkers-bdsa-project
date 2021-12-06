@@ -1,0 +1,69 @@
+@page "/project/create"
+@using ProjectBank.Shared
+@inject HttpClient HttpClient
+@inject NavigationManager MyNavigationManager
+@inject IToastService toastService
+<h1>Create a project!</h1>
+<p>Fill in the form and click create!</p>
+
+
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <h2>Create Project</h2>
+            </div>
+            <div class="card-body">
+                
+
+                <EditForm Model="@project" >
+                    <DataAnnotationsValidator />
+               
+
+                    <div>
+                         <div class="form-group">
+                               <label for="name">Title</label>
+                               <InputText id="name" @bind-Value="project.name" class="form-control" />
+                         </div>
+                    </div>
+                    <div class="desc-field">
+                        <label class="control-label col-md-12">Description</label>
+                        <div class="col">
+                           <textarea @bind="project.desc" @bind:event="oninput" style="width: 100%; height: 100%">  </textarea>
+                        </div>
+                    </div>
+    
+                </EditForm>
+                <div>
+                <button @onclick="createProject">Create Project</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@code
+{
+
+    private Project project = new();  
+
+    public async Task createProject()
+    {
+        project.authorid = 2;
+        var response = await HttpClient.PostAsJsonAsync("Project/Post", project);
+ 
+        if (response.IsSuccessStatusCode)
+        {  MyNavigationManager.NavigateTo("myprojects");
+            toastService.ShowSuccess("You successfully created a project");
+            var created = await response.Content.ReadFromJsonAsync<Project>();
+            
+            
+        }
+
+    }
+}

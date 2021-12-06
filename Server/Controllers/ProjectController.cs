@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace ProjectBank.Server.Controllers;
 
 [Route("[controller]")]
@@ -28,6 +27,7 @@ public class ProjectController : ControllerBase
         new(3, "Dorte", new List<Project>() { new Project(1, "Dortes bog", "Dortes beskrivelse", 2, 2, 0.5f) }),
         new(4, "Bentes", new List<Project>() { new Project(1, "Bentes bog", "Bentes beskrivelse", 2, 2, 0.5f) }),
     };
+
 
     [HttpGet("{id}")]
     public ActionResult Get(int id)

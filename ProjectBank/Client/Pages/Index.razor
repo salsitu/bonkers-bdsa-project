@@ -1,9 +1,23 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Index</PageTitle>
 
 <h1>Hello there!</h1>
 
-Welcome to Project Bank - Your hotspot to find a project
 
-<SurveyPrompt Title="How is Project Bank working for you?" />
+<AuthorizeView>
+    Hello, @context.User.Claims.First( cl => cl.Type.ToString()=="preferred_username").Value
+</AuthorizeView>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+@code {
+
+    //var authenticationState = await authenticationStateTask;
+    
+}
+

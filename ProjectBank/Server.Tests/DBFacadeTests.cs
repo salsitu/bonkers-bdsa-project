@@ -35,16 +35,20 @@ public class DBFacadeTests
                                             AuthorId = 2});
         context.Users.Add(new User{ Id = 1,
                                     Name = "paolo",
-                                    IsSupervisor = true});
+                                    IsSupervisor = true,
+                                    Email = "paolo@"});
         context.Users.Add(new User{ Id = 2,
                                     Name = "jakob",
-                                    IsSupervisor = false});
+                                    IsSupervisor = false,
+                                    Email = "jakob@"});
         context.Users.Add(new User{ Id = 3,
                                     Name = "Barto",
-                                    IsSupervisor = false});
+                                    IsSupervisor = false,
+                                    Email = "barto@"});
         context.Users.Add(new User{ Id = 4,
                                     Name = "Dennis",
-                                    IsSupervisor = false});
+                                    IsSupervisor = false,
+                                    Email = "Dennis@"});
         context.Applicants.Add(new Applicant
         {
             ProjectId = 1,
@@ -313,6 +317,7 @@ public class DBFacadeTests
 
         Assert.Equal(Deleted,response);
     }
+    [Fact]
 
     public async Task DeleteViews_returns_NotFound_if_project_has_no_views()
     {
@@ -320,7 +325,48 @@ public class DBFacadeTests
 
         Assert.Equal(NotFound,response);
     }
+    [Fact]
+    public async Task CreateUser_returns_created_and_new_user()
+    {
+        var created = await _repo.CreateUser("Karl", false, "Email@mei.dk");
 
+        Assert.Equal((Created, new UserDTO(5, "Karl", false, "Email@mei.dk")), created);
+    }
+    [Fact]
+    public async Task CreateUser_given_existing_User_returns_Conflict_and_user()
+    {
+        var created = await _repo.CreateUser("jakob", false, "jakob@");
+
+        Assert.Equal((Conflict, new UserDTO(2, "jakob", false, "jakob@")), created);
+    }
+    [Fact]
+    public async Task GetUser_returns_requested_user()
+    {
+        var user = await _repo.GetUser(2);
+
+        Assert.Equal(new UserDTO(2, "jakob", false, "jakob@"), user);
+    }
+    [Fact]
+    public async Task GetUser_returns_null_if_user_doesnt_exists()
+    {
+        var user = await _repo.GetUser(22);
+
+        Assert.Null(user);
+    }
+    [Fact]
+    public async Task GetUserWithEmail_returns_requested_user()
+    {
+        var user = await _repo.GetUserByEmail("jakob@");
+
+        Assert.Equal(new UserDTO(2, "jakob", false, "jakob@"), user);
+    }
+    [Fact]
+    public async Task GetUserWithEmail_returns_null_if_user_doesnt_exists()
+    {
+        var user = await _repo.GetUserByEmail("whateven@");
+
+        Assert.Null(user);
+    }
 
 
 

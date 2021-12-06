@@ -34,38 +34,63 @@ public class UserRepositoryTests
         {
             Id = 1,
             Name = "paolo",
-            IsSupervisor = true
+            IsSupervisor = true,
+            Email = "paolo@"
         });
         context.Users.Add(new User
         {
             Id = 2,
             Name = "jakob",
-            IsSupervisor = false
+            IsSupervisor = false,
+            Email = "jakob@"
         });
         context.SaveChanges();
         _context = context;
         _repo = new UserRepository(_context);
     }
-    //[Fact]
-    //public async Task CreateUserAsync_returns_created_and_new_user()
-    //{
-    //    var project = new UserCreateDTO("Karl", false);
-    //
-    //    var created = await _repo.CreateUserAsync(project);
-    //
-    //    Assert.Equal((Created, new UserDTO(3, "Karl", false)), created);
-    //}
+    [Fact]
+    public async Task CreateUserAsync_returns_created_and_new_user()
+    {
+        var user = new UserCreateDTO("Karl", false, "Email@mei.dk");
+    
+        var created = await _repo.CreateUserAsync(user);
+    
+        Assert.Equal((Created, new UserDTO(3, "Karl", false, "Email@mei.dk")), created);
+    }
+    [Fact]
+    public async Task CreateUserAsync_given_existing_User_returns_Conflict_and_user()
+    {
+        var user = new UserCreateDTO("jakob", false, "jakob@");
+
+        var created = await _repo.CreateUserAsync(user);
+
+        Assert.Equal((Conflict, new UserDTO(2, "jakob", false, "jakob@")), created);
+    }
     [Fact]
     public async Task GetUserAsync_returns_requested_user()
     {
         var user = await _repo.GetUserAsync(2);
 
-        Assert.Equal(new UserDTO(2, "jakob", false), user);
+        Assert.Equal(new UserDTO(2, "jakob", false, "jakob@"), user);
     }
     [Fact]
     public async Task GetUserAsync_returns_null_if_user_doesnt_exists()
     {
         var user = await _repo.GetUserAsync(4);
+
+        Assert.Null(user);
+    }
+    [Fact]
+    public async Task GetUserWithEmailAsync_returns_requested_user()
+    {
+        var user = await _repo.GetUserWithEmailAsync("jakob@");
+
+        Assert.Equal(new UserDTO(2, "jakob", false, "jakob@"), user);
+    }
+    [Fact]
+    public async Task GetUserWithEmailAsync_returns_null_if_user_doesnt_exists()
+    {
+        var user = await _repo.GetUserWithEmailAsync("whateven@");
 
         Assert.Null(user);
     }

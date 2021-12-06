@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjectBank.Server.Entities
@@ -11,5 +12,7 @@ namespace ProjectBank.Server.Entities
         public string Name { get; set; }
         [Required]
         public bool IsSupervisor { get; set; }
+        [Required]
+        public string Email { get; set; }
     }
 }

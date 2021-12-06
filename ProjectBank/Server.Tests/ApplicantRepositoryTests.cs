@@ -42,19 +42,22 @@ public class ApplicantRepositoryTests
         {
             Id = 1,
             Name = "paolo",
-            IsSupervisor = true
+            IsSupervisor = true,
+            Email = "paolo@"
         });
         context.Users.Add(new User
         {
             Id = 2,
             Name = "jakob",
-            IsSupervisor = false
+            IsSupervisor = false,
+            Email = "jakob@"
         });
         context.Users.Add(new User
         {
             Id = 3,
             Name = "troels",
-            IsSupervisor = false
+            IsSupervisor = false,
+            Email = "troels@"
         });
         context.Applicants.Add(new Applicant
         {

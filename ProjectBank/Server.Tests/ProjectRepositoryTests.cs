@@ -34,10 +34,12 @@ public class ProjectRepositoryTests
                                             AuthorId = 2});
         context.Users.Add(new User{ Id = 1,
                                     Name = "paolo",
-                                    IsSupervisor = true});
+                                    IsSupervisor = true,
+                                    Email = "paolo@"});
         context.Users.Add(new User{ Id = 2,
                                     Name = "jakob",
-                                    IsSupervisor = false});
+                                    IsSupervisor = false,
+                                    Email = "jakob@"});
         context.SaveChanges();
         _context = context;
         _repo = new ProjectRepository(_context);

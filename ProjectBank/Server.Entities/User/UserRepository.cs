@@ -15,21 +15,39 @@ namespace ProjectBank.Server.Entities
         {
             _context = context;
         }
-        //public async Task<(Response, UserDTO)> CreateUserAsync(UserCreateDTO user)
-        //{
-        //    var entity = new User { Name = user.Name, IsSupervisor = user.IsSupervisor};
-        //
-        //    _context.Users.Add(entity);
-        //
-        //    await _context.SaveChangesAsync();
-        //
-        //    return (Created, new UserDTO(entity.Id, entity.Name, entity.IsSupervisor));
-        //}
+        public async Task<(Response, UserDTO)> CreateUserAsync(UserCreateDTO user)
+        {
+            var conflict =
+                await _context.Users
+                .Where(u => u.Email == user.Email)
+                .Select(u => new UserDTO(u.Id, u.Name, u.IsSupervisor, u.Email))
+                .FirstOrDefaultAsync();
+
+            if (conflict != null)
+            {
+                return (Conflict, conflict);
+            }
+            var entity = new User { Name = user.Name, IsSupervisor = user.IsSupervisor, Email = user.Email};
+        
+            _context.Users.Add(entity);
+        
+            await _context.SaveChangesAsync();
+        
+            return (Created, new UserDTO(entity.Id, entity.Name, entity.IsSupervisor, entity.Email));
+        }
         public async Task<UserDTO> GetUserAsync(int userId)
         {
             var projects = from u in _context.Users
                            where u.Id == userId
-                           select new UserDTO(u.Id, u.Name, u.IsSupervisor);
+                           select new UserDTO(u.Id, u.Name, u.IsSupervisor, u.Email);
+
+            return await projects.FirstOrDefaultAsync();
+        }
+        public async Task<UserDTO> GetUserWithEmailAsync(string email)
+        {
+            var projects = from u in _context.Users
+                           where u.Email == email
+                           select new UserDTO(u.Id, u.Name, u.IsSupervisor, u.Email);
 
             return await projects.FirstOrDefaultAsync();
         }

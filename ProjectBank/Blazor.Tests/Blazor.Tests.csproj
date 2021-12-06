@@ -21,4 +21,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Client\ProjectBank.Client.csproj" />
+  </ItemGroup>
+
 </Project>

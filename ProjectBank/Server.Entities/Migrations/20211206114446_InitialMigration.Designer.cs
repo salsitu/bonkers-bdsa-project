@@ -11,7 +11,7 @@ using ProjectBank.Server.Entities;
 namespace Server.Entities.Migrations
 {
     [DbContext(typeof(ProjectBankContext))]
-    [Migration("20211203163323_InitialMigration")]
+    [Migration("20211206114446_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,6 +69,10 @@ namespace Server.Entities.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsSupervisor")
                         .HasColumnType("bit");

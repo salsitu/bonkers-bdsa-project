@@ -13,13 +13,13 @@ Set password variable:
 
 `$password = New-Guid`
 
-Run Microsoft Sql Server in docker: 
-
-`docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$password" -p 1433:1433 --name serene_kepler -d mcr.microsoft.com/mssql/server:2019-latest`
-
 Set database name variable:
 
-`$database = serene_kepler`
+`$database = sql_server`
+
+Run Microsoft Sql Server in docker: 
+
+`docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$password" -p 1433:1433 --name $database -d mcr.microsoft.com/mssql/server:2019-latest`
 
 Set connnectionString variable: 
 
@@ -27,7 +27,7 @@ Set connnectionString variable:
 
 Update the connectionString in Server.csproj:
 
-`dotnet user-secrets set "ConnectionStrings:serene_kepler" "$connectionString"` 
+`dotnet user-secrets set "ConnectionStrings:$database" "$connectionString"`
 
 Apply migration to database: 
 

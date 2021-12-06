@@ -23,7 +23,7 @@ Set database name variable:
 
 Set connnectionString variable: 
 
-`connectionString = "Server=localhost;Database=$database;User Id=sa;Password=$password;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=true"`
+`$connectionString = "Server=localhost;Database=$database;User Id=sa;Password=$password;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=true"`
 
 Update the connectionString in Server.csproj:
 

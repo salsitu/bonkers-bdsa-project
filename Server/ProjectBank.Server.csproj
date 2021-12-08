@@ -13,7 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.0" />
 
     <PackageReference Include="Syncfusion.Blazor.Notifications" Version="19.3.0.56" />
-
+    
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

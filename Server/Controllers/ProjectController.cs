@@ -43,9 +43,9 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet("Email/{email}")]
-    public async Task<int> GetByEmail(string email)
+    public async Task<UserDTO> GetByEmail(string email)
     {
-        return await _repository.GetUserIdWithEmailAsync(email);
+        return await _repository.GetUserByEmail(email);
     }
 
 

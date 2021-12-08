@@ -2,34 +2,40 @@
 @using ProjectBank.Shared
 @inject HttpClient HttpClient
 @inject IJSRuntime JSRuntime
-@inject NavigationManager NavigationManager
+@inject NavigationManager MyNavigationManager
 @inject IToastService toastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 
 <h1>My Projects</h1>
-<p>These are all your projects on Project Bank!</p>
+
+@if (Projects.Count != 0)
+{
+    <p>These are all your projects on Project Bank!</p>
 
 
-    
-            @foreach(var project in Projects)
-            {
-               <div class="row justify-content-center">
-                  <div class="col-md-10">
-                     <div class="card mt-3 mb-3">
-                         <div class="card-header">
-                             <h2>@project.Name</h2>
-                         </div>
-                        <div class="card-body">
-                            <h3>@project.Description</h3>
-                            <button @onclick="Delete">Delete</button>
-                            @currentProject = project;
-                        </div>
-                      </div>
-                   </div>
+
+    @foreach (var project in Projects)
+    {
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card mt-3 mb-3">
+                    <div class="card-header">
+                      <h2><a href="project/@project.Id">@project.Name</a></h2>
+                    </div>
+                    <div class="card-body">
+                        <h3>@project.Description</h3>
+                        <button @onclick="() => Selected(project)">Delete</button>
+                        
+                    </div>
                 </div>
+            </div>
+        </div>
 
-            }
+    }
+}else{
+    <p>You currently do not have any projects!</p>
+}
 <style>
     h1, p, h2{
         text-align:center !important;
@@ -41,36 +47,39 @@
 {
 
 
-    private List<SharedProject> Projects = new();
+    private List<Project> Projects = new();
     private int authorId;
-    private SharedProject currentProject;
+    private Project currentProject;
 
     protected override async Task OnInitializedAsync()
     {       
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
-            
-        authorId = await HttpClient.GetFromJsonAsync<int>($"Email/{email}");
-       
 
-        Projects = await HttpClient.GetFromJsonAsync<List<SharedProject>>($"Project/Author/{authorId}");
+        var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
+        Console.WriteLine(user.Name, user.IsSupervisor, user.Email);
+
+        Projects = await HttpClient.GetFromJsonAsync<List<Project>>($"Project/Author/{user.Id}");
     }
 
-    
+    private async Task Selected(Project p)
+    {
+        currentProject = p;
+        await Delete();
+    }
 
     private async Task Delete()
-    {
+    {   
         if (await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the project?"))
         {
-            
+
             await HttpClient.DeleteAsync($"Project/Delete/{currentProject.Id}");
             string success = "You successfully deleted the project";
-     
+
             toastService.ShowSuccess(success);
-
-            var uri = $"{NavigationManager.BaseUri}myprojects";
-
-            NavigationManager.NavigateTo(uri);
+            //MEGET SCUFFED FIX TIL AT DEN IKKE RELOADER SIDEN - HURTIGT GÅ TIL ANDEN SIDE OG DEREFTER TILBAGE
+            MyNavigationManager.NavigateTo("allprojects");
+            MyNavigationManager.NavigateTo("myprojects");
         }
     }
 }

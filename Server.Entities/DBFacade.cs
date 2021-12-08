@@ -44,7 +44,7 @@ namespace ProjectBank.Server.Entities
         {
             return _projectRepo.ListAllProjectsAsync();
         }
-
+        
         public Task<List<SimplifiedProjectDTO>> ShowCreatedProjects(int authorId)
         {
             return _projectRepo.ShowCreatedProjectsAsync(authorId);
@@ -103,12 +103,10 @@ namespace ProjectBank.Server.Entities
         {
             return _userRepo.GetUserWithEmailAsync(email);
         }
-
-        public Task<int> GetUserIdWithEmailAsync(string email)
+        public Task<int> GetUserIdByEmail(string email)
         {
             return _userRepo.GetUserIdWithEmailAsync(email);
         }
-
     }
 
 }

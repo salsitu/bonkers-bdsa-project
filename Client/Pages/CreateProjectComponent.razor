@@ -1,5 +1,6 @@
 @page "/project/create"
 @using ProjectBank.Shared
+@using ProjectBank.Server.Entities
 @inject HttpClient HttpClient
 @inject NavigationManager MyNavigationManager
 @inject IToastService toastService
@@ -56,21 +57,23 @@
 
     public async Task createProject()
     {
-
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
         var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
         Console.WriteLine(email);
-        project.AuthorId = await HttpClient.GetFromJsonAsync<int>($"Email/{email}");
+        var e = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
+        project.AuthorId = e.Id;
 
         var response = await HttpClient.PostAsJsonAsync("Project/Post", project);
-        
+
         if (response.IsSuccessStatusCode)
         {  MyNavigationManager.NavigateTo("myprojects");
             toastService.ShowSuccess("You successfully created a project");
             var created = await response.Content.ReadFromJsonAsync<SharedProject>();
-            
-            
+        }
+        else
+        {
+            toastService.ShowError("Error");
         }
 
     }

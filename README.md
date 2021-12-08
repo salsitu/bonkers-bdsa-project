@@ -15,7 +15,7 @@ Set password variable:
 
 Set database name variable:
 
-`$database = sql_server`
+`$database = "sql_server"`
 
 Run Microsoft Sql Server in docker: 
 

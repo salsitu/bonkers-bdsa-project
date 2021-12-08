@@ -36,12 +36,12 @@
 
 @code {
 
-    private List<Project> Projects = new();
+    private List<SharedProject> Projects = new();
 
     protected override async Task OnInitializedAsync()
     {       
 
-       Projects = await HttpClient.GetFromJsonAsync<List<Project>>("Project/List");
+       Projects = await HttpClient.GetFromJsonAsync<List<SharedProject>>("Project/List");
         
     }
 }

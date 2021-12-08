@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProjectBank.Shared;
 
-    public class Project
+    public class SharedProject
     {
         public int Id { get; set; }
         [Required, StringLength(50)]
@@ -13,5 +13,5 @@ namespace ProjectBank.Shared;
         [Required]
         public int AuthorId { get; set; }
 
-        public Project() { }
+        public SharedProject() { }
     }

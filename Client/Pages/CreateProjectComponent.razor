@@ -3,6 +3,8 @@
 @inject HttpClient HttpClient
 @inject NavigationManager MyNavigationManager
 @inject IToastService toastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
 <h1>Create a project!</h1>
 <p>Fill in the form and click create!</p>
 
@@ -50,17 +52,23 @@
 @code
 {
 
-    private Project project = new();  
+    private SharedProject project = new();  
 
     public async Task createProject()
     {
-        project.AuthorId = 2;
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
+        Console.WriteLine(email);
+        project.AuthorId = await HttpClient.GetFromJsonAsync<int>($"Email/{email}");
+
         var response = await HttpClient.PostAsJsonAsync("Project/Post", project);
- 
+        
         if (response.IsSuccessStatusCode)
         {  MyNavigationManager.NavigateTo("myprojects");
             toastService.ShowSuccess("You successfully created a project");
-            var created = await response.Content.ReadFromJsonAsync<Project>();
+            var created = await response.Content.ReadFromJsonAsync<SharedProject>();
             
             
         }

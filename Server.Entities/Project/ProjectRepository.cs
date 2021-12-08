@@ -70,8 +70,8 @@ namespace ProjectBank.Server.Entities
         }
         public async Task<List<SimplifiedProjectDTO>> ShowCreatedProjectsAsync(int id)
         {
-            var projects = await (from p in _context.Users
-                           where p.Id == id
+            var projects = await (from p in _context.Projects
+                           where p.AuthorId == id
                            select new SimplifiedProjectDTO(p.Id, p.Name)).ToListAsync();
             return projects;
         }

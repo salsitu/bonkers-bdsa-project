@@ -4,7 +4,7 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 @inject IToastService toastService
-
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 
 <h1>My Projects</h1>
@@ -23,6 +23,7 @@
                         <div class="card-body">
                             <h3>@project.Description</h3>
                             <button @onclick="Delete">Delete</button>
+                            @currentProject = project;
                         </div>
                       </div>
                    </div>
@@ -38,21 +39,31 @@
 
 @code
 {
-    
 
- private List<Project> Projects = new();
+
+    private List<SharedProject> Projects = new();
+    private int authorId;
+    private SharedProject currentProject;
 
     protected override async Task OnInitializedAsync()
     {       
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
+            
+        authorId = await HttpClient.GetFromJsonAsync<int>($"Email/{email}");
+       
 
-       Projects = await HttpClient.GetFromJsonAsync<List<Project>>("Project/Author/2");
-   
+        Projects = await HttpClient.GetFromJsonAsync<List<SharedProject>>($"Project/Author/{authorId}");
     }
+
+    
+
     private async Task Delete()
     {
         if (await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the project?"))
         {
-            await HttpClient.DeleteAsync($"Project/Delete/2");
+            
+            await HttpClient.DeleteAsync($"Project/Delete/{currentProject.Id}");
             string success = "You successfully deleted the project";
      
             toastService.ShowSuccess(success);

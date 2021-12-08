@@ -103,6 +103,12 @@ namespace ProjectBank.Server.Entities
         {
             return _userRepo.GetUserWithEmailAsync(email);
         }
+
+        public Task<int> GetUserIdWithEmailAsync(string email)
+        {
+            return _userRepo.GetUserIdWithEmailAsync(email);
+        }
+
     }
 
 }

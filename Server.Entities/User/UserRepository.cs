@@ -51,6 +51,15 @@ namespace ProjectBank.Server.Entities
 
             return await projects.FirstOrDefaultAsync();
         }
+
+        public async Task<int> GetUserIdWithEmailAsync(string email)
+        {
+            var userId = from u in _context.Users
+                       where u.Email == email
+                       select u.Id;
+
+            return await userId.FirstOrDefaultAsync();
+        }
     }
 
 }

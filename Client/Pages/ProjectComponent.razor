@@ -41,7 +41,7 @@
     [Parameter] public int id {get; set;}
 
     private bool IsSupervisor;
-    private Project SelectedProject = new();
+    private SharedProject SelectedProject = new();
 
     private int Views = 0;
     private int Applications = 0;
@@ -52,7 +52,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
+        SelectedProject = await HttpClient.GetFromJsonAsync<SharedProject>($"Project/{id}");
 
         Views = await HttpClient.GetFromJsonAsync<int>($"Project/Views/{id}");
 

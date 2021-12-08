@@ -42,6 +42,12 @@ public class ProjectController : ControllerBase
         return await _repository.ShowCreatedProjects(authorid);
     }
 
+    [HttpGet("Email/{email}")]
+    public async Task<int> GetByEmail(string email)
+    {
+        return await _repository.GetUserIdWithEmailAsync(email);
+    }
+
 
     [HttpGet("List")]
     public async Task<List<SimplifiedProjectDTO>> Get()
@@ -88,11 +94,9 @@ public class ProjectController : ControllerBase
 
     [HttpPost("Post")]
     [ProducesResponseType(typeof(ProjectDTO), 201)]
-    public async Task<ActionResult<(Response, ProjectDTO)>> Post(Entities.Project project) 
+    public async Task<(Response, ProjectDTO)> Post(Project project) 
     {
-        var created = await _repository.CreateProject(project.Name, project.Description, project.AuthorId);
-
-        return CreatedAtAction(nameof(Get), new { Entities.Response.Created }, created);
+        return await _repository.CreateProject(project.Name, project.Description, project.AuthorId);
     }
     
 

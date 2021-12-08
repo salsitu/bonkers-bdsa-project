@@ -1,8 +1,10 @@
 @page "/project/{id:int}"
 @inject HttpClient HttpClient
 @using ProjectBank.Shared
-
-
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager MyNavigationManager
+@inject IToastService toastService
+@inject IJSRuntime JSRuntime
 <h1>@SelectedProject.Name</h1>
 
 
@@ -22,19 +24,28 @@
         </table>
     </div>
     <div>
-        <div> <!-- Title-->
+        <div> <h2>Title</h2>
             <span>@SelectedProject.Name</span>
         </div>
-        <div> <!-- Desc-->
+        <div><h2>Description</h2>
             @SelectedProject.Description
         </div>
     </div>
 </div>
+@if (currentUser != null)
+{
+    @if (currentUser.IsSupervisor && currentUser.Id == SelectedProject.AuthorId)
+    {
+        <button @onclick="Delete">Delete project</button>
+    }else if (!currentUser.IsSupervisor)
+    {
+        <button @onclick="ApplyForProject">Apply for project</button>
 
-<button hidden="@(!IsSupervisor)" @onclick="ApplyForProject">Apply for project</button>
-<button hidden="@IsSupervisor" @onclick="DeleteProject">Delete project</button>
 
-<button @onclick ="@Toggle">Toogle Supervisor</button>
+    }
+}
+
+
 
 @code{
 
@@ -46,7 +57,7 @@
     private int Views = 0;
     private int Applications = 0;
     private double Ratio;
-
+    private UserDTO currentUser;
 
 
 
@@ -60,7 +71,11 @@
 
         SetRatio();
 
-        IsSupervisor = GetUser().supervisor;
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
+
+        var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
+        currentUser = user;
 
 
     }
@@ -93,9 +108,19 @@
         Ratio =  Views < 1 ? 0 : Views/Applications;
     }
 
-    public async void DeleteProject()
-    {
-         await HttpClient.DeleteAsync($"Project/Delete/{id}");
+    private async Task Delete()
+    {   
+        if (await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the project?"))
+        {
+
+            await HttpClient.DeleteAsync($"Project/Delete/{SelectedProject.Id}");
+            string success = "You successfully deleted the project";
+
+            toastService.ShowSuccess(success);
+            //MEGET SCUFFED FIX TIL AT DEN IKKE RELOADER SIDEN - HURTIGT GÅ TIL ANDEN SIDE OG DEREFTER TILBAGE
+            MyNavigationManager.NavigateTo("allprojects");
+            MyNavigationManager.NavigateTo("myprojects");
+        }
     }
 
     public async void ApplyForProject()

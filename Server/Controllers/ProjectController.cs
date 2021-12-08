@@ -47,7 +47,11 @@ public class ProjectController : ControllerBase
     {
         return await _repository.GetUserByEmail(email);
     }
-
+    [HttpGet("Student/{studentid}")]
+    public async Task<List<SimplifiedProjectDTO>> ShowListOfAppliedProjects(int studentId)
+    {
+        return await _repository.ShowListOfAppliedProjects(studentId);
+    }
 
     [HttpGet("List")]
     public async Task<List<SimplifiedProjectDTO>> Get()

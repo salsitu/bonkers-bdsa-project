@@ -34,6 +34,11 @@
         </div>
         <AuthorizeView Roles="Supervisor">
           <!--Only user with the role Supervisor should see this-->  
+          <div class="nav-item px-3">
+            <NavLink class="nav-link" href="myprojects">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Supervisor Test
+            </NavLink>
+        </div>
         </AuthorizeView>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="myprojects">

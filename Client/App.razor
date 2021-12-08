@@ -1,5 +1,5 @@
 ﻿<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(App).Assembly">
+    <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies"@_extraAssemblies">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
@@ -23,3 +23,11 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+
+@code {
+
+    public List<System.Reflection.Assembly> _extraAssemblies = new List<System.Reflection.Assembly>
+    {
+        typeof(Server.Entities._Project).Assembly
+    }
+}

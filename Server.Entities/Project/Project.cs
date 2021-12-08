@@ -12,5 +12,7 @@ namespace ProjectBank.Server.Entities
         public string Description { get; set; }
         [Required]
         public int AuthorId { get; set; }
+
+        public Project() { }
     }
 }

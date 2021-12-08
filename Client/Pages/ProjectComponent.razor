@@ -1,7 +1,9 @@
 @page "/project/{id:int}"
 @inject HttpClient HttpClient
-@using ProjectBank.Shared;
-<h1>@SelectedProject.name</h1>
+@using ProjectBank.Shared
+
+
+<h1>@SelectedProject.Name</h1>
 
 
 <div class="border">
@@ -21,10 +23,10 @@
     </div>
     <div>
         <div> <!-- Title-->
-            <span>@SelectedProject.name</span>
+            <span>@SelectedProject.Name</span>
         </div>
         <div> <!-- Desc-->
-            @SelectedProject.desc
+            @SelectedProject.Description
         </div>
     </div>
 </div>

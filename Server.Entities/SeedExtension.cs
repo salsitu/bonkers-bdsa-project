@@ -25,13 +25,24 @@ namespace Server.Entities
         }
         public static async Task SeedProjectAsync(ProjectBankContext context)
         {
-            await context.Database.MigrateAsync();
+            //await context.Database.MigrateAsync();
 
             var facade = new DBFacade(context);
-            await facade.CreateProject("mAchine", "something about AI", 2);
-            await facade.ApplyToProject(1, 2);
-            await facade.AddView(1, 2);
-            await facade.AddView(2, 2);
+            await facade.CreateUser("Gustav Holmgren", true, "guho@itu.dk");
+            await facade.CreateUser("Lukas", true, "luks@itu.dk");
+            await facade.CreateUser("Sam Al-Sapti", true, "sals@itu.dk");
+            await facade.CreateUser("Alexander Skou-Larsen", true, "alsk@itu.dk");
+            await facade.CreateUser("Alexander Rode", true, "arod@itu.dk");
+            await facade.CreateUser("Frederik Svendsen", true, "frsv@itu.dk");
+            await facade.CreateUser("Kevin Bacon", false, "pbstudent1@hotmail.com");
+            await facade.CreateUser("Hellen Mirren", false, "pbstudent2@hotmail.com");
+            await facade.CreateUser("Supervisor Sam", true, "salsitu@outlook.com");
+            await facade.CreateUser("Paolo Tell", true, "pate@itu.dk");
+            await facade.CreateUser("Rasmus Lystrøm", true, "rnie@itu.dk");
+            //await facade.CreateProject("mAchine", "something about AI", 2);
+            //await facade.ApplyToProject(1, 2);
+            //await facade.AddView(1, 2);
+            //await facade.AddView(2, 2);
             context.SaveChanges();
         }
     }

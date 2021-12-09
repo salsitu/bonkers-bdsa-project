@@ -386,7 +386,3 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
-
-
-# Custom
-Server.Entities/Migrations/

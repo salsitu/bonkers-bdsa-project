@@ -62,18 +62,25 @@
 
 @code {
     private bool collapseNavMenu = true;
-    private UserDTO currentUser;
+    private UserDTO? currentUser;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     protected override async Task OnInitializedAsync()
     {
 
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
-
-        var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
-        currentUser = user;
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
+            
+            var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
+            currentUser = user;
+        }
+        catch(Exception e)
+        {
+            
+        }
     }
 
     private void ToggleNavMenu()

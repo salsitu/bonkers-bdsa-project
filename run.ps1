@@ -1,3 +1,5 @@
+#!/usr/bin/env pwsh
+
 $project = "./Server"
 $entities = "./Server.Entities"
 $database = "sql_server"

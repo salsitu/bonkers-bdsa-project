@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 PROJECT="Server"
 ENTITIES="Server.Entities"

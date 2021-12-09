@@ -1,6 +1,9 @@
 @page "/projects"
 @inject HttpClient HttpClient
 @using ProjectBank.Shared
+@attribute [Authorize] 
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
 <h1>All Projects</h1>
 <p>These are all projects currently available on Project Bank!</p>
@@ -36,12 +39,13 @@
 
 @code {
 
-    private List<SharedProject> Projects = new();
+    private List<Project> Projects = new();
 
     protected override async Task OnInitializedAsync()
-    {       
-
-       Projects = await HttpClient.GetFromJsonAsync<List<SharedProject>>("Project/List");
+    {
         
+            Projects = await HttpClient.GetFromJsonAsync<List<Project>>("Project/List");
+        
+       
     }
 }

@@ -125,7 +125,7 @@
 
     public async void ApplyForProject()
     {
-        var studentid = 2;
+        var studentid = currentUser.Id;
 
         var result = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}",studentid);
         Console.WriteLine("Applied for project");

@@ -112,15 +112,22 @@
     {   
         if (await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the project?"))
         {
+            string toastMsg = "You successfully deleted the project";
+            using var httpresponse = await HttpClient.DeleteAsync($"Project/Delete/{SelectedProject.Id}");
+            if (!httpresponse.IsSuccessStatusCode) {
+                toastMsg = "An error has occured: " + httpresponse.ReasonPhrase;
+                toastService.ShowError(toastMsg);
+                MyNavigationManager.NavigateTo("allprojects");
+                MyNavigationManager.NavigateTo("myprojects");
+                toastService.ShowError(toastMsg);
+                return;
+            }
 
-            await HttpClient.DeleteAsync($"Project/Delete/{SelectedProject.Id}");
-            string success = "You successfully deleted the project";
-
-            toastService.ShowSuccess(success);
+            toastService.ShowSuccess(toastMsg);
             //MEGET SCUFFED FIX TIL AT DEN IKKE RELOADER SIDEN - HURTIGT GÅ TIL ANDEN SIDE OG DEREFTER TILBAGE
             MyNavigationManager.NavigateTo("allprojects");
             MyNavigationManager.NavigateTo("myprojects");
-            toastService.ShowSuccess(success);
+            toastService.ShowSuccess(toastMsg);
         }
     }
 

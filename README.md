@@ -1,46 +1,46 @@
-# bonkers-bdsa-project
-BDSA2021 Final Project
+# ProjectBank
 
-## How to setup SQL database connection (using powershell)
+## How to setup ProjectBank on Windows
 
-Navigate to `ProjectBank/Server` in a terminal.
+First, make sure that Docker is up and running, typically by starting Docker Desktop. Then, in a new PowerShell terminal, install the Entity Framework Core tool for .NET:
 
-Install Entity Framework tool for all users:
+```ps1
+> dotnet tool install --global dotnet-ef
+```
 
-`dotnet tool install --global dotnet-ef`
+After that's done, run the startup script to start the ProjectBank server:
 
-Set password variable:
+```ps1
+> ./run.ps1
+```
 
-`$password = New-Guid`
+Note: You can also use this method on Linux and macOS if you have PowerShell installed.
 
-Set database name variable:
+## How to setup ProjectBank on Linux and macOS
 
-`$database = "sql_server"`
+First, make sure that Docker is up and running. On macOS you can do this by starting Docker Desktop. On systemd-based Linux distributions, run the following command in a terminal to start the Docker service:
 
-Run Microsoft Sql Server in docker: 
+```bash
+$ sudo systemctl start docker
+```
 
-`docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$password" -p 1433:1433 --name $database -d mcr.microsoft.com/mssql/server:2019-latest`
+Then, install the Entity Framework Core tool for .NET:
 
-Set connnectionString variable: 
+```bash
+$ dotnet tool install --global dotnet-ef
+```
 
-`$connectionString = "Server=localhost;Database=$database;User Id=sa;Password=$password;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=true"`
+After that's done, make the startup script executable and run it to start the ProjectBank server:
 
-Update the connectionString in Server.csproj:
+```bash
+$ chmod +x run.sh
+$ ./run.sh
+```
 
-`dotnet user-secrets set "ConnectionStrings:$database" "$connectionString"`
-
-Apply migration to database: 
-
-`dotnet ef database update`
-
-## Start up server 
-Navigate to `ProjectBank/Server` in a terminal.
-
-Run the following command:
-`dotnet run`
+Note: This also works in Windows Subsystem for Linux (WSL).
 
 ## Start client session
-Open browser (Firefox/Chrome/Safari/Edge)
-
-Input the following in the address bar: `localhost:5001`
-
+Open you preferred web browser and navigate to the following URL:
+```text
+https://localhost:5001
+```

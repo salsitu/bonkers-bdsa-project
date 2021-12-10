@@ -136,10 +136,9 @@
 
     public async void ApplyForProject()
     {
-        //var studentid = currentUser.Id;
-        var studentid = 2;
+       
 
-        var response = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}",studentid);
+        var response = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}",currentUser.Id);
 
         if (response.IsSuccessStatusCode)         
         {   

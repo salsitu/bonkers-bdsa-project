@@ -26,55 +26,37 @@
                 <span class="oi oi-list-rich" aria-hidden="true"></span> All Projects
             </NavLink>
         </div>
-        @if (currentUser != null)
-        {
-            @if (currentUser.IsSupervisor)
-            {
+        
+        <AuthorizeView Roles="Supervisor">
          <div class="nav-item px-3">
             <NavLink class="nav-link" href="myprojects">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> My Projects <a href="/project/create" class="nav-link" type="button"><span class="material-icons">add</span></a>
             </NavLink>
                 </div>
+                </AuthorizeView>
 
-
-            }
-            else
-            {
+            
+                <AuthorizeView Roles="Student">
                  <div class="nav-item px-3">
             <NavLink class="nav-link" href="myprojects">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Projects applied to
             </NavLink>
         </div>
+         </AuthorizeView>
 
-            }
-        }
         
     </nav>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
-    private UserDTO? currentUser;
+
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     protected override async Task OnInitializedAsync()
     {   
-        try
-        {
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
-           
-            var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
         
-            currentUser = user;
-            
-
-        }
-        catch(Exception e)
-        {
-            
-        }
 
     }
 
@@ -86,17 +68,7 @@
     public async Task setUser()
     {
                 
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
-
-        var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
-
-        currentUser = user;
-           
-        
-        MyNavigationManager.NavigateTo("refresh");
-        MyNavigationManager.NavigateTo("https://localhost:5001/", true);
-       
+     
     }
   
     

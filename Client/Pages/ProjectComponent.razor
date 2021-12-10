@@ -32,11 +32,29 @@
         </div>
     </div>
 </div>
+<AuthorizeView Roles="Supervisor">
+    @if (currentUser.Id == SelectedProject.AuthorId)
+    {
+        <button @onclick="Delete">Delete project</button>
+    }
+</AuthorizeView>
+<AuthorizeView Roles="Student">
+    @if (Applied)
+    {
+        <span>You have already applied for this project!</span>
+
+    } else
+    {
+        <button @onclick="ApplyForProject">Apply for project</button>    
+    }
+</AuthorizeView>
+
+<!---
 @if (currentUser != null)
 {
     @if (currentUser.IsSupervisor && currentUser.Id == SelectedProject.AuthorId)
     {
-        <button @onclick="Delete">Delete project</button>
+        //<button @onclick="Delete">Delete project</button>
 
 
     }
@@ -45,17 +63,17 @@
 {
         if (Applied)
         {
-           <span>You have already applied for this project!</span>
+           //<span>You have already applied for this project!</span>
 
         } else
         {
-            <button @onclick="ApplyForProject">Apply for project</button>    
+            //<button @onclick="ApplyForProject">Apply for project</button>    
         }
 
 
 
     } 
-}
+}-->
 
 
 

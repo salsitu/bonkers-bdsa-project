@@ -20,8 +20,7 @@ namespace ProjectBank.Server.Entities
         {
             var conflict =
                 await _context.Views
-                .Where(v => v.ProjectId == projectId)
-                .Where(v => v.StudentId == userId)
+                .Where(v => v.ProjectId == projectId && v.StudentId == userId)
                 .Select(v => new ViewCreateDTO(v.ProjectId, v.StudentId))
                 .FirstOrDefaultAsync();
 
@@ -36,14 +35,16 @@ namespace ProjectBank.Server.Entities
 
             await _context.SaveChangesAsync();
 
-            return (Created);
+            return Created;
         }
         public async Task<int> GetViewsOfProjectAsync(int projectId)
         {
-            var projects = await (from v in _context.Views
+            var views =  (from v in _context.Views
                                   where v.ProjectId == projectId
-                                  select v).CountAsync();
-            return projects;
+                                  select v).Count();
+            Console.WriteLine(projectId);
+            Console.WriteLine(views);
+            return views;
         }
         public async Task<Response> DeleteViewAsync(int projectId)
         {

@@ -1,8 +1,11 @@
 @page "/project/create"
 @using ProjectBank.Shared
+@using ProjectBank.Server.Entities
 @inject HttpClient HttpClient
 @inject NavigationManager MyNavigationManager
 @inject IToastService toastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
 <h1>Create a project!</h1>
 <p>Fill in the form and click create!</p>
 
@@ -24,13 +27,13 @@
                     <div>
                          <div class="form-group">
                                <label for="name">Title</label>
-                               <InputText id="name" @bind-Value="project.name" class="form-control" />
+                               <InputText id="name" @bind-Value="project.Name" class="form-control" />
                          </div>
                     </div>
                     <div class="desc-field">
                         <label class="control-label col-md-12">Description</label>
                         <div class="col">
-                           <textarea @bind="project.desc" @bind:event="oninput" style="width: 100%; height: 100%">  </textarea>
+                           <textarea @bind="project.Description" @bind:event="oninput" style="width: 100%; height: 100%">  </textarea>
                         </div>
                     </div>
     
@@ -54,15 +57,23 @@
 
     public async Task createProject()
     {
-        project.authorid = 2;
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
+        Console.WriteLine(email);
+        var e = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
+        project.AuthorId = e.Id;
+
         var response = await HttpClient.PostAsJsonAsync("Project/Post", project);
- 
+
         if (response.IsSuccessStatusCode)
         {  MyNavigationManager.NavigateTo("myprojects");
             toastService.ShowSuccess("You successfully created a project");
             var created = await response.Content.ReadFromJsonAsync<Project>();
-            
-            
+        }
+        else
+        {
+            toastService.ShowError("Error");
         }
 
     }

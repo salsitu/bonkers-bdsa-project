@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ProjectBank.Server.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjectBank.Server.Controllers;
 
@@ -12,93 +14,117 @@ namespace ProjectBank.Server.Controllers;
 [ApiController]
 public class ProjectController : ControllerBase
 {
-    public List<Project> Projects = new()
-    {
-        new(1, "Bennys bog1", "Desc1", 2, 2, 0.5f),
-        new(2, "Bennys bog2", "Desc2", 2, 2, 0.5f),
-        new(3, "Bennys bog3", "Desc3", 2, 2, 0.5f),
-        new(4, "Bennys bog4", "Desc4", 2, 2, 0.5f)
-    };
+    private DBFacade _repository;
 
-    private List<Supervisor> Supervisors = new()
+    public ProjectController(DBFacade repository)
     {
-        new(1, "Benny", new List<Project>() { new Project(1, "Bennys bog", "Bennys beskrivelse", 2, 2, 0.5f) }),
-        new(2, "Fanny", new List<Project>() { new Project(1, "Fannys bog", "Fannys beskrivelse", 2, 2, 0.5f) }),
-        new(3, "Dorte", new List<Project>() { new Project(1, "Dortes bog", "Dortes beskrivelse", 2, 2, 0.5f) }),
-        new(4, "Bentes", new List<Project>() { new Project(1, "Bentes bog", "Bentes beskrivelse", 2, 2, 0.5f) }),
-    };
+        _repository = repository;          
+    }
 
 
     [HttpGet("{id}")]
-    public ActionResult Get(int id)
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProjectDTO),StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProjectDTO>> Get(int id)
     {
-        var project = Projects.Find(o => o.id == id);
+        var project = await _repository.SelectProject(id);
+
         if (project != null)
-        {
+        {   
             return Ok(project);
         }
         return NotFound();
     }
 
     [HttpGet("Author/{authorid}")]
-    public ActionResult GetByAuthor(int authorid)
+    public async Task<List<SimplifiedProjectDTO>> GetByAuthor(int authorid)
     {
-        var author = Supervisors.Find(o => o.Id == authorid);
-        if (author != null)
-        {
-            return Ok(author.CreatedProjects);
-        }
-        return NotFound();
+        return await _repository.ShowCreatedProjects(authorid);
     }
 
+    [HttpGet("Email/{email}")]
+    public async Task<UserDTO> GetByEmail(string email)
+    {
+        return await _repository.GetUserByEmail(email);
+    }
+    [HttpGet("Student/{studentid}")]
+    public async Task<List<SimplifiedProjectDTO>> ShowListOfAppliedProjects(int studentId)
+    {
+        return await _repository.ShowListOfAppliedProjects(studentId);
+    }
 
     [HttpGet("List")]
-    public ActionResult Get()
+    public async Task<List<SimplifiedProjectDTO>> Get()
     {
-        return Ok(Projects);
+        return await _repository.ShowAllProjects();
     }
 
 
-    [HttpGet("Views/{id}")]
-    public ActionResult GetViews(int projectid)
-    {
-        Console.WriteLine("Me get views");
-        return Ok(22);
+    [HttpGet("GetViews/{projectid}")]
+    public async Task<int> GetViews(int projectid)
+    {   
+        return await _repository.GetViewsOfProject(projectid);
     }
 
-    [HttpGet("Applications/{id}")]
-    public ActionResult GetApplications(int projectid)
+    [HttpGet("Applications/{projectid}")]
+    public async Task<int> GetApplications(int projectid)
     {
-        Console.WriteLine("Trying to get applic");
-        return Ok(2);
+        return await _repository.SelectNrOfProjectApplications(projectid);  
+    }
+
+    [HttpGet("IsApplied/{projectid}/{studentid}")]
+    public async Task<bool> IsApplied(int projectid, int studentid)
+    {
+        var x = await _repository.HasAlreadyAppliedToProject(projectid, studentid);
+        if (x == Entities.Response.Exists) return true;
+        else return false;
     }
 
     [HttpPut("Apply/{projectId}")]
-    public ActionResult ApplyForProject(int projectid, [FromBody] int studentid)
+    public async Task<ActionResult> ApplyForProject(int projectid, [FromBody] int studentid)
     {
-        return Ok(); //Return enum, when merging with DB
+        var response = await _repository.ApplyToProject(projectid, studentid);
+
+        switch (response)
+        {
+            case Entities.Response.Created: return Ok();
+
+            case Entities.Response.Updated: return Ok();
+            
+            case Entities.Response.Deleted: return NoContent();
+
+            case Entities.Response.NotFound: return NotFound();
+            
+            case Entities.Response.BadRequest: return BadRequest();
+
+            case Entities.Response.Conflict: return Conflict();
+
+            default: return NotFound();
+        }
     }
+  
 
     [HttpPost("Post")]
-    public ActionResult Post(Project project)
+    [ProducesResponseType(typeof(ProjectDTO), 201)]
+    public async Task<(Response, ProjectDTO)> Post(Project project) 
     {
-        var author = Supervisors.Find(o => o.Id == 2);
-        author.CreatedProjects.Add(project);
-
-        return Ok(author.CreatedProjects);
+        return await _repository.CreateProject(project.Name, project.Description, project.AuthorId);
     }
+    
 
     [HttpDelete("Delete/{id}")]
-    public async Task<IActionResult> Delete(int id)
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<Response> Delete(int id)
     {
-        var project = Projects.Find(o => o.id == id);
-        if(project != null)
-        {
-            Projects.Remove(project);
-            return(Ok(project));
-        }
-        return NotFound();
+        return await _repository.DeleteProject(id);
     }
-       
+
+
+    [HttpPut("PutView/{id}")]
+    public async Task<Response> AddView(int id, [FromBody] int studentId)
+    {
+        return await _repository.AddView(id, studentId);
+    }
 }
 

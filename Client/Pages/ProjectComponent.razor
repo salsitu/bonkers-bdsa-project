@@ -52,7 +52,7 @@
     [Parameter] public int id {get; set;}
 
     private bool IsSupervisor;
-    private SharedProject SelectedProject = new();
+    private Project SelectedProject = new();
 
     private int Views = 0;
     private int Applications = 0;
@@ -63,19 +63,30 @@
 
     protected override async Task OnInitializedAsync()
     {
-        SelectedProject = await HttpClient.GetFromJsonAsync<SharedProject>($"Project/{id}");
-
-        Views = await HttpClient.GetFromJsonAsync<int>($"Project/Views/{id}");
-
-        Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
-
-        SetRatio();
-
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
 
         var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
         currentUser = user;
+
+        //if (!currentUser.IsSupervisor)
+
+        Console.WriteLine("We do be adding a view");
+        var studentId = user.Id;
+        var response = await HttpClient.PutAsJsonAsync($"Project/PutView/{id}",studentId);
+
+
+
+        SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
+
+        Console.WriteLine("projectId = " + SelectedProject.Id);
+        Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{SelectedProject.Id}");
+
+        Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
+
+        SetRatio();
+
+ 
 
 
     }

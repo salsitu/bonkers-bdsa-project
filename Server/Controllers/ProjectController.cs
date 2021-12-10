@@ -60,13 +60,13 @@ public class ProjectController : ControllerBase
     }
 
 
-    [HttpGet("Views/{id}")]
+    [HttpGet("GetViews/{projectid}")]
     public async Task<int> GetViews(int projectid)
-    {
+    {   
         return await _repository.GetViewsOfProject(projectid);
     }
 
-    [HttpGet("Applications/{id}")]
+    [HttpGet("Applications/{projectid}")]
     public async Task<int> GetApplications(int projectid)
     {
         return await _repository.SelectNrOfProjectApplications(projectid);  
@@ -110,6 +110,13 @@ public class ProjectController : ControllerBase
     public async Task<Response> Delete(int id)
     {
         return await _repository.DeleteProject(id);
+    }
+
+
+    [HttpPut("PutView/{id}")]
+    public async Task<Response> AddView(int id, [FromBody] int studentId)
+    {
+        return await _repository.AddView(id, studentId);
     }
 }
 

@@ -12,7 +12,7 @@ dotnet user-secrets set "ConnectionStrings:$DATABASE" "$CONNECTION_STRING" --pro
 
 echo "Starting SQL Server"
 docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$SQL_PASS" -p 1433:1433 --name $DATABASE -d mcr.microsoft.com/mssql/server:2019-latest
-sleep 2
+sleep 5
 dotnet ef database update --project $PROJECT
 
 echo "Starting ProjectBank (press Ctrl+C to stop)"

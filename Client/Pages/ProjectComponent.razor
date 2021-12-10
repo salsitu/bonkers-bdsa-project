@@ -7,7 +7,6 @@
 @inject IJSRuntime JSRuntime
 <h1>@SelectedProject.Name</h1>
 
-
 <div class="border">
     <div class="stats"> <!--Statistics Div-->
         <table>
@@ -32,32 +31,22 @@
         </div>
     </div>
 </div>
-@if (currentUser != null)
-{
-    @if (currentUser.IsSupervisor && currentUser.Id == SelectedProject.AuthorId)
+<AuthorizeView Roles="Supervisor">
+    @if (currentUser.Id == SelectedProject.AuthorId)
     {
         <button @onclick="Delete">Delete project</button>
-
-
     }
-    if (!currentUser.IsSupervisor)
+</AuthorizeView>
+<AuthorizeView Roles="Student">
+    @if (Applied)
+    {
+        <span>You have already applied for this project!</span>
 
-{
-        if (Applied)
-        {
-           <span>You have already applied for this project!</span>
-
-        } else
-        {
-            <button @onclick="ApplyForProject">Apply for project</button>    
-        }
-
-
-
-    } 
-}
-
-
+    } else
+    {
+        <button @onclick="ApplyForProject">Apply for project</button>    
+    }
+</AuthorizeView>
 
 @code{
 

@@ -88,9 +88,17 @@
 
         var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
         currentUser = user;
-        
-        Projects = await HttpClient.GetFromJsonAsync<List<SimplifiedProjectDTO>>($"Project/Author/{user.Id}");
-        
+
+        if (currentUser.IsSupervisor)
+        {
+            Projects = await HttpClient.GetFromJsonAsync<List<SimplifiedProjectDTO>>($"Project/Author/{user.Id}");
+
+        } 
+        else
+        {
+            Projects = await HttpClient.GetFromJsonAsync<List<SimplifiedProjectDTO>>($"Project/Student/{user.Id}");
+        }        
+
 
         }
 

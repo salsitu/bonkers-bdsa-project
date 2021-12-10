@@ -72,6 +72,14 @@ public class ProjectController : ControllerBase
         return await _repository.SelectNrOfProjectApplications(projectid);  
     }
 
+    [HttpGet("IsApplied/{projectid}/{studentid}")]
+    public async Task<bool> IsApplied(int projectid, int studentid)
+    {
+        var x = await _repository.HasAlreadyAppliedToProject(projectid, studentid);
+        if (x == Entities.Response.Exists) return true;
+        else return false;
+    }
+
     [HttpPut("Apply/{projectId}")]
     public async Task<ActionResult> ApplyForProject(int projectid, [FromBody] int studentid)
     {

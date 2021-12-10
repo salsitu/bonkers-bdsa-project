@@ -37,12 +37,24 @@
     @if (currentUser.IsSupervisor && currentUser.Id == SelectedProject.AuthorId)
     {
         <button @onclick="Delete">Delete project</button>
-    }else if (!currentUser.IsSupervisor)
-    {
-        <button @onclick="ApplyForProject">Apply for project</button>
 
 
     }
+    if (!currentUser.IsSupervisor)
+
+{
+        if (Applied)
+        {
+           <span>You have already applied for this project!</span>
+
+        } else
+        {
+            <button @onclick="ApplyForProject">Apply for project</button>    
+        }
+
+
+
+    } 
 }
 
 
@@ -52,8 +64,8 @@
     [Parameter] public int id {get; set;}
 
     private bool IsSupervisor;
-    private SharedProject SelectedProject = new();
-
+    private Project SelectedProject = new();
+    private bool Applied;
     private int Views = 0;
     private int Applications = 0;
     private double Ratio;
@@ -63,49 +75,40 @@
 
     protected override async Task OnInitializedAsync()
     {
-        SelectedProject = await HttpClient.GetFromJsonAsync<SharedProject>($"Project/{id}");
-
-        Views = await HttpClient.GetFromJsonAsync<int>($"Project/Views/{id}");
-
-        Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
-
-        SetRatio();
-
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
 
         var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
         currentUser = user;
 
+        if (!currentUser.IsSupervisor)
+        {
+            var studentId = user.Id;
+            var response = await HttpClient.PutAsJsonAsync($"Project/PutView/{id}", studentId);
+            isApplied();
 
-    }
+        }
 
-    public async Task SetViews() 
-    {
-        Views = await HttpClient.GetFromJsonAsync<int>($"Project/Views/{id}");
 
-    }
+        SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
 
-    public async Task SetApplicants()
-    {
+        Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
+
         Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
-    }
 
-    public void Toggle()
-    {
-        IsSupervisor = !IsSupervisor;
-    }
+        SetRatio();
 
 
 
-    public (int id, string name, bool supervisor) GetUser()
-    {
-        return (1,"Paolo", true);
+
+
     }
 
     public void SetRatio() 
     {
-        Ratio =  Views < 1 ? 0 : Views/Applications;
+        if (Views == 0) Ratio = 0;
+        else if  (Applications == 0) Ratio = 0;
+        else  Ratio = Views / Applications; 
     }
 
     private async Task Delete()
@@ -136,9 +139,26 @@
         //var studentid = currentUser.Id;
         var studentid = 2;
 
-        var result = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}",studentid);
-        Console.WriteLine("Applied for project");
+        var response = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}",studentid);
+
+        if (response.IsSuccessStatusCode)         
+        {   
+            MyNavigationManager.NavigateTo("myprojects");             
+            toastService.ShowSuccess("You successfully applied to project " + SelectedProject.Name);             
+        }         
+        else         
+        {             
+            toastService.ShowError("Error");        
+        }
 
     }
+
+    public async void isApplied()
+    {
+        var studentid = currentUser.Id;
+        var x = await HttpClient.GetFromJsonAsync<bool>($"Project/IsApplied/{id}/{studentid}");
+
+        Applied = x;
+    } 
 
 }

@@ -60,16 +60,24 @@ public class ProjectController : ControllerBase
     }
 
 
-    [HttpGet("Views/{id}")]
+    [HttpGet("GetViews/{projectid}")]
     public async Task<int> GetViews(int projectid)
-    {
+    {   
         return await _repository.GetViewsOfProject(projectid);
     }
 
-    [HttpGet("Applications/{id}")]
+    [HttpGet("Applications/{projectid}")]
     public async Task<int> GetApplications(int projectid)
     {
         return await _repository.SelectNrOfProjectApplications(projectid);  
+    }
+
+    [HttpGet("IsApplied/{projectid}/{studentid}")]
+    public async Task<bool> IsApplied(int projectid, int studentid)
+    {
+        var x = await _repository.HasAlreadyAppliedToProject(projectid, studentid);
+        if (x == Entities.Response.Exists) return true;
+        else return false;
     }
 
     [HttpPut("Apply/{projectId}")]
@@ -110,6 +118,13 @@ public class ProjectController : ControllerBase
     public async Task<Response> Delete(int id)
     {
         return await _repository.DeleteProject(id);
+    }
+
+
+    [HttpPut("PutView/{id}")]
+    public async Task<Response> AddView(int id, [FromBody] int studentId)
+    {
+        return await _repository.AddView(id, studentId);
     }
 }
 

@@ -1,5 +1,7 @@
 ﻿@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject HttpClient HttpClient
+@inject NavigationManager MyNavigationManager
+
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
@@ -57,24 +59,45 @@
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     protected override async Task OnInitializedAsync()
-    {
-
+    {   
         try
         {
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
             var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
-            
+           
             var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
+        
             currentUser = user;
+            
+
         }
         catch(Exception e)
         {
             
         }
+
     }
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    public async Task setUser()
+    {
+                
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
+
+        var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
+
+        currentUser = user;
+           
+        
+        MyNavigationManager.NavigateTo("refresh");
+        MyNavigationManager.NavigateTo("https://localhost:5001/", true);
+       
+    }
+  
+    
 }

@@ -1,7 +1,19 @@
 ﻿@page "/authentication/{action}"
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-<RemoteAuthenticatorView Action="@Action" />
+<RemoteAuthenticatorView Action="@Action" OnLogInSucceeded="@setUser" />
+
+<NavMenu @ref="MyNavMenu"></NavMenu>
 
 @code{
     [Parameter] public string? Action { get; set; }
+
+    [Microsoft.AspNetCore.Components.Parameter]
+    public Microsoft.AspNetCore.Components.EventCallback<bool> OnLogInSucceeded { get; set; }
+    private NavMenu MyNavMenu;
+
+    private void setUser()
+    {
+        MyNavMenu.setUser();
+    }
+
 }

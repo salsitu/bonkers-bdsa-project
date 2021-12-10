@@ -1,7 +1,7 @@
 ﻿@page "/fetchdata"
 
 @using ProjectBank.Shared
-@attribute [Authorize] 
+@attribute [Authorize(Roles = "Supervisor")]
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject HttpClient Http

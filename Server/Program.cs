@@ -15,7 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+    .AddMicrosoftIdentityWebApi(options => builder.Configuration.Bind("AzureAD", options), options =>
+    {
+        builder.Configuration.Bind("AzureAD", options);
+        options.TokenValidationParameters.RoleClaimType = "https://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+    });
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

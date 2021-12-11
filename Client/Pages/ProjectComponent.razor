@@ -32,9 +32,13 @@
     </div>
 </div>
 <AuthorizeView Roles="Supervisor">
-    @if (currentUser.Id == SelectedProject.AuthorId)
+    @if (currentUser != null && SelectedProject != null)
     {
-        <button @onclick="Delete">Delete project</button>
+        @if (currentUser.Id == SelectedProject.AuthorId)
+        {
+            <button @onclick="Delete">Delete project</button>
+        }
+
     }
 </AuthorizeView>
 <AuthorizeView Roles="Student">
@@ -52,7 +56,7 @@
 
     [Parameter] public int id {get; set;}
 
-    private bool IsSupervisor;
+   
     private Project SelectedProject = new();
     private bool Applied;
     private int Views = 0;

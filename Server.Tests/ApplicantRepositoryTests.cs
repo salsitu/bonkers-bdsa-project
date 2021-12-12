@@ -87,7 +87,7 @@ public class ApplicantRepositoryTests
         Assert.Equal(Created, application);
     }
     [Fact]
-    public async Task ApplyToProjectAsync_returns_conflict_when_relation_already_exists()
+    public async Task ApplyToProjectAsync_returns_conflict_if_relation_already_exists()
     {
         var application = await _repo.ApplyToProjectAsync(2, 2);
 
@@ -115,14 +115,14 @@ public class ApplicantRepositoryTests
         Assert.Equal(new List<SimplifiedProjectDTO> {new SimplifiedProjectDTO(1, "huhu"), new SimplifiedProjectDTO(2, "hihi") }, application);
     }
     [Fact]
-    public async Task SelectNrOfProjectApplicationsAsync_returns_nr_of_applied_projects()
+    public async Task SelectNrOfProjectApplicationsAsync_returns_2_if_project_has_two_applications()
     {
         var application = await _repo.SelectNrOfProjectApplicationsAsync(1);
 
         Assert.Equal(2, application);
     }
     [Fact]
-    public async Task SelectNrOfProjectApplicationsAsync_returns_null()
+    public async Task SelectNrOfProjectApplicationsAsync_returns_null_if_no_applications_to_project_exist()
     {
         var application = await _repo.SelectNrOfProjectApplicationsAsync(3);
 

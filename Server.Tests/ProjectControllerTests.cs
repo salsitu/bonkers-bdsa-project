@@ -361,4 +361,28 @@ public class ProjectControllerTests
 
         Assert.Equal(expected, actual);
     }
+
+    [Fact]
+    public async void ApplyForProject_Returns_Ok_When_Given_ProjectId_And_StudentId()
+    {
+        var repository = new Mock<IDBFacade>();
+        repository.Setup(m => m.ApplyToProject(1, 1)).ReturnsAsync(Response.Created);
+        var controller = new ProjectController(repository.Object);
+
+        var actual = await controller.ApplyForProject(1, 1);
+
+        Assert.IsType<OkResult>(actual);
+    }
+
+    [Fact]
+    public async void ApplyForProject_Returns_Conflict_When_Student_Already_Applied_To_Project()
+    {
+        var repository = new Mock<IDBFacade>();
+        repository.Setup(m => m.ApplyToProject(1, 1)).ReturnsAsync(Response.Conflict);
+        var controller = new ProjectController(repository.Object);
+
+        var actual = await controller.ApplyForProject(1,1);
+
+        Assert.IsType<ConflictResult>(actual);
+    }
 }

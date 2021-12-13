@@ -91,15 +91,12 @@ public class ProjectController : ControllerBase
     public async Task<ActionResult> ApplyForProject(int projectid, [FromBody] int studentid)
     {
         var response = await _repository.ApplyToProject(projectid, studentid);
-         
-        switch (response)
+        
+        if (response == Entities.Response.Created)
         {
-            case Entities.Response.Created: return Ok();
-
-            case Entities.Response.Conflict: return Conflict();
-
-            default: return NotFound();
+            return Ok();
         }
+        return Conflict();        
     }
   
 

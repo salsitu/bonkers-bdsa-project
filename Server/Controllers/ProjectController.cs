@@ -96,14 +96,6 @@ public class ProjectController : ControllerBase
         {
             case Entities.Response.Created: return Ok();
 
-            case Entities.Response.Updated: return Ok();
-            
-            case Entities.Response.Deleted: return NoContent();
-
-            case Entities.Response.NotFound: return NotFound();
-            
-            case Entities.Response.BadRequest: return BadRequest();
-
             case Entities.Response.Conflict: return Conflict();
 
             default: return NotFound();

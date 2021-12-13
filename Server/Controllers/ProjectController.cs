@@ -120,6 +120,18 @@ public class ProjectController : ControllerBase
         return await _repository.DeleteProject(id);
     }
 
+    [HttpDelete("DeleteView/{projectid}")]
+    public async Task<Response> DeleteView(int projectid)
+    {
+        return await _repository.DeleteViews(projectid);
+    }
+
+    [HttpDelete("DeleteApplication/{projectid}")]
+    public async Task<Response> DeleteApplication(int projectid)
+    {
+        return await _repository.DeleteApplications(projectid);
+    }
+
 
     [HttpPut("PutView/{id}")]
     public async Task<Response> AddView(int id, [FromBody] int studentId)

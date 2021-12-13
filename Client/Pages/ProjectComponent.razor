@@ -56,7 +56,7 @@
 
     [Parameter] public int id {get; set;}
 
-   
+
     private Project SelectedProject = new();
     private bool Applied;
     private int Views = 0;
@@ -101,7 +101,7 @@
     {
         if (Views == 0) Ratio = 0;
         else if  (Applications == 0) Ratio = 0;
-        else  Ratio = Views / Applications; 
+        else  Ratio = Applications / Ratio; 
     }
 
     private async Task Delete()
@@ -110,6 +110,8 @@
         {
             string toastMsg = "You successfully deleted the project";
             using var httpresponse = await HttpClient.DeleteAsync($"Project/Delete/{SelectedProject.Id}");
+            var x = await HttpClient.DeleteAsync($"Project/DeleteView/{SelectedProject.Id}");
+            var y = await HttpClient.DeleteAsync($"Project/DeleteApplication/{SelectedProject.Id}");
             if (!httpresponse.IsSuccessStatusCode) {
                 toastMsg = "An error has occured: " + httpresponse.ReasonPhrase;
                 toastService.ShowError(toastMsg);

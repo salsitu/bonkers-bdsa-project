@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ProjectBank.Server.Entities;
 using Microsoft.EntityFrameworkCore;
+using Server.Entities;
 
 namespace ProjectBank.Server.Controllers;
 
@@ -14,9 +15,9 @@ namespace ProjectBank.Server.Controllers;
 [ApiController]
 public class ProjectController : ControllerBase
 {
-    private DBFacade _repository;
+    private IDBFacade _repository;
 
-    public ProjectController(DBFacade repository)
+    public ProjectController(IDBFacade repository)
     {
         _repository = repository;          
     }
@@ -84,7 +85,7 @@ public class ProjectController : ControllerBase
     public async Task<ActionResult> ApplyForProject(int projectid, [FromBody] int studentid)
     {
         var response = await _repository.ApplyToProject(projectid, studentid);
-
+         
         switch (response)
         {
             case Entities.Response.Created: return Ok();

@@ -15,9 +15,9 @@ namespace ProjectBank.Server.Controllers;
 [ApiController]
 public class ProjectController : ControllerBase
 {
-    private DBFacade _repository;
+    private IDBFacade _repository;
 
-    public ProjectController(DBFacade repository)
+    public ProjectController(IDBFacade repository)
     {
         _repository = repository;          
     }

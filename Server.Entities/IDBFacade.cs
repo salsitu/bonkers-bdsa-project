@@ -1,7 +1,7 @@
 ﻿using ProjectBank.Server.Entities;
 using System;
 
-namespace Server.Entities;
+namespace ProjectBank.Server.Entities;
 
 public interface IDBFacade
 {

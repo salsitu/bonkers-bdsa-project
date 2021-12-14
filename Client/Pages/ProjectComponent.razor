@@ -8,17 +8,21 @@
 <h1>@SelectedProject.Name</h1>
 
 <div class="border">
-    <div class="stats"> <!--Statistics Div-->
+    <div> <!--Statistics Div-->
         <table>
             <tr>
                 <th>Views</th>
+                <AuthorizeView Roles="Supervisor">
                 <th>Applications</th>
                 <th>Ratio</th>
+                </AuthorizeView>
             </tr>
             <tr>
                 <th>@Views</th>
+                <AuthorizeView Roles="Supervisor">
                 <th>@Applications</th>
                 <th>@Ratio</th>
+                 </AuthorizeView>
             </tr>
         </table>
     </div>
@@ -27,10 +31,10 @@
             <span>@SelectedProject.Name</span>
         </div>
         <div><h2>Description</h2>
-            @SelectedProject.Description
+           <span class="test"> @SelectedProject.Description</span>
         </div>
     </div>
-</div>
+
 <AuthorizeView Roles="Supervisor">
     @if (currentUser != null && SelectedProject != null)
     {
@@ -51,6 +55,14 @@
         <button @onclick="ApplyForProject">Apply for project</button>    
     }
 </AuthorizeView>
+    </div>
+<style>
+    .border{ max-width:100vh;
+    word-wrap:break-word;
+   box-shadow: 20px 20px 10px #888888;
+    }
+
+</style>
 
 @code{
 
@@ -61,7 +73,7 @@
     private bool Applied;
     private int Views = 0;
     private int Applications = 0;
-    private double Ratio;
+    private string Ratio;
     private UserDTO currentUser;
 
 
@@ -99,9 +111,15 @@
 
     public void SetRatio() 
     {
-        if (Views == 0) Ratio = 0;
-        else if  (Applications == 0) Ratio = 0;
-        else  Ratio = Applications / Ratio; 
+        if (Views == 0 || Applications == 0) return;
+        var greatestComminDenominator = GCD(Views, Applications);
+        Ratio = string.Format("{0}:{1}", Views / greatestComminDenominator, Applications / greatestComminDenominator);
+
+    }
+
+    private int GCD(int a, int b)
+    {
+         return b == 0 ? Math.Abs(a) : GCD(b, a % b);
     }
 
     private async Task Delete()

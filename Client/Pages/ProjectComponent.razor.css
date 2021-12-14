@@ -1,9 +1,7 @@
 div {
+   
     border-style: solid;
     border-color: coral;
-}
-
-.stats {
-    height: 20%;
-    width: 10%;
+    background-color: white;
+    border: dotted 1px #4B718B;
 }

@@ -8,10 +8,10 @@
 
 
 <AuthorizeView>
-    Hello, @context.User.Claims.First( cl => cl.Type.ToString()=="email").Value
+    Hello, @context.User.Claims.First( cl => cl.Type.ToString()=="email").Value!
 </AuthorizeView>
-
-Welcome to your new app.
+<br />
+Welcome to <b>Project Bank</b>.
 
 <SurveyPrompt Title="How is Project Bank working for you?" />
 

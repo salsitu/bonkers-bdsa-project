@@ -76,36 +76,36 @@ public class ViewRepositoryTests
     [Fact]
     public async Task AddViewAsync_returns_Created_when_new_view()
     {
-        var application = await _repo.AddViewAsync(2, 3);
+        var response= await _repo.AddViewAsync(2, 3);
 
-        Assert.Equal(Created, application);
+        Assert.Equal(Created, response);
     }
     [Fact]
     public async Task AddViewAsync_returns_conflict_if_already_exists()
     {
-        var application = await _repo.AddViewAsync(1, 2);
+        var response = await _repo.AddViewAsync(1, 2);
 
-        Assert.Equal(Conflict, application);
+        Assert.Equal(Conflict, response);
     }
     [Fact]
-    public async Task GetViewAsync_returns_nr_of_views()
+    public async Task GetViewAsync_returns_2_if_two_relations_with_projectid_exist()
     {
-        var application = await _repo.GetViewsOfProjectAsync(1);
+        var count = await _repo.GetViewsOfProjectAsync(1);
 
-        Assert.Equal(2, application);
+        Assert.Equal(2, count);
     }
     [Fact]
     public async Task DeleteViewAsync_returns_deleted()
     {
-        var application = await _repo.DeleteViewAsync(1);
+        var response = await _repo.DeleteViewAsync(1);
 
-        Assert.Equal(Deleted, application);
+        Assert.Equal(Deleted, response);
     }
     [Fact]
-    public async Task DeleteViewAsync_returns_notFound()
+    public async Task DeleteViewAsync_returns_notFound_if_relations_with_projectid_do_not_exist()
     {
-        var application = await _repo.DeleteViewAsync(120);
+        var response = await _repo.DeleteViewAsync(120);
 
-        Assert.Equal(NotFound, application);
+        Assert.Equal(NotFound, response);
     }
 }

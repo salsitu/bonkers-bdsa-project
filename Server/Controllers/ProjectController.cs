@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ProjectBank.Server.Entities;
 using Microsoft.EntityFrameworkCore;
+using Server.Entities;
 
 namespace ProjectBank.Server.Controllers;
 
@@ -14,9 +15,9 @@ namespace ProjectBank.Server.Controllers;
 [ApiController]
 public class ProjectController : ControllerBase
 {
-    private DBFacade _repository;
+    private IDBFacade _repository;
 
-    public ProjectController(DBFacade repository)
+    public ProjectController(IDBFacade repository)
     {
         _repository = repository;          
     }
@@ -43,9 +44,15 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet("Email/{email}")]
-    public async Task<UserDTO> GetByEmail(string email)
+    public async Task<ActionResult<UserDTO>> GetByEmail(string email)
     {
-        return await _repository.GetUserByEmail(email);
+        var user = await _repository.GetUserByEmail(email);
+        
+        if (user != null)
+        {
+            return Ok(user);
+        }
+        return NotFound();
     }
     [HttpGet("Student/{studentid}")]
     public async Task<List<SimplifiedProjectDTO>> ShowListOfAppliedProjects(int studentId)
@@ -84,23 +91,12 @@ public class ProjectController : ControllerBase
     public async Task<ActionResult> ApplyForProject(int projectid, [FromBody] int studentid)
     {
         var response = await _repository.ApplyToProject(projectid, studentid);
-
-        switch (response)
+        
+        if (response == Entities.Response.Created)
         {
-            case Entities.Response.Created: return Ok();
-
-            case Entities.Response.Updated: return Ok();
-            
-            case Entities.Response.Deleted: return NoContent();
-
-            case Entities.Response.NotFound: return NotFound();
-            
-            case Entities.Response.BadRequest: return BadRequest();
-
-            case Entities.Response.Conflict: return Conflict();
-
-            default: return NotFound();
+            return Ok();
         }
+        return Conflict();        
     }
   
 
@@ -118,6 +114,18 @@ public class ProjectController : ControllerBase
     public async Task<Response> Delete(int id)
     {
         return await _repository.DeleteProject(id);
+    }
+
+    [HttpDelete("DeleteView/{projectid}")]
+    public async Task<Response> DeleteView(int projectid)
+    {
+        return await _repository.DeleteViews(projectid);
+    }
+
+    [HttpDelete("DeleteApplication/{projectid}")]
+    public async Task<Response> DeleteApplication(int projectid)
+    {
+        return await _repository.DeleteApplications(projectid);
     }
 
 

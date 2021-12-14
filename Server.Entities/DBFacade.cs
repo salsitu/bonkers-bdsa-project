@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using static ProjectBank.Server.Entities.Response;
 using ProjectBank.Server;
+using Server.Entities;
 
 namespace ProjectBank.Server.Entities
 {
-    public class DBFacade
+    public class DBFacade : IDBFacade
     {
         private readonly ProjectBankContext _context;
         private readonly ProjectRepository _projectRepo;

@@ -275,7 +275,7 @@ public class DBFacadeTests
 
     [Fact]
 
-    public async Task AddView_returns_created_if_student_had_not_previously_applied()
+    public async Task AddView_returns_created_if_student_had_not_previously_viewed_the_project()
     {
         var response = await _repo.AddView(3,4);
 
@@ -283,7 +283,7 @@ public class DBFacadeTests
     }
 
     [Fact]
-    public async Task AddView_returns_conflict_if_student_has_already_applied_for_project()
+    public async Task AddView_returns_conflict_if_student_has_already_viewed_the_project()
     {
         var response = await _repo.AddView(1,2);
 
@@ -326,14 +326,14 @@ public class DBFacadeTests
         Assert.Equal(NotFound,response);
     }
     [Fact]
-    public async Task CreateUser_returns_created_and_new_user()
+    public async Task CreateUser_returns_created_and_new_user_if_no_user_in_database_with_provided_email()
     {
         var created = await _repo.CreateUser("Karl", false, "Email@mei.dk");
 
         Assert.Equal((Created, new UserDTO(5, "Karl", false, "Email@mei.dk")), created);
     }
     [Fact]
-    public async Task CreateUser_given_existing_User_returns_Conflict_and_user()
+    public async Task CreateUser_given_existing_email_returns_Conflict_and_user()
     {
         var created = await _repo.CreateUser("jakob", false, "jakob@");
 
@@ -347,7 +347,7 @@ public class DBFacadeTests
         Assert.Equal(new UserDTO(2, "jakob", false, "jakob@"), user);
     }
     [Fact]
-    public async Task GetUser_returns_null_if_user_doesnt_exists()
+    public async Task GetUser_returns_null_if_no_user_with_provided_id_exists()
     {
         var user = await _repo.GetUser(22);
 

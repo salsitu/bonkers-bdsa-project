@@ -60,7 +60,12 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
+if (!app.Environment.IsEnvironment("Integration")) 
+{
+    await app.SeedAsync();
+}
 
-await app.SeedAsync();
 
 app.Run();
+
+public partial class Program { }

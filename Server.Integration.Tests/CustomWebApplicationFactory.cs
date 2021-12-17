@@ -10,6 +10,8 @@ using ProjectBank.Server.Entities;
 using System;
 using System.Linq;
 
+//Constructor and CreateHost method from https://github.com/ondfisk/BDSA2021/blob/main/MyApp.Server.Integration.Tests/CustomWebApplicationFactory.cs
+
 namespace Server.Integration.Tests;
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {

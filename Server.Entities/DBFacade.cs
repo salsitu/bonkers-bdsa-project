@@ -11,10 +11,10 @@ namespace ProjectBank.Server.Entities
     public class DBFacade : IDBFacade
     {
         private readonly ProjectBankContext _context;
-        private readonly ProjectRepository _projectRepo;
-        private readonly ApplicantRepository _applicantRepo;
-        private readonly ViewRepository _viewRepo;
-        private readonly UserRepository _userRepo;
+        private readonly IProjectRepository _projectRepo;
+        private readonly IApplicantRepository _applicantRepo;
+        private readonly IViewRepository _viewRepo;
+        private readonly IUserRepository _userRepo;
         public DBFacade(ProjectBankContext context)
         {
             _context = context;

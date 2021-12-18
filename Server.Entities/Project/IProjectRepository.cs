@@ -10,10 +10,10 @@ namespace ProjectBank.Server.Entities
     {
         public Task<(Response, ProjectDTO)> CreateAsync(ProjectCreateDTO project);
 
-        public Task<ProjectDTO> ReadAsync(int projectId);
+        public Task<ProjectDTO> GetProjectAsync(int projectId);
         public Task<Response> DeleteAsync(int projectId);
-        public Task<List<SimplifiedProjectDTO>> ListAllProjectsAsync();
-        public Task<List<SimplifiedProjectDTO>> ShowCreatedProjectsAsync(int id);
+        public Task<List<SimplifiedProjectDTO>> GetAllProjectsAsync();
+        public Task<List<SimplifiedProjectDTO>> GetCreatedProjectsAsync(int id);
 
     }
 }

@@ -14,13 +14,13 @@ public interface IDBFacade
     public Task<int> GetViewsOfProject(int projectId);
     public Task<Response> AddView(int projectId, int studentId);
     public Task<Response> DeleteApplications(int projectId);
-    public Task<int> SelectNrOfProjectApplications(int projectId);
-    public Task<List<SimplifiedProjectDTO>> ShowListOfAppliedProjects(int studentId);
+    public Task<int> GetNrOfProjectApplications(int projectId);
+    public Task<List<SimplifiedProjectDTO>> GetAppliedProjects(int studentId);
     public Task<Response> HasAlreadyAppliedToProject(int projectid, int studentId);
     public Task<Response> ApplyToProject(int projectId, int studentId);
-    public Task<List<SimplifiedProjectDTO>> ShowCreatedProjects(int authorId);
-    public Task<List<SimplifiedProjectDTO>> ShowAllProjects();
-    public Task<ProjectDTO> SelectProject(int projectId);
+    public Task<List<SimplifiedProjectDTO>> GetCreatedProjects(int authorId);
+    public Task<List<SimplifiedProjectDTO>> GetAllProjects();
+    public Task<ProjectDTO> GetProject(int projectId);
     public Task<Response> DeleteProject(int projectId);
 }
 

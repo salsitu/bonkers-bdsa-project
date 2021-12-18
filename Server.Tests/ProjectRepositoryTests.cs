@@ -66,14 +66,14 @@ public class ProjectRepositoryTests
     [Fact]
     public async Task ReadAsync_given_non_existing_id_returns_null()
     {
-        var project = await _repo.ReadAsync(36);
+        var project = await _repo.GetProjectAsync(36);
 
         Assert.Null(project);
     }
     [Fact]
     public async Task ReadAsync_given_existing_id_returns_project()
     {
-        var project = await _repo.ReadAsync(2);
+        var project = await _repo.GetProjectAsync(2);
 
         Assert.Equal(new ProjectDTO(2, "hihi", "dada", 2), project);
     }
@@ -94,7 +94,7 @@ public class ProjectRepositoryTests
     [Fact]
     public async Task ListAllProjectsAsync_returns_all_existing_projects()
     {
-        var projectList = await _repo.ListAllProjectsAsync();
+        var projectList = await _repo.GetAllProjectsAsync();
 
 
         Assert.Equal(new List<SimplifiedProjectDTO>{ new SimplifiedProjectDTO(1, "huhu"), new SimplifiedProjectDTO(2, "hihi")}, projectList);
@@ -104,14 +104,14 @@ public class ProjectRepositoryTests
     {
         await _repo.DeleteAsync(1);
         await _repo.DeleteAsync(2);
-        var projectList = await _repo.ListAllProjectsAsync();
+        var projectList = await _repo.GetAllProjectsAsync();
         var emptyList = new List<SimplifiedProjectDTO>();
         Assert.Equal(emptyList, projectList);
     }
     [Fact]
     public async Task ShowCreatedProjectsAsync_returns_authors_projects()
     {
-        var createdProjects = await _repo.ShowCreatedProjectsAsync(1);
+        var createdProjects = await _repo.GetCreatedProjectsAsync(1);
 
         Assert.Equal(new List<SimplifiedProjectDTO> { new SimplifiedProjectDTO(1, "huhu") }, createdProjects);
     }

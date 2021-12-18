@@ -102,7 +102,7 @@ public class DBFacadeTests
     [Fact]
     public async Task SelectProject_returns_requested_project()
     {
-        var project = await _repo.SelectProject(1);
+        var project = await _repo.GetProject(1);
 
         var expectedProject = new ProjectDTO(1, "huhu", "jaja",1);
 
@@ -111,7 +111,7 @@ public class DBFacadeTests
     [Fact]
     public async Task SelectProject_returns_null_if_project_doesnt_exist()
     {
-        var project = await _repo.SelectProject(3);
+        var project = await _repo.GetProject(3);
 
         Assert.Null(project);
     }
@@ -137,7 +137,7 @@ public class DBFacadeTests
 
     public async Task ShowAllProjects_returns_list_of_all_existing_projects()
     {
-        var projects = await _repo.ShowAllProjects();
+        var projects = await _repo.GetAllProjects();
 
         var allProjects = new List<SimplifiedProjectDTO>{ new SimplifiedProjectDTO(1, "huhu"), new SimplifiedProjectDTO(2, "hihi")};
 
@@ -151,7 +151,7 @@ public class DBFacadeTests
         await _repo.DeleteProject(1);
         await _repo.DeleteProject(2);
     
-        var projects = await _repo.ShowAllProjects();
+        var projects = await _repo.GetAllProjects();
 
         var emptyRepo = new List<SimplifiedProjectDTO>();
 
@@ -162,7 +162,7 @@ public class DBFacadeTests
 
     public async Task ShowCreatedProjects_returns_the_authors_projects()
     {
-        var projects = await _repo.ShowCreatedProjects(1);
+        var projects = await _repo.GetCreatedProjects(1);
 
         var listOfCreatedProjects = new List<SimplifiedProjectDTO> { new SimplifiedProjectDTO(1, "huhu") };
 
@@ -173,7 +173,7 @@ public class DBFacadeTests
     public async Task ShowCreatedProjecs_returns_empty_list_if_author_hasnt_created_projects()
     {
         await _repo.DeleteProject(1);
-        var projects = await _repo.ShowCreatedProjects(1);
+        var projects = await _repo.GetCreatedProjects(1);
 
         var emptyListOfDTO = new List<SimplifiedProjectDTO>();
 
@@ -223,7 +223,7 @@ public class DBFacadeTests
     [Fact]
     public async Task ShowListOfApppliedProjects_returns_students_applications()
     {
-        var projects = await _repo.ShowListOfAppliedProjects(2);
+        var projects = await _repo.GetAppliedProjects(2);
 
         var expectedList = new List<SimplifiedProjectDTO>{new SimplifiedProjectDTO(1,"huhu"), new SimplifiedProjectDTO(2, "hihi")};
 
@@ -234,7 +234,7 @@ public class DBFacadeTests
 
     public async Task ShowListOfAppliedProjects_returns_empty_list_if_student_has_no_applications()
     {
-        var projects = await _repo.ShowListOfAppliedProjects(4);
+        var projects = await _repo.GetAppliedProjects(4);
 
         Assert.Equal(new List<SimplifiedProjectDTO>{},projects);
     }
@@ -242,7 +242,7 @@ public class DBFacadeTests
     [Fact]
     public async Task SelectNrOfProjectApplications_returns_2_if_project_has_two_applications()
     {
-        var applications = await _repo.SelectNrOfProjectApplications(2);
+        var applications = await _repo.GetNrOfProjectApplications(2);
 
         Assert.Equal(2,2);
 
@@ -252,7 +252,7 @@ public class DBFacadeTests
     [Fact]
     public async Task SelectNrOfProjectApplications_returns_0_as_default_is_project_has_no_applications()
     {
-        var applications = await _repo.SelectNrOfProjectApplications(4);
+        var applications = await _repo.GetNrOfProjectApplications(4);
 
         Assert.Equal(0,0);
     }

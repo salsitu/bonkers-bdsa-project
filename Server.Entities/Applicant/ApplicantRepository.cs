@@ -56,7 +56,7 @@ namespace ProjectBank.Server.Entities
                 return (NotFound);
             }
         }
-        public async Task<List<SimplifiedProjectDTO>> ShowListOfAppliedProjectsAsync(int userId)
+        public async Task<List<SimplifiedProjectDTO>> GetAppliedProjectsAsync(int userId)
         {
             var projects =
                 await (from Applicant in _context.Applicants
@@ -67,7 +67,7 @@ namespace ProjectBank.Server.Entities
 
             return projects;
         }
-        public async Task<int> SelectNrOfProjectApplicationsAsync(int projectId)
+        public async Task<int> GetNrOfProjectApplicationsAsync(int projectId)
         {
             var projects = await (from a in _context.Applicants
                             where a.ProjectId == projectId

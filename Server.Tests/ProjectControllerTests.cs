@@ -18,7 +18,7 @@ public class ProjectControllerTests
     {
         var expected = new ProjectDTO(1, "Project", "Body of project", 1);
         var repository = new Mock<IDBFacade>();
-        repository.Setup(m => m.SelectProject(1)).ReturnsAsync(expected);
+        repository.Setup(m => m.GetProject(1)).ReturnsAsync(expected);
         var controller = new ProjectController(repository.Object);
 
         var actual = await controller.Get(1);
@@ -31,7 +31,7 @@ public class ProjectControllerTests
     {
         var expected = new ProjectDTO(1, "Project", "Body of project", 1);
         var repository = new Mock<IDBFacade>();
-        repository.Setup(m => m.SelectProject(2)).ReturnsAsync(expected);
+        repository.Setup(m => m.GetProject(2)).ReturnsAsync(expected);
         var controller = new ProjectController(repository.Object);
 
         var actual = await controller.Get(1);
@@ -44,7 +44,7 @@ public class ProjectControllerTests
     {
         var expected = Array.Empty<SimplifiedProjectDTO>();
         var repository = new Mock<IDBFacade>();
-        repository.Setup(m => m.ShowCreatedProjects(1)).ReturnsAsync(() => new List<SimplifiedProjectDTO>(expected));
+        repository.Setup(m => m.GetCreatedProjects(1)).ReturnsAsync(() => new List<SimplifiedProjectDTO>(expected));
         var controller = new ProjectController(repository.Object);
 
         var actual = await controller.GetByAuthor(1);
@@ -61,7 +61,7 @@ public class ProjectControllerTests
         expected.Add(project1);
         expected.Add(project2);
         var repository = new Mock<IDBFacade>();
-        repository.Setup(m => m.ShowCreatedProjects(1)).ReturnsAsync(() => new List<SimplifiedProjectDTO>(expected));
+        repository.Setup(m => m.GetCreatedProjects(1)).ReturnsAsync(() => new List<SimplifiedProjectDTO>(expected));
         var controller = new ProjectController(repository.Object);
 
         var actual = await controller.GetByAuthor(1);
@@ -103,10 +103,10 @@ public class ProjectControllerTests
         expected.Add(project1);
         expected.Add(project2);
         var repository = new Mock<IDBFacade>();
-        repository.Setup(m => m.ShowListOfAppliedProjects(1)).ReturnsAsync(expected);
+        repository.Setup(m => m.GetAppliedProjects(1)).ReturnsAsync(expected);
         var controller = new ProjectController(repository.Object);
 
-        var actual = await controller.ShowListOfAppliedProjects(1);
+        var actual = await controller.GetAppliedProjects(1);
 
         Assert.Equal(expected, actual);
     }
@@ -117,10 +117,10 @@ public class ProjectControllerTests
         var expected = Array.Empty<SimplifiedProjectDTO>();
 
         var repository = new Mock<IDBFacade>();
-        repository.Setup(m => m.ShowListOfAppliedProjects(1)).ReturnsAsync(() => new List<SimplifiedProjectDTO>(expected));
+        repository.Setup(m => m.GetAppliedProjects(1)).ReturnsAsync(() => new List<SimplifiedProjectDTO>(expected));
         var controller = new ProjectController(repository.Object);
 
-        var actual = await controller.ShowListOfAppliedProjects(1);
+        var actual = await controller.GetAppliedProjects(1);
 
         Assert.Equal(expected, actual);
     }
@@ -131,7 +131,7 @@ public class ProjectControllerTests
         var expected = Array.Empty<SimplifiedProjectDTO>();
 
         var repository = new Mock<IDBFacade>();
-        repository.Setup(m => m.ShowAllProjects()).ReturnsAsync(() => new List<SimplifiedProjectDTO>(expected));
+        repository.Setup(m => m.GetAllProjects()).ReturnsAsync(() => new List<SimplifiedProjectDTO>(expected));
         var controller = new ProjectController(repository.Object);
 
         var actual = await controller.Get();
@@ -148,7 +148,7 @@ public class ProjectControllerTests
         expected.Add(project1);
         expected.Add(project2);
         var repository = new Mock<IDBFacade>();
-        repository.Setup(m => m.ShowAllProjects()).ReturnsAsync(expected);
+        repository.Setup(m => m.GetAllProjects()).ReturnsAsync(expected);
         var controller = new ProjectController(repository.Object);
 
         var actual = await controller.Get();
@@ -184,7 +184,7 @@ public class ProjectControllerTests
     {
         var expected = 1;
         var repository = new Mock<IDBFacade>();
-        repository.Setup(m => m.SelectNrOfProjectApplications(1)).ReturnsAsync(expected);
+        repository.Setup(m => m.GetNrOfProjectApplications(1)).ReturnsAsync(expected);
         var controller = new ProjectController(repository.Object);
 
         var actual = await controller.GetApplications(1);

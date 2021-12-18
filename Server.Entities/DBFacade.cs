@@ -11,10 +11,10 @@ namespace ProjectBank.Server.Entities
     public class DBFacade : IDBFacade
     {
         private readonly ProjectBankContext _context;
-        private readonly ProjectRepository _projectRepo;
-        private readonly ApplicantRepository _applicantRepo;
-        private readonly ViewRepository _viewRepo;
-        private readonly UserRepository _userRepo;
+        private readonly IProjectRepository _projectRepo;
+        private readonly IApplicantRepository _applicantRepo;
+        private readonly IViewRepository _viewRepo;
+        private readonly IUserRepository _userRepo;
         public DBFacade(ProjectBankContext context)
         {
             _context = context;
@@ -31,9 +31,9 @@ namespace ProjectBank.Server.Entities
             return _projectRepo.CreateAsync(project);
         }
 
-        public Task<ProjectDTO> SelectProject(int projectId)
+        public Task<ProjectDTO> GetProject(int projectId)
         {
-            return _projectRepo.ReadAsync(projectId);
+            return _projectRepo.GetProjectAsync(projectId);
         }
 
         public Task<Response> DeleteProject(int projectId)
@@ -41,14 +41,14 @@ namespace ProjectBank.Server.Entities
             return _projectRepo.DeleteAsync(projectId);
         }
 
-        public Task<List<SimplifiedProjectDTO>> ShowAllProjects()
+        public Task<List<SimplifiedProjectDTO>> GetAllProjects()
         {
-            return _projectRepo.ListAllProjectsAsync();
+            return _projectRepo.GetAllProjectsAsync();
         }
         
-        public Task<List<SimplifiedProjectDTO>> ShowCreatedProjects(int authorId)
+        public Task<List<SimplifiedProjectDTO>> GetCreatedProjects(int authorId)
         {
-            return _projectRepo.ShowCreatedProjectsAsync(authorId);
+            return _projectRepo.GetCreatedProjectsAsync(authorId);
         }
 
         public Task<Response> ApplyToProject(int projectId, int studentId)
@@ -61,14 +61,14 @@ namespace ProjectBank.Server.Entities
             return _applicantRepo.HasAlreadyAppliedToProjectAsync(projectid,studentId);
         }
 
-        public Task<List<SimplifiedProjectDTO>> ShowListOfAppliedProjects(int studentId)
+        public Task<List<SimplifiedProjectDTO>> GetAppliedProjects(int studentId)
         {
-            return _applicantRepo.ShowListOfAppliedProjectsAsync(studentId);
+            return _applicantRepo.GetAppliedProjectsAsync(studentId);
         }
 
-        public Task<int> SelectNrOfProjectApplications(int projectId)
+        public Task<int> GetNrOfProjectApplications(int projectId)
         {
-            return _applicantRepo.SelectNrOfProjectApplicationsAsync(projectId);
+            return _applicantRepo.GetNrOfProjectApplicationsAsync(projectId);
         }
 
         public Task<Response> DeleteApplications(int projectId)

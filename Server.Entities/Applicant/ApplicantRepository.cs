@@ -7,7 +7,7 @@ using ProjectBank.Server;
 
 namespace ProjectBank.Server.Entities
 {
-    public class ApplicantRepository
+    public class ApplicantRepository : IApplicantRepository
     {
         private readonly ProjectBankContext _context;
 

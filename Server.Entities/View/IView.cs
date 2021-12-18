@@ -1,13 +1,14 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ProjectBank.Server.Entities
 {
-    public class Applicant : IApplicant
+    internal interface IView
     {
-        [Required]
         public int ProjectId { get; set; }
-        [Required]
         public int StudentId { get; set; }
     }
 }

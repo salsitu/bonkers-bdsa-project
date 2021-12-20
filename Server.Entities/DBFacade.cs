@@ -45,7 +45,7 @@ namespace ProjectBank.Server.Entities
         {
             return _projectRepo.GetAllProjectsAsync();
         }
-        
+
         public Task<List<SimplifiedProjectDTO>> GetCreatedProjects(int authorId)
         {
             return _projectRepo.GetCreatedProjectsAsync(authorId);
@@ -58,7 +58,7 @@ namespace ProjectBank.Server.Entities
 
         public Task<Response> HasAlreadyAppliedToProject(int projectid, int studentId)
         {
-            return _applicantRepo.HasAlreadyAppliedToProjectAsync(projectid,studentId);
+            return _applicantRepo.HasAlreadyAppliedToProjectAsync(projectid, studentId);
         }
 
         public Task<List<SimplifiedProjectDTO>> GetAppliedProjects(int studentId)
@@ -78,11 +78,11 @@ namespace ProjectBank.Server.Entities
 
         public Task<Response> AddView(int projectId, int studentId)
         {
-            return _viewRepo.AddViewAsync(projectId,studentId);
+            return _viewRepo.AddViewAsync(projectId, studentId);
         }
 
         public Task<int> GetViewsOfProject(int projectId)
-        {   
+        {
             Console.WriteLine("Facade =" + projectId);
             return _viewRepo.GetViewsOfProjectAsync(projectId);
         }
@@ -91,7 +91,7 @@ namespace ProjectBank.Server.Entities
         {
             return _viewRepo.DeleteViewAsync(projectId);
         }
-        
+
         public Task<(Response, UserDTO)> CreateUser(string name, bool isSupervisor, string email)
         {
             var user = new UserCreateDTO(name, isSupervisor, email);

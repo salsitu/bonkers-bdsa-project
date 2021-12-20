@@ -1,4 +1,3 @@
-using ProjectBank.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,19 +18,19 @@ public class ProjectController : ControllerBase
 
     public ProjectController(IDBFacade repository)
     {
-        _repository = repository;          
+        _repository = repository;
     }
 
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ProjectDTO),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProjectDTO), StatusCodes.Status200OK)]
     public async Task<ActionResult<ProjectDTO>> Get(int id)
     {
         var project = await _repository.GetProject(id);
 
         if (project != null)
-        {   
+        {
             return Ok(project);
         }
         return NotFound();
@@ -47,7 +46,7 @@ public class ProjectController : ControllerBase
     public async Task<ActionResult<UserDTO>> GetByEmail(string email)
     {
         var user = await _repository.GetUserByEmail(email);
-        
+
         if (user != null)
         {
             return Ok(user);
@@ -69,14 +68,14 @@ public class ProjectController : ControllerBase
 
     [HttpGet("GetViews/{projectid}")]
     public async Task<int> GetViews(int projectid)
-    {   
+    {
         return await _repository.GetViewsOfProject(projectid);
     }
 
     [HttpGet("Applications/{projectid}")]
     public async Task<int> GetApplications(int projectid)
     {
-        return await _repository.GetNrOfProjectApplications(projectid);  
+        return await _repository.GetNrOfProjectApplications(projectid);
     }
 
     [HttpGet("IsApplied/{projectid}/{studentid}")]
@@ -91,22 +90,28 @@ public class ProjectController : ControllerBase
     public async Task<ActionResult> ApplyForProject(int projectid, [FromBody] int studentid)
     {
         var response = await _repository.ApplyToProject(projectid, studentid);
-        
+
         if (response == Entities.Response.Created)
         {
             return Ok();
         }
-        return Conflict();        
+        return Conflict();
     }
-  
+
 
     [HttpPost("Post")]
     [ProducesResponseType(typeof(ProjectDTO), 201)]
-    public async Task<(Response, ProjectDTO)> Post(Project project) 
+    public async Task<ActionResult> Post(Project project)
     {
-        return await _repository.CreateProject(project.Name, project.Description, project.AuthorId);
+        var x = await _repository.CreateProject(project.Name, project.Description, project.AuthorId);
+
+        if (x.Item1 == Entities.Response.Conflict)
+        {
+            return Conflict();
+        }
+        return Ok();
     }
-    
+
 
     [HttpDelete("Delete/{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

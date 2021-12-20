@@ -26,15 +26,15 @@ public class ViewRepositoryTests
         context.Projects.Add(new Project
         {
             Id = 1,
-            Name = "huhu",
-            Description = "jaja",
+            Name = "Title1",
+            Description = "Desc1",
             AuthorId = 1
         });
         context.Projects.Add(new Project
         {
             Id = 2,
-            Name = "hihi",
-            Description = "dada",
+            Name = "Title2",
+            Description = "Desc2",
             AuthorId = 2
         });
         context.Users.Add(new User
@@ -76,7 +76,7 @@ public class ViewRepositoryTests
     [Fact]
     public async Task AddViewAsync_returns_Created_when_new_view()
     {
-        var response= await _repo.AddViewAsync(2, 3);
+        var response = await _repo.AddViewAsync(2, 3);
 
         Assert.Equal(Created, response);
     }

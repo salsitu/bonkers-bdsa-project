@@ -14,7 +14,7 @@ namespace Server.Tests;
 public class ProjectControllerTests
 {
     [Fact]
-    public async void Get_Returns_Project_When_Given_Id ()
+    public async void Get_Returns_Project_When_Given_Id()
     {
         var expected = new ProjectDTO(1, "Project", "Body of project", 1);
         var repository = new Mock<IDBFacade>();
@@ -113,7 +113,7 @@ public class ProjectControllerTests
     [Fact]
     public async void ShowListOfAppliedProjects_Returns_Empty_List_Of_Projects_When_Given_UserID_With_No_Applications()
     {
-        
+
         var expected = Array.Empty<SimplifiedProjectDTO>();
 
         var repository = new Mock<IDBFacade>();
@@ -136,7 +136,7 @@ public class ProjectControllerTests
 
         var actual = await controller.Get();
 
-        Assert.Equal(expected, actual); 
+        Assert.Equal(expected, actual);
     }
 
     [Fact]
@@ -208,7 +208,7 @@ public class ProjectControllerTests
     public async void IsApplied_Returns_True_When_Student_Is_Applied_To_Given_Project()
     {
         var expected = true;
-        var response = Exists; 
+        var response = Exists;
         var projectid = 1;
         var studentid = 1;
 
@@ -216,7 +216,7 @@ public class ProjectControllerTests
         repository.Setup(m => m.HasAlreadyAppliedToProject(projectid, studentid)).ReturnsAsync(response);
         var controller = new ProjectController(repository.Object);
 
-        var actual = await controller.IsApplied(studentid,projectid);
+        var actual = await controller.IsApplied(studentid, projectid);
 
         Assert.Equal(expected, actual);
     }
@@ -341,25 +341,24 @@ public class ProjectControllerTests
         repository.Setup(m => m.CreateProject("Project", "Desc", 1)).ReturnsAsync(() => (Response.Created, new ProjectDTO(1, "Project", "Desc", 1)));
         var controller = new ProjectController(repository.Object);
 
-        var project = new Project { Id = 1, Name = "Project", Description = "Desc", AuthorId = 1};
-        var expected = (Response.Created, new ProjectDTO(1, "Project", "Desc", 1));
+        var project = new Project { Id = 1, Name = "Project", Description = "Desc", AuthorId = 1 };
+        var expected = new OkResult();
         var actual = await controller.Post(project);
 
-        Assert.Equal(expected, actual);
+        Assert.IsType<OkResult>(actual);
     }
 
     [Fact]
     public async void Post_Returns_Conflict_When_Given_Existing_Project()
     {
         var repository = new Mock<IDBFacade>();
-        repository.Setup(m => m.CreateProject("Project", "Desc", 1)).ReturnsAsync(()=> (Response.Conflict, new ProjectDTO(1, "Project", "Desc", 1)));
+        repository.Setup(m => m.CreateProject("Project", "Desc", 1)).ReturnsAsync(() => (Response.Conflict, new ProjectDTO(1, "Project", "Desc", 1)));
         var controller = new ProjectController(repository.Object);
 
         var project = new Project { Id = 1, Name = "Project", Description = "Desc", AuthorId = 1 };
-        var expected = (Response.Conflict, new ProjectDTO(1, "Project", "Desc", 1));
         var actual = await controller.Post(project);
 
-        Assert.Equal(expected, actual);
+        Assert.IsType<ConflictResult>(actual);
     }
 
     [Fact]
@@ -381,7 +380,7 @@ public class ProjectControllerTests
         repository.Setup(m => m.ApplyToProject(1, 1)).ReturnsAsync(Response.Conflict);
         var controller = new ProjectController(repository.Object);
 
-        var actual = await controller.ApplyForProject(1,1);
+        var actual = await controller.ApplyForProject(1, 1);
 
         Assert.IsType<ConflictResult>(actual);
     }

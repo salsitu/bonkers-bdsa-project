@@ -1,5 +1,4 @@
 @page "/myprojects"
-@using ProjectBank.Shared
 @inject HttpClient HttpClient
 @inject IJSRuntime JSRuntime
 @inject NavigationManager MyNavigationManager
@@ -70,7 +69,7 @@
     private Project currentProject = new();
 
     protected override async Task OnInitializedAsync()
-    {       
+    {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
 
@@ -81,16 +80,16 @@
         {
             Projects = await HttpClient.GetFromJsonAsync<List<SimplifiedProjectDTO>>($"Project/Author/{user.Id}");
 
-        } 
+        }
         else
         {
             Projects = await HttpClient.GetFromJsonAsync<List<SimplifiedProjectDTO>>($"Project/Student/{user.Id}");
-        }        
-
-
         }
 
-    
+
+    }
+
+
 
     private async Task Selected(Project p)
     {
@@ -99,14 +98,14 @@
     }
 
     private async Task Delete()
-    {   
+    {
         if (await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the project?"))
         {
 
             await HttpClient.DeleteAsync($"Project/Delete/{currentProject.Id}");
             string success = "You successfully deleted the project";
 
-           
+
             //MEGET SCUFFED FIX TIL AT DEN IKKE RELOADER SIDEN - HURTIGT GÅ TIL ANDEN SIDE OG DEREFTER TILBAGE
             MyNavigationManager.NavigateTo("allprojects");
             MyNavigationManager.NavigateTo("myprojects");

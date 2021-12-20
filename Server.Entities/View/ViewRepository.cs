@@ -39,9 +39,9 @@ namespace ProjectBank.Server.Entities
         }
         public async Task<int> GetViewsOfProjectAsync(int projectId)
         {
-            var views =  (from v in _context.Views
-                                  where v.ProjectId == projectId
-                                  select v).Count();
+            var views = (from v in _context.Views
+                         where v.ProjectId == projectId
+                         select v).Count();
             Console.WriteLine(projectId);
             Console.WriteLine(views);
             return views;

@@ -1,7 +1,6 @@
 @page "/projects"
 @inject HttpClient HttpClient
-@using ProjectBank.Shared
-@attribute [Authorize] 
+@attribute [Authorize]
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
@@ -38,9 +37,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        
-            Projects = await HttpClient.GetFromJsonAsync<List<Project>>("Project/List");
-        
-       
+
+        Projects = await HttpClient.GetFromJsonAsync<List<Project>>("Project/List");
     }
 }

@@ -10,7 +10,7 @@ using ProjectBank.Server.Entities;
 using System;
 using System.Linq;
 
-//Constructor and CreateHost method from https://github.com/ondfisk/BDSA2021/blob/main/MyApp.Server.Integration.Tests/CustomWebApplicationFactory.cs
+//CreateHost method from https://github.com/ondfisk/BDSA2021/blob/main/MyApp.Server.Integration.Tests/CustomWebApplicationFactory.cs
 
 namespace Server.Integration.Tests;
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
@@ -66,20 +66,20 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         return base.CreateHost(builder);
     }
 
-    private void Seed(ProjectBankContext context) 
+    private void Seed(ProjectBankContext context)
     {
         context.Projects.Add(new Project
         {
             Id = 1,
-            Name = "huhu",
-            Description = "jaja",
+            Name = "Title1",
+            Description = "Desc1",
             AuthorId = 1
         });
         context.Projects.Add(new Project
         {
             Id = 2,
-            Name = "hihi",
-            Description = "dada",
+            Name = "Title2",
+            Description = "Desc2",
             AuthorId = 2
         });
         context.Users.Add(new User
@@ -135,7 +135,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             ProjectId = 1,
             StudentId = 5
         });
-        context.SaveChanges(); 
+        context.SaveChanges();
     }
 
 

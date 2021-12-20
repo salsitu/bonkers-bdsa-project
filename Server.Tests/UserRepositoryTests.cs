@@ -26,8 +26,8 @@ public class UserRepositoryTests
         context.Projects.Add(new Project
         {
             Id = 1,
-            Name = "huhu",
-            Description = "jaja",
+            Name = "Title1",
+            Description = "Desc1",
             AuthorId = 1
         });
         context.Users.Add(new User
@@ -52,9 +52,9 @@ public class UserRepositoryTests
     public async Task CreateUserAsync_returns_created_and_new_user()
     {
         var user = new UserCreateDTO("Karl", false, "Email@mei.dk");
-    
+
         var created = await _repo.CreateUserAsync(user);
-    
+
         Assert.Equal((Created, new UserDTO(3, "Karl", false, "Email@mei.dk")), created);
     }
     [Fact]

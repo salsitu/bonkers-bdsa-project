@@ -1,11 +1,10 @@
 @page "/project/{id:int}"
 @inject HttpClient HttpClient
-@using ProjectBank.Shared
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager MyNavigationManager
 @inject IToastService toastService
 @inject IJSRuntime JSRuntime
-   
+
 <div class="row justify-content-center">
     <div class="col-md-10">
         <div class="card mt-3 mb-3">
@@ -69,9 +68,9 @@
 
 
 
-@code{
+@code {
 
-    [Parameter] public int id {get; set;}
+    [Parameter] public int id { get; set; }
 
 
     private Project SelectedProject = new();
@@ -93,7 +92,6 @@
 
         SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
 
-        Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
 
 
 
@@ -101,18 +99,21 @@
         {
             var studentId = user.Id;
             var response = await HttpClient.PutAsJsonAsync($"Project/PutView/{id}", studentId);
+            Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
             isApplied();
 
-        }else if (currentUser.IsSupervisor)
+        }
+        else if (currentUser.IsSupervisor)
         {
+            Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
             Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
             SetRatio();
         }
     }
 
-    public void SetRatio() 
+    public void SetRatio()
     {
-        if (Applications == 0) 
+        if (Applications == 0)
         {
             Ratio = string.Format("{0}:{1}", Views, Applications);
             return;
@@ -121,31 +122,32 @@
         Ratio = string.Format("{0}:{1}", Views / greatestCommonDenominator, Applications / greatestCommonDenominator);
 
     }
-    //https://stackoverflow.com/questions/18541832/c-sharp-find-the-greatest-common-divisor 
+    //https://stackoverflow.com/questions/18541832/c-sharp-find-the-greatest-common-divisor
     //Finding the Greatest Common Denominator by using the Euclidean Algorithm
-    private int GCD(int Views, int Applications)       
+    private int GCD(int Views, int Applications)
     {
-    while (Views != 0 && Applications != 0)
-    {
-        if (Views > Applications)
-            Views %= Applications;
-        else
-            Applications %= Views;
-    }
+        while (Views != 0 && Applications != 0)
+        {
+            if (Views > Applications)
+                Views %= Applications;
+            else
+                Applications %= Views;
+        }
 
-    return Views | Applications;
+        return Views | Applications;
 
     }
 
     private async Task Delete()
-    {   
+    {
         if (await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the project?"))
         {
             string toastMsg = "You successfully deleted the project";
             using var httpresponse = await HttpClient.DeleteAsync($"Project/Delete/{SelectedProject.Id}");
             var x = await HttpClient.DeleteAsync($"Project/DeleteView/{SelectedProject.Id}");
             var y = await HttpClient.DeleteAsync($"Project/DeleteApplication/{SelectedProject.Id}");
-            if (!httpresponse.IsSuccessStatusCode) {
+            if (!httpresponse.IsSuccessStatusCode)
+            {
                 toastMsg = "An error has occured: " + httpresponse.ReasonPhrase;
                 toastService.ShowError(toastMsg);
                 MyNavigationManager.NavigateTo("allprojects");
@@ -163,18 +165,18 @@
 
     public async void ApplyForProject()
     {
-       
 
-        var response = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}",currentUser.Id);
 
-        if (response.IsSuccessStatusCode)         
-        {   
-            MyNavigationManager.NavigateTo("myprojects");             
-            toastService.ShowSuccess("You successfully applied to project " + SelectedProject.Name);             
-        }         
-        else         
-        {             
-            toastService.ShowError("Error");        
+        var response = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}", currentUser.Id);
+
+        if (response.IsSuccessStatusCode)
+        {
+            MyNavigationManager.NavigateTo("myprojects");
+            toastService.ShowSuccess("You successfully applied to project " + SelectedProject.Name);
+        }
+        else
+        {
+            toastService.ShowError("Error");
         }
 
     }
@@ -185,6 +187,6 @@
         var x = await HttpClient.GetFromJsonAsync<bool>($"Project/IsApplied/{id}/{studentid}");
 
         Applied = x;
-    } 
+    }
 
 }

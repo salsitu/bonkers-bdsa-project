@@ -55,7 +55,8 @@
     private Project project = new();
 
     public async Task createProject()
-    {
+    {   
+        
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
         var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;

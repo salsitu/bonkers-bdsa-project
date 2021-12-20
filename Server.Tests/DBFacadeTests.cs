@@ -26,12 +26,12 @@ public class DBFacadeTests
         var context = new ProjectBankContext(builder.Options);
         context.Database.EnsureCreated();
         context.Projects.Add(new Project{ Id = 1,
-                                            Name = "huhu",
-                                            Description = "jaja",
+                                            Name = "Title1",
+                                            Description = "Desc1",
                                             AuthorId = 1});
         context.Projects.Add(new Project { Id = 2, 
-                                            Name = "hihi",
-                                            Description = "dada",
+                                            Name = "Title2",
+                                            Description = "Desc2",
                                             AuthorId = 2});
         context.Users.Add(new User{ Id = 1,
                                     Name = "paolo",
@@ -93,9 +93,9 @@ public class DBFacadeTests
     [Fact]
     public async Task CreateProject_returns_conflict_if_project_name_exists()
     {
-        var created = await _repo.CreateProject("hihi", "this is body", 1);
+        var created = await _repo.CreateProject("Title2", "this is body", 1);
 
-        var expected = new ProjectDTO(2, "hihi", "dada", 2);
+        var expected = new ProjectDTO(2, "Title2", "Desc2", 2);
 
         Assert.Equal((Conflict,expected),created);
     }
@@ -104,7 +104,7 @@ public class DBFacadeTests
     {
         var project = await _repo.GetProject(1);
 
-        var expectedProject = new ProjectDTO(1, "huhu", "jaja",1);
+        var expectedProject = new ProjectDTO(1, "Title1", "Desc1",1);
 
         Assert.Equal(expectedProject,project);
     }
@@ -139,7 +139,7 @@ public class DBFacadeTests
     {
         var projects = await _repo.GetAllProjects();
 
-        var allProjects = new List<SimplifiedProjectDTO>{ new SimplifiedProjectDTO(1, "huhu"), new SimplifiedProjectDTO(2, "hihi")};
+        var allProjects = new List<SimplifiedProjectDTO>{ new SimplifiedProjectDTO(1, "Title1"), new SimplifiedProjectDTO(2, "Title2")};
 
         Assert.Equal(allProjects,projects);
     }
@@ -164,7 +164,7 @@ public class DBFacadeTests
     {
         var projects = await _repo.GetCreatedProjects(1);
 
-        var listOfCreatedProjects = new List<SimplifiedProjectDTO> { new SimplifiedProjectDTO(1, "huhu") };
+        var listOfCreatedProjects = new List<SimplifiedProjectDTO> { new SimplifiedProjectDTO(1, "Title1") };
 
         Assert.Equal(listOfCreatedProjects,projects);
     }
@@ -225,7 +225,7 @@ public class DBFacadeTests
     {
         var projects = await _repo.GetAppliedProjects(2);
 
-        var expectedList = new List<SimplifiedProjectDTO>{new SimplifiedProjectDTO(1,"huhu"), new SimplifiedProjectDTO(2, "hihi")};
+        var expectedList = new List<SimplifiedProjectDTO>{new SimplifiedProjectDTO(1,"Title1"), new SimplifiedProjectDTO(2, "Title2")};
 
         Assert.Equal(expectedList,projects);
     }

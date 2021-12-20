@@ -71,15 +71,15 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         context.Projects.Add(new Project
         {
             Id = 1,
-            Name = "huhu",
-            Description = "jaja",
+            Name = "Title1",
+            Description = "Desc1",
             AuthorId = 1
         });
         context.Projects.Add(new Project
         {
             Id = 2,
-            Name = "hihi",
-            Description = "dada",
+            Name = "Title2",
+            Description = "Desc2",
             AuthorId = 2
         });
         context.Users.Add(new User

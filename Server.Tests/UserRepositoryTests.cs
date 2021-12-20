@@ -26,8 +26,8 @@ public class UserRepositoryTests
         context.Projects.Add(new Project
         {
             Id = 1,
-            Name = "huhu",
-            Description = "jaja",
+            Name = "Title1",
+            Description = "Desc1",
             AuthorId = 1
         });
         context.Users.Add(new User

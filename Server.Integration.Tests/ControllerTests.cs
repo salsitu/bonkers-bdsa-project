@@ -31,12 +31,12 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
         var projects = await _client.GetFromJsonAsync<List<Project>>("Project/List");
 
         var expected = new List<Project>();
-        expected.Add(new Project { Id = 1, Name = "huhu"});
-        expected.Add(new Project { Id = 2, Name = "hihi"});
+        expected.Add(new Project { Id = 1, Name = "Title1"});
+        expected.Add(new Project { Id = 2, Name = "Title2"});
 
 
-        Assert.Contains(projects, p => p.Name == "huhu" && p.Id == 1);
-        Assert.Contains(projects, p => p.Name == "hihi" && p.Id == 2);
+        Assert.Contains(projects, p => p.Name == "Title1" && p.Id == 1);
+        Assert.Contains(projects, p => p.Name == "Title2" && p.Id == 2);
         Assert.True(condition: projects.Count >= 2);
 
     }
@@ -52,7 +52,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
 
         var response = await _client.PostAsJsonAsync("Project/Post", project);
         var foundProject = await _client.GetFromJsonAsync<Project>("Project/1");
-        var expectedName = "huhu";
+        var expectedName = "Title1";
         var expectedId = 1;
 
         Assert.True(response.IsSuccessStatusCode == true);
@@ -65,7 +65,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
     public async Task Post_does_not_create_project_if_name_is_duplicate()
     {
         var project = new Project();
-        project.Name = "hihi";
+        project.Name = "Title1";
         project.Description = "CreatedBody";
         project.AuthorId = 1;
 
@@ -75,7 +75,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
 
 
         Assert.False(response.IsSuccessStatusCode);
-        Assert.DoesNotContain(projects, p => p.Name == "hihi" && p.AuthorId == 1);
+        Assert.DoesNotContain(projects, p => p.Name == "Title1" && p.AuthorId == 1);
 
     }
 
@@ -84,7 +84,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
     {
         var project = await _client.GetFromJsonAsync<Project>("Project/1");
 
-        var expectedName = "huhu";
+        var expectedName = "Title1";
         var expectedId = 1;
         
         Assert.Equal(expectedId, project.Id);
@@ -97,8 +97,8 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
         var projects = await _client.GetFromJsonAsync<List<SimplifiedProjectDTO>>($"Project/Student/2");
 
         var expected = new List<SimplifiedProjectDTO>();
-        expected.Add(new SimplifiedProjectDTO(1, "huhu"));
-        expected.Add(new SimplifiedProjectDTO(2, "hihi"));
+        expected.Add(new SimplifiedProjectDTO(1, "Title1"));
+        expected.Add(new SimplifiedProjectDTO(2, "Title2"));
 
         Assert.Equal(expected, projects);
     }
@@ -109,7 +109,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
     {
         var projects = await _client.GetFromJsonAsync<List<SimplifiedProjectDTO>>($"Project/Author/1");
         var expected = new List<SimplifiedProjectDTO>();
-        expected.Add(new SimplifiedProjectDTO(1, "huhu"));
+        expected.Add(new SimplifiedProjectDTO(1, "Title1"));
 
         Assert.Equal(expected, projects);
     }

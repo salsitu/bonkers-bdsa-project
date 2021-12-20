@@ -7,7 +7,7 @@ using ProjectBank.Server;
 
 namespace ProjectBank.Server.Entities
 {
-	public class UserRepository : IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ProjectBankContext _context;
 
@@ -27,12 +27,12 @@ namespace ProjectBank.Server.Entities
             {
                 return (Conflict, conflict);
             }
-            var entity = new User { Name = user.Name, IsSupervisor = user.IsSupervisor, Email = user.Email};
-        
+            var entity = new User { Name = user.Name, IsSupervisor = user.IsSupervisor, Email = user.Email };
+
             _context.Users.Add(entity);
-        
+
             await _context.SaveChangesAsync();
-        
+
             return (Created, new UserDTO(entity.Id, entity.Name, entity.IsSupervisor, entity.Email));
         }
         public async Task<UserDTO> GetUserAsync(int userId)
@@ -55,8 +55,8 @@ namespace ProjectBank.Server.Entities
         public async Task<int> GetUserIdWithEmailAsync(string email)
         {
             var userId = from u in _context.Users
-                       where u.Email == email
-                       select u.Id;
+                         where u.Email == email
+                         select u.Id;
 
             return await userId.FirstOrDefaultAsync();
         }

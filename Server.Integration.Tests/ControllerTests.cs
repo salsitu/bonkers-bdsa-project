@@ -16,7 +16,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
     private readonly HttpClient _client;
     private readonly CustomWebApplicationFactory _factory;
 
-    public ControllerTests(CustomWebApplicationFactory factory) 
+    public ControllerTests(CustomWebApplicationFactory factory)
     {
         _factory = factory;
         _client = factory.CreateClient(new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions
@@ -26,13 +26,13 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
     }
 
     [Fact]
-    public async  Task List_returns_all_projects()
+    public async Task List_returns_all_projects()
     {
         var projects = await _client.GetFromJsonAsync<List<Project>>("Project/List");
 
         var expected = new List<Project>();
-        expected.Add(new Project { Id = 1, Name = "Title1"});
-        expected.Add(new Project { Id = 2, Name = "Title2"});
+        expected.Add(new Project { Id = 1, Name = "Title1" });
+        expected.Add(new Project { Id = 2, Name = "Title2" });
 
 
         Assert.Contains(projects, p => p.Name == "Title1" && p.Id == 1);
@@ -41,8 +41,8 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
 
     }
 
-    [Fact] 
-    public async Task Post_creates_project_if_name_is_unique() 
+    [Fact]
+    public async Task Post_creates_project_if_name_is_unique()
     {
         var project = new Project();
         project.Name = "CreatedTitle";
@@ -86,7 +86,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
 
         var expectedName = "Title1";
         var expectedId = 1;
-        
+
         Assert.Equal(expectedId, project.Id);
         Assert.Equal(expectedName, project.Name);
     }
@@ -105,7 +105,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
 
     [Fact]
 
-    public async Task Project_Author_returns_list_of_projects_supervisor_has_created() 
+    public async Task Project_Author_returns_list_of_projects_supervisor_has_created()
     {
         var projects = await _client.GetFromJsonAsync<List<SimplifiedProjectDTO>>($"Project/Author/1");
         var expected = new List<SimplifiedProjectDTO>();
@@ -114,7 +114,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
         Assert.Equal(expected, projects);
     }
 
-    
+
 
     [Fact]
     public async Task Project_Delete_deletes_given_project()
@@ -140,10 +140,10 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
     {
         var user = await _client.GetFromJsonAsync<UserDTO>($"Project/Email/paolo@");
 
-        var expected = new UserDTO( 1, "paolo", true,"paolo@");
+        var expected = new UserDTO(1, "paolo", true, "paolo@");
 
         Assert.Equal(expected, user);
-  
+
     }
 
     [Fact]
@@ -166,7 +166,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
     }
 
     [Fact]
-    public async Task PutView_does_not_increase_the_number_of_views_for_a_given_project_if_student_has_viewed_it_before() 
+    public async Task PutView_does_not_increase_the_number_of_views_for_a_given_project_if_student_has_viewed_it_before()
     {
         var studentId = 2;
         var viewsBeforePut = await _client.GetFromJsonAsync<int>("Project/GetViews/1");
@@ -174,13 +174,13 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
         var response = await _client.PutAsJsonAsync($"Project/PutView/1", studentId);
         var viewsAfterPut = await _client.GetFromJsonAsync<int>("Project/GetViews/1");
 
-        Assert.Equal(viewsBeforePut,viewsAfterPut);
+        Assert.Equal(viewsBeforePut, viewsAfterPut);
 
     }
 
     [Fact]
 
-    public async Task DeleteView_deletes_all_views_associated_with_a_project() 
+    public async Task DeleteView_deletes_all_views_associated_with_a_project()
     {
         var response = await _client.DeleteAsync("Project/DeleteView/2");
 
@@ -192,7 +192,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
 
 
     [Fact]
-    public async Task Applications_returns_number_of_applicants_for_given_project() 
+    public async Task Applications_returns_number_of_applicants_for_given_project()
     {
         var applications = await _client.GetFromJsonAsync<int>("Project/Applications/1");
 
@@ -200,7 +200,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
     }
 
     [Fact]
-    public async Task Apply_increases_number_of_applications_by_one_if_student_is_new_applicant() 
+    public async Task Apply_increases_number_of_applications_by_one_if_student_is_new_applicant()
     {
         var studentID = 2;
         var response = await _client.PutAsJsonAsync("Project/Apply/2", studentID);
@@ -210,7 +210,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
     }
 
     [Fact]
-    public async Task Apply_does_not_increase_number_of_applications_by_one_if_student_has_already_applied() 
+    public async Task Apply_does_not_increase_number_of_applications_by_one_if_student_has_already_applied()
     {
         var studentID = 2;
         var response = await _client.PutAsJsonAsync("Project/Apply/2", studentID);
@@ -220,7 +220,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
     }
 
     [Fact]
-    public async Task DeleteApplication_removes_all_applications_associated_with_given_project_id() 
+    public async Task DeleteApplication_removes_all_applications_associated_with_given_project_id()
     {
         //in case there is no project 3 in database due to test sequence
         var project = new Project();
@@ -242,7 +242,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
 
     [Fact]
 
-    public async Task IsApplied_returns_true_if_student_with_id_has_already_applied_to_project() 
+    public async Task IsApplied_returns_true_if_student_with_id_has_already_applied_to_project()
     {
         var alreadyApplied = await _client.GetFromJsonAsync<bool>($"Project/IsApplied/1/2");
 
@@ -250,7 +250,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
     }
 
     [Fact]
-    public async Task IsApplied_returns_false_if_student_with_id_has_not_applied_to_project() 
+    public async Task IsApplied_returns_false_if_student_with_id_has_not_applied_to_project()
     {
         var alreadyApplied = await _client.GetFromJsonAsync<bool>($"Project/IsApplied/1/4");
 
@@ -258,6 +258,6 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
     }
 
 
-    
+
 
 }

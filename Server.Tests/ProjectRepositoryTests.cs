@@ -16,7 +16,7 @@ public class ProjectRepositoryTests
     private readonly ProjectBankContext _context;
     private readonly ProjectRepository _repo;
 
-    public ProjectRepositoryTests() 
+    public ProjectRepositoryTests()
     {
         var connection = new SqliteConnection("Filename=:memory:");
         connection.Open();
@@ -24,22 +24,34 @@ public class ProjectRepositoryTests
         builder.UseSqlite(connection);
         var context = new ProjectBankContext(builder.Options);
         context.Database.EnsureCreated();
-        context.Projects.Add(new Project{ Id = 1,
-                                            Name = "Title1",
-                                            Description = "Desc1",
-                                            AuthorId = 1});
-        context.Projects.Add(new Project { Id = 2, 
-                                            Name = "Title2",
-                                            Description = "Desc2",
-                                            AuthorId = 2});
-        context.Users.Add(new User{ Id = 1,
-                                    Name = "paolo",
-                                    IsSupervisor = true,
-                                    Email = "paolo@"});
-        context.Users.Add(new User{ Id = 2,
-                                    Name = "jakob",
-                                    IsSupervisor = false,
-                                    Email = "jakob@"});
+        context.Projects.Add(new Project
+        {
+            Id = 1,
+            Name = "Title1",
+            Description = "Desc1",
+            AuthorId = 1
+        });
+        context.Projects.Add(new Project
+        {
+            Id = 2,
+            Name = "Title2",
+            Description = "Desc2",
+            AuthorId = 2
+        });
+        context.Users.Add(new User
+        {
+            Id = 1,
+            Name = "paolo",
+            IsSupervisor = true,
+            Email = "paolo@"
+        });
+        context.Users.Add(new User
+        {
+            Id = 2,
+            Name = "jakob",
+            IsSupervisor = false,
+            Email = "jakob@"
+        });
         context.SaveChanges();
         _context = context;
         _repo = new ProjectRepository(_context);
@@ -97,7 +109,7 @@ public class ProjectRepositoryTests
         var projectList = await _repo.GetAllProjectsAsync();
 
 
-        Assert.Equal(new List<SimplifiedProjectDTO>{ new SimplifiedProjectDTO(1, "Title1"), new SimplifiedProjectDTO(2, "Title2")}, projectList);
+        Assert.Equal(new List<SimplifiedProjectDTO> { new SimplifiedProjectDTO(1, "Title1"), new SimplifiedProjectDTO(2, "Title2") }, projectList);
     }
     [Fact]
     public async Task ListAllProjectsAsync_with_no_projects_returns_empty_list()
@@ -115,5 +127,5 @@ public class ProjectRepositoryTests
 
         Assert.Equal(new List<SimplifiedProjectDTO> { new SimplifiedProjectDTO(1, "Title1") }, createdProjects);
     }
-    
+
 }

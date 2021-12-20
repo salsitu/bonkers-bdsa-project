@@ -30,7 +30,7 @@ namespace ProjectBank.Server.Entities
                 return (Conflict);
             }
 
-            var entity = new Applicant { ProjectId = projectId, StudentId = userId};
+            var entity = new Applicant { ProjectId = projectId, StudentId = userId };
 
             _context.Applicants.Add(entity);
 
@@ -50,7 +50,7 @@ namespace ProjectBank.Server.Entities
             if (conflict != null)
             {
                 return (Exists);
-            } 
+            }
             else
             {
                 return (NotFound);
@@ -70,8 +70,8 @@ namespace ProjectBank.Server.Entities
         public async Task<int> GetNrOfProjectApplicationsAsync(int projectId)
         {
             var projects = await (from a in _context.Applicants
-                            where a.ProjectId == projectId
-                            select a).CountAsync();
+                                  where a.ProjectId == projectId
+                                  select a).CountAsync();
             return projects;
         }
         public async Task<Response> DeleteApplicationsAsync(int projectId)

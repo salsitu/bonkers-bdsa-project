@@ -76,7 +76,7 @@ public class ViewRepositoryTests
     [Fact]
     public async Task AddViewAsync_returns_Created_when_new_view()
     {
-        var response= await _repo.AddViewAsync(2, 3);
+        var response = await _repo.AddViewAsync(2, 3);
 
         Assert.Equal(Created, response);
     }

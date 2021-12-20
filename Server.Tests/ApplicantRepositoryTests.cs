@@ -112,7 +112,7 @@ public class ApplicantRepositoryTests
     {
         var application = await _repo.GetAppliedProjectsAsync(2);
 
-        Assert.Equal(new List<SimplifiedProjectDTO> {new SimplifiedProjectDTO(1, "Title1"), new SimplifiedProjectDTO(2, "Title2") }, application);
+        Assert.Equal(new List<SimplifiedProjectDTO> { new SimplifiedProjectDTO(1, "Title1"), new SimplifiedProjectDTO(2, "Title2") }, application);
     }
     [Fact]
     public async Task SelectNrOfProjectApplicationsAsync_returns_2_if_project_has_two_applications()

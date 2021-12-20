@@ -17,28 +17,28 @@
                 <h2>Create Project</h2>
             </div>
             <div class="card-body">
-                
 
-                <EditForm Model="@project" >
+
+                <EditForm Model="@project">
                     <DataAnnotationsValidator />
-               
+
 
                     <div>
-                         <div class="form-group">
-                               <label for="name"><Tooltip Text="Max characters is 50">Title</Tooltip></label>
-                               <InputText id="name" @bind-Value="project.Name" class="form-control" />
-                         </div>
+                        <div class="form-group">
+                            <label for="name"><Tooltip Text="Max characters is 50">Title</Tooltip></label>
+                            <InputText id="name" @bind-Value="project.Name" class="form-control" />
+                        </div>
                     </div>
                     <div class="desc-field">
                         <label class="control-label col-md-12"><Tooltip Text="Max characters is 500">Description</Tooltip></label>
                         <div class="col">
-                           <textarea @bind="project.Description" @bind:event="oninput" style="width: 100%; height: 100%">  </textarea>
+                            <textarea @bind="project.Description" @bind:event="oninput" style="width: 100%; height: 100%">  </textarea>
                         </div>
                     </div>
-    
+
                 </EditForm>
                 <div>
-                <button @onclick="createProject">Create Project</button>
+                    <button @onclick="createProject">Create Project</button>
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
 @code
 {
 
-    private Project project = new();  
+    private Project project = new();
 
     public async Task createProject()
     {
@@ -67,17 +67,18 @@
 
 
         if (response.IsSuccessStatusCode)
-        {  MyNavigationManager.NavigateTo("myprojects");
+        {
+            MyNavigationManager.NavigateTo("myprojects");
             toastService.ShowSuccess("You successfully created a project");
         }
         else
-        {   
-            if(project.Name.Length > 50)
+        {
+            if (project.Name.Length > 50)
                 toastService.ShowError("Error, Title too long");
             else if (project.Description.Length > 500)
             {
-                toastService.ShowError("Error, Description too long");  
-            } 
+                toastService.ShowError("Error, Description too long");
+            }
             else
             {
                 toastService.ShowError("Error, Another project already has that title");

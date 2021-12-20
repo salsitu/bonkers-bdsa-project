@@ -50,7 +50,7 @@ namespace ProjectBank.Server.Entities
             var entity =
                 await _context.Projects
                                 .FirstOrDefaultAsync(p => p.Id == projectId);
-            
+
 
             if (entity == null)
             {
@@ -65,14 +65,14 @@ namespace ProjectBank.Server.Entities
         public async Task<List<SimplifiedProjectDTO>> GetAllProjectsAsync()
         {
             var projects = await (from p in _context.Projects
-                           select new SimplifiedProjectDTO(p.Id, p.Name)).ToListAsync();
+                                  select new SimplifiedProjectDTO(p.Id, p.Name)).ToListAsync();
             return projects;
         }
         public async Task<List<SimplifiedProjectDTO>> GetCreatedProjectsAsync(int id)
         {
             var projects = await (from p in _context.Projects
-                           where p.AuthorId == id
-                           select new SimplifiedProjectDTO(p.Id, p.Name)).ToListAsync();
+                                  where p.AuthorId == id
+                                  select new SimplifiedProjectDTO(p.Id, p.Name)).ToListAsync();
             return projects;
         }
     }

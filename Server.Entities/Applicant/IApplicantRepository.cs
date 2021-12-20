@@ -12,11 +12,11 @@ namespace ProjectBank.Server.Entities
 
         public Task<Response> HasAlreadyAppliedToProjectAsync(int projectId, int userId);
 
-        public  Task<List<SimplifiedProjectDTO>> GetAppliedProjectsAsync(int userId);
+        public Task<List<SimplifiedProjectDTO>> GetAppliedProjectsAsync(int userId);
 
-        public  Task<int> GetNrOfProjectApplicationsAsync(int projectId);
+        public Task<int> GetNrOfProjectApplicationsAsync(int projectId);
 
-        public  Task<Response> DeleteApplicationsAsync(int projectId);
+        public Task<Response> DeleteApplicationsAsync(int projectId);
 
     }
 }

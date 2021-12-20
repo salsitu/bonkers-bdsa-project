@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using ProjectBank.Server.Entities;
 using System.Collections.Generic;
 using System.Net;
@@ -73,7 +74,7 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
         var projects = await _client.GetFromJsonAsync<List<Project>>("Project/List");
 
 
-        Assert.True(response.IsSuccessStatusCode == true);
+        Assert.False(response.IsSuccessStatusCode);
         Assert.DoesNotContain(projects, p => p.Name == "hihi" && p.AuthorId == 1);
 
     }

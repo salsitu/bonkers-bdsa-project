@@ -1,5 +1,4 @@
 @page "/project/create"
-@using ProjectBank.Shared
 @using ProjectBank.Server.Entities
 @inject HttpClient HttpClient
 @inject NavigationManager MyNavigationManager
@@ -66,18 +65,22 @@
 
         var response = await HttpClient.PostAsJsonAsync("Project/Post", project);
 
+
         if (response.IsSuccessStatusCode)
         {  MyNavigationManager.NavigateTo("myprojects");
             toastService.ShowSuccess("You successfully created a project");
-            var created = await response.Content.ReadFromJsonAsync<Project>();
         }
         else
         {   
             if(project.Name.Length > 50)
                 toastService.ShowError("Error, Title too long");
+            else if (project.Description.Length > 500)
+            {
+                toastService.ShowError("Error, Description too long");  
+            } 
             else
             {
-              toastService.ShowError("Error, Description too long");  
+                toastService.ShowError("Error, Another project already has that title");
             }
         }
 

@@ -342,10 +342,10 @@ public class ProjectControllerTests
         var controller = new ProjectController(repository.Object);
 
         var project = new Project { Id = 1, Name = "Project", Description = "Desc", AuthorId = 1};
-        var expected = (Response.Created, new ProjectDTO(1, "Project", "Desc", 1));
+        var expected = new OkResult();
         var actual = await controller.Post(project);
 
-        Assert.Equal(expected, actual);
+        Assert.IsType<OkResult>(actual);
     }
 
     [Fact]
@@ -356,10 +356,9 @@ public class ProjectControllerTests
         var controller = new ProjectController(repository.Object);
 
         var project = new Project { Id = 1, Name = "Project", Description = "Desc", AuthorId = 1 };
-        var expected = (Response.Conflict, new ProjectDTO(1, "Project", "Desc", 1));
         var actual = await controller.Post(project);
 
-        Assert.Equal(expected, actual);
+        Assert.IsType<ConflictResult>(actual);
     }
 
     [Fact]

@@ -1,6 +1,5 @@
 @page "/project/{id:int}"
 @inject HttpClient HttpClient
-@using ProjectBank.Shared
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager MyNavigationManager
 @inject IToastService toastService
@@ -93,7 +92,6 @@
 
         SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
 
-        Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
 
 
 
@@ -101,10 +99,12 @@
         {
             var studentId = user.Id;
             var response = await HttpClient.PutAsJsonAsync($"Project/PutView/{id}", studentId);
+            Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
             isApplied();
 
         }else if (currentUser.IsSupervisor)
         {
+            Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
             Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
             SetRatio();
         }

@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Client\ProjectBank.Client.csproj" />
-    <ProjectReference Include="..\Shared\ProjectBank.Shared.csproj" />
     <ProjectReference Include="..\Server.Entities\Server.Entities.csproj" />
   </ItemGroup>
 

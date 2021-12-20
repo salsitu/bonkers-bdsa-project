@@ -1,4 +1,3 @@
-using ProjectBank.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -102,9 +101,15 @@ public class ProjectController : ControllerBase
 
     [HttpPost("Post")]
     [ProducesResponseType(typeof(ProjectDTO), 201)]
-    public async Task<(Response, ProjectDTO)> Post(Project project) 
+    public async Task<ActionResult> Post(Project project) 
     {
-        return await _repository.CreateProject(project.Name, project.Description, project.AuthorId);
+        var x =  await _repository.CreateProject(project.Name, project.Description, project.AuthorId);
+
+        if (x.Item1 == Entities.Response.Conflict)
+        {
+            return Conflict();
+        }
+        return Ok();
     }
     
 

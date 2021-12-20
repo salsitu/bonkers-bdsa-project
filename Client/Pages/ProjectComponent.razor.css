@@ -1,13 +1,9 @@
-div {
-   
-    border-style: solid;
-    border-color: coral;
-    background-color: white;
-    border: dotted 1px #4B718B;
+table {
+    border-collapse: separate;
+    border-spacing: 15px;
 }
 
-.border {
+div {
     max-width: 100vh;
     word-wrap: break-word;
-    box-shadow: 20px 20px 10px #888888;
 }

@@ -55,7 +55,12 @@
     private Project project = new();
 
     public async Task createProject()
-    {
+    {   
+        if(project.Name == null || project.Description == null)
+        {
+            toastService.ShowError("Both a title and a description is needed");
+            return;
+        }
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
         var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;

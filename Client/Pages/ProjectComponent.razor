@@ -96,11 +96,12 @@
 
 
         if (!currentUser.IsSupervisor)
-        {
+        {   
+            isApplied();
             var studentId = user.Id;
             var response = await HttpClient.PutAsJsonAsync($"Project/PutView/{id}", studentId);
             Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
-            isApplied();
+            
 
         }
         else if (currentUser.IsSupervisor)

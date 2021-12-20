@@ -13,10 +13,19 @@
 <br />
 Welcome to <b>Project Bank</b>.
 
+<AuthorizeView Roles="Supervisor">
+<p>Here you can have a look at all projects made available by other supervisors.
+   <br /> You can create your own projects and make them publicly available for students to apply. 
+    <br /> You can see statistics regarding how many different students have viewed your project and compare it to how many have applied.
+    <br /> If your project has gotten enough suitable applicants or is no longer available, you can simply delete it.
+</p> 
+</AuthorizeView>
+<AuthorizeView Roles="Student">
+    <p>Here you can have a look at all projects made available by supervisors.
+   <br /> You can apply to projects and see a list of projects you have already applied to.
+    <br /> You can see statistics regarding how many different students have viewed the project.
+</p> 
+</AuthorizeView>
+
 <SurveyPrompt Title="How is Project Bank working for you?" />
 
-@code {
-
-    //var authenticationState = await authenticationStateTask;
-
-}

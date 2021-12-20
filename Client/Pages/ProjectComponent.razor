@@ -56,13 +56,6 @@
     }
 </AuthorizeView>
     </div>
-<style>
-    .border{ max-width:100vh;
-    word-wrap:break-word;
-   box-shadow: 20px 20px 10px #888888;
-    }
-
-</style>
 
 @code{
 
@@ -86,40 +79,50 @@
         var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
         currentUser = user;
 
+        SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
+
+        Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
+
+
+
         if (!currentUser.IsSupervisor)
         {
             var studentId = user.Id;
             var response = await HttpClient.PutAsJsonAsync($"Project/PutView/{id}", studentId);
             isApplied();
 
+        }else if (currentUser.IsSupervisor)
+        {
+            Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
+            SetRatio();
         }
-
-
-        SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
-
-        Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
-
-        Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
-
-        SetRatio();
-
-
-
-
-
     }
 
     public void SetRatio() 
     {
-        if (Views == 0 || Applications == 0) return;
-        var greatestComminDenominator = GCD(Views, Applications);
-        Ratio = string.Format("{0}:{1}", Views / greatestComminDenominator, Applications / greatestComminDenominator);
+        if (Applications == 0) 
+        {
+            Ratio = string.Format("{0}:{1}", Views, Applications);
+            return;
+        }
+        var greatestCommonDenominator = GCD(Views, Applications);
+        Ratio = string.Format("{0}:{1}", Views / greatestCommonDenominator, Applications / greatestCommonDenominator);
 
     }
+    //https://stackoverflow.com/questions/18541832/c-sharp-find-the-greatest-common-divisor 
 
-    private int GCD(int a, int b)
+    private int GCD(int Views, int Applications)       
     {
-         return b == 0 ? Math.Abs(a) : GCD(b, a % b);
+    while (Views != 0 && Applications != 0)
+    {
+        if (Views > Applications)
+            Views %= Applications;
+        else
+            Applications %= Views;
+    }
+
+    return Views | Applications;
+
     }
 
     private async Task Delete()
@@ -140,7 +143,6 @@
             }
 
             toastService.ShowSuccess(toastMsg);
-            //MEGET SCUFFED FIX TIL AT DEN IKKE RELOADER SIDEN - HURTIGT GÅ TIL ANDEN SIDE OG DEREFTER TILBAGE
             MyNavigationManager.NavigateTo("allprojects");
             MyNavigationManager.NavigateTo("myprojects");
             toastService.ShowSuccess(toastMsg);

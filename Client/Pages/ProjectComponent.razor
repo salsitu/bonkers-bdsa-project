@@ -8,17 +8,21 @@
 <h1>@SelectedProject.Name</h1>
 
 <div class="border">
-    <div class="stats"> <!--Statistics Div-->
+    <div> <!--Statistics Div-->
         <table>
             <tr>
                 <th>Views</th>
+                <AuthorizeView Roles="Supervisor">
                 <th>Applications</th>
                 <th>Ratio</th>
+                </AuthorizeView>
             </tr>
             <tr>
                 <th>@Views</th>
+                <AuthorizeView Roles="Supervisor">
                 <th>@Applications</th>
                 <th>@Ratio</th>
+                 </AuthorizeView>
             </tr>
         </table>
     </div>
@@ -27,10 +31,10 @@
             <span>@SelectedProject.Name</span>
         </div>
         <div><h2>Description</h2>
-            @SelectedProject.Description
+           <span class="test"> @SelectedProject.Description</span>
         </div>
     </div>
-</div>
+
 <AuthorizeView Roles="Supervisor">
     @if (currentUser != null && SelectedProject != null)
     {
@@ -51,6 +55,7 @@
         <button @onclick="ApplyForProject">Apply for project</button>    
     }
 </AuthorizeView>
+    </div>
 
 @code{
 
@@ -61,7 +66,7 @@
     private bool Applied;
     private int Views = 0;
     private int Applications = 0;
-    private double Ratio;
+    private string Ratio;
     private UserDTO currentUser;
 
 
@@ -74,34 +79,50 @@
         var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
         currentUser = user;
 
+        SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
+
+        Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
+
+
+
         if (!currentUser.IsSupervisor)
         {
             var studentId = user.Id;
             var response = await HttpClient.PutAsJsonAsync($"Project/PutView/{id}", studentId);
             isApplied();
 
+        }else if (currentUser.IsSupervisor)
+        {
+            Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
+            SetRatio();
         }
-
-
-        SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
-
-        Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
-
-        Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
-
-        SetRatio();
-
-
-
-
-
     }
 
     public void SetRatio() 
     {
-        if (Views == 0) Ratio = 0;
-        else if  (Applications == 0) Ratio = 0;
-        else  Ratio = Applications / Ratio; 
+        if (Applications == 0) 
+        {
+            Ratio = string.Format("{0}:{1}", Views, Applications);
+            return;
+        }
+        var greatestCommonDenominator = GCD(Views, Applications);
+        Ratio = string.Format("{0}:{1}", Views / greatestCommonDenominator, Applications / greatestCommonDenominator);
+
+    }
+    //https://stackoverflow.com/questions/18541832/c-sharp-find-the-greatest-common-divisor 
+    //Finding the Greatest Common Denominator by using the Euclidean Algorithm
+    private int GCD(int Views, int Applications)       
+    {
+    while (Views != 0 && Applications != 0)
+    {
+        if (Views > Applications)
+            Views %= Applications;
+        else
+            Applications %= Views;
+    }
+
+    return Views | Applications;
+
     }
 
     private async Task Delete()
@@ -122,7 +143,6 @@
             }
 
             toastService.ShowSuccess(toastMsg);
-            //MEGET SCUFFED FIX TIL AT DEN IKKE RELOADER SIDEN - HURTIGT GÅ TIL ANDEN SIDE OG DEREFTER TILBAGE
             MyNavigationManager.NavigateTo("allprojects");
             MyNavigationManager.NavigateTo("myprojects");
             toastService.ShowSuccess(toastMsg);

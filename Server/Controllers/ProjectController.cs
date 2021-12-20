@@ -28,7 +28,7 @@ public class ProjectController : ControllerBase
     [ProducesResponseType(typeof(ProjectDTO),StatusCodes.Status200OK)]
     public async Task<ActionResult<ProjectDTO>> Get(int id)
     {
-        var project = await _repository.SelectProject(id);
+        var project = await _repository.GetProject(id);
 
         if (project != null)
         {   
@@ -40,7 +40,7 @@ public class ProjectController : ControllerBase
     [HttpGet("Author/{authorid}")]
     public async Task<List<SimplifiedProjectDTO>> GetByAuthor(int authorid)
     {
-        return await _repository.ShowCreatedProjects(authorid);
+        return await _repository.GetCreatedProjects(authorid);
     }
 
     [HttpGet("Email/{email}")]
@@ -55,15 +55,15 @@ public class ProjectController : ControllerBase
         return NotFound();
     }
     [HttpGet("Student/{studentid}")]
-    public async Task<List<SimplifiedProjectDTO>> ShowListOfAppliedProjects(int studentId)
+    public async Task<List<SimplifiedProjectDTO>> GetAppliedProjects(int studentId)
     {
-        return await _repository.ShowListOfAppliedProjects(studentId);
+        return await _repository.GetAppliedProjects(studentId);
     }
 
     [HttpGet("List")]
     public async Task<List<SimplifiedProjectDTO>> Get()
     {
-        return await _repository.ShowAllProjects();
+        return await _repository.GetAllProjects();
     }
 
 
@@ -76,7 +76,7 @@ public class ProjectController : ControllerBase
     [HttpGet("Applications/{projectid}")]
     public async Task<int> GetApplications(int projectid)
     {
-        return await _repository.SelectNrOfProjectApplications(projectid);  
+        return await _repository.GetNrOfProjectApplications(projectid);  
     }
 
     [HttpGet("IsApplied/{projectid}/{studentid}")]

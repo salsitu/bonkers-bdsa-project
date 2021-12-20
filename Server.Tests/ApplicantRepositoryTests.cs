@@ -110,21 +110,21 @@ public class ApplicantRepositoryTests
     [Fact]
     public async Task ShowListOfAppliedProjectsAsync_returns_list_of_applied_projects()
     {
-        var application = await _repo.ShowListOfAppliedProjectsAsync(2);
+        var application = await _repo.GetAppliedProjectsAsync(2);
 
         Assert.Equal(new List<SimplifiedProjectDTO> {new SimplifiedProjectDTO(1, "huhu"), new SimplifiedProjectDTO(2, "hihi") }, application);
     }
     [Fact]
     public async Task SelectNrOfProjectApplicationsAsync_returns_2_if_project_has_two_applications()
     {
-        var application = await _repo.SelectNrOfProjectApplicationsAsync(1);
+        var application = await _repo.GetNrOfProjectApplicationsAsync(1);
 
         Assert.Equal(2, application);
     }
     [Fact]
     public async Task SelectNrOfProjectApplicationsAsync_returns_null_if_no_applications_to_project_exist()
     {
-        var application = await _repo.SelectNrOfProjectApplicationsAsync(3);
+        var application = await _repo.GetNrOfProjectApplicationsAsync(3);
 
         Assert.Equal(0, application);
     }

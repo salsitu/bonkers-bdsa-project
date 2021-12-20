@@ -7,7 +7,7 @@ using ProjectBank.Server;
 
 namespace ProjectBank.Server.Entities
 {
-    public class ProjectRepository
+    public class ProjectRepository : IProjectRepository
     {
         private readonly ProjectBankContext _context;
 
@@ -37,7 +37,7 @@ namespace ProjectBank.Server.Entities
 
             return (Created, new ProjectDTO(entity.Id, entity.Name, entity.Description, entity.AuthorId));
         }
-        public async Task<ProjectDTO> ReadAsync(int projectId)
+        public async Task<ProjectDTO> GetProjectAsync(int projectId)
         {
             var projects = from p in _context.Projects
                            where p.Id == projectId
@@ -62,13 +62,13 @@ namespace ProjectBank.Server.Entities
 
             return Deleted;
         }
-        public async Task<List<SimplifiedProjectDTO>> ListAllProjectsAsync()
+        public async Task<List<SimplifiedProjectDTO>> GetAllProjectsAsync()
         {
             var projects = await (from p in _context.Projects
                            select new SimplifiedProjectDTO(p.Id, p.Name)).ToListAsync();
             return projects;
         }
-        public async Task<List<SimplifiedProjectDTO>> ShowCreatedProjectsAsync(int id)
+        public async Task<List<SimplifiedProjectDTO>> GetCreatedProjectsAsync(int id)
         {
             var projects = await (from p in _context.Projects
                            where p.AuthorId == id

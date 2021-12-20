@@ -7,8 +7,8 @@ using ProjectBank.Server;
 
 namespace ProjectBank.Server.Entities
 {
-	public class UserRepository
-	{
+	public class UserRepository : IUserRepository
+    {
         private readonly ProjectBankContext _context;
 
         public UserRepository(ProjectBankContext context)

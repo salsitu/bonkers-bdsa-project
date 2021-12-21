@@ -9,24 +9,24 @@
     <div class="col-md-10">
         <div class="card mt-3 mb-3">
             <div class="card-header">
-                <h2>@SelectedProject.Name</h2>
+                <h2>@_selectedProject.Name</h2>
             </div>
             <div class="card-body">
                 <div>
                     <div class="form-group">
                         <table>
                             <tr>
-                                <th>Views</th>
+                                <th>_views</th>
                                 <AuthorizeView Roles="Supervisor">
-                                    <th>Applications</th>
-                                    <th>Ratio</th>
+                                    <th>_applications</th>
+                                    <th>_ratio</th>
                                 </AuthorizeView>
                             </tr>
                             <tr>
-                                <th>@Views</th>
+                                <th>@_views</th>
                                 <AuthorizeView Roles="Supervisor">
-                                    <th>@Applications</th>
-                                    <th>@Ratio</th>
+                                    <th>@_applications</th>
+                                    <th>@_ratio</th>
                                 </AuthorizeView>
                             </tr>
                         </table>
@@ -35,14 +35,14 @@
                 <div class="desc-field">
                     <h2>Description</h2>
                     <div class="card-body">
-                        <span>@SelectedProject.Description</span>
+                        <span>@_selectedProject.Description</span>
                     </div>
                 </div>
                 <div>
                     <AuthorizeView Roles="Supervisor">
-                        @if (currentUser != null && SelectedProject != null)
+                        @if (_currentUser != null && _selectedProject != null)
                         {
-                            @if (currentUser.Id == SelectedProject.AuthorId)
+                            @if (_currentUser.Id == _selectedProject.AuthorId)
                             {
                                 <button @onclick="Delete">Delete project</button>
                             }
@@ -50,7 +50,7 @@
                         }
                     </AuthorizeView>
                     <AuthorizeView Roles="Student">
-                        @if (Applied)
+                        @if (_applied)
                         {
                             <span>You have already applied for this project!</span>
 
@@ -71,12 +71,12 @@
 @code {
     [Parameter] public int id { get; set; }
 
-    private Project SelectedProject = new();
-    private bool Applied;
-    private int Views = 0;
-    private int Applications = 0;
-    private string? Ratio;
-    private UserDTO? currentUser;
+    private Project _selectedProject = new();
+    private bool _applied;
+    private int _views = 0;
+    private int _applications = 0;
+    private string? _ratio;
+    private UserDTO? _currentUser;
 
     protected override async Task OnInitializedAsync()
     {
@@ -84,54 +84,54 @@
         var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
 
         var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
-        currentUser = user;
+        _currentUser = user;
 
-        SelectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
-
-
+        _selectedProject = await HttpClient.GetFromJsonAsync<Project>($"Project/{id}");
 
 
-        if (!currentUser.IsSupervisor)
+
+
+        if (!_currentUser.IsSupervisor)
         {
             isApplied();
             var studentId = user.Id;
             var response = await HttpClient.PutAsJsonAsync($"Project/PutView/{id}", studentId);
-            Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
+            _views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
 
 
         }
-        else if (currentUser.IsSupervisor)
+        else if (_currentUser.IsSupervisor)
         {
-            Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
-            Applications = await HttpClient.GetFromJsonAsync<int>($"Project/Applications/{id}");
+            _views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
+            _applications = await HttpClient.GetFromJsonAsync<int>($"Project/_applications/{id}");
             SetRatio();
         }
     }
 
     public void SetRatio()
     {
-        if (Applications == 0)
+        if (_applications == 0)
         {
-            Ratio = string.Format("{0}:{1}", Views, Applications);
+            _ratio = string.Format("{0}:{1}", _views, _applications);
             return;
         }
 
-        var greatestCommonDenominator = GCD(Views, Applications);
-        Ratio = string.Format("{0}:{1}", Views / greatestCommonDenominator, Applications / greatestCommonDenominator);
+        var greatestCommonDenominator = GCD(_views, _applications);
+        _ratio = string.Format("{0}:{1}", _views / greatestCommonDenominator, _applications / greatestCommonDenominator);
     }
 
     // Inspired by: https://stackoverflow.com/questions/18541832/c-sharp-find-the-greatest-common-divisor
-    private int GCD(int Views, int Applications)
+    private int GCD(int _views, int _applications)
     {
-        while (Views != 0 && Applications != 0)
+        while (_views != 0 && _applications != 0)
         {
-            if (Views > Applications)
-                Views %= Applications;
+            if (_views > _applications)
+                _views %= _applications;
             else
-                Applications %= Views;
+                _applications %= _views;
         }
 
-        return Views | Applications;
+        return _views | _applications;
     }
 
     private async Task Delete()
@@ -139,9 +139,9 @@
         if (await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the project?"))
         {
             string toastMsg = "You successfully deleted the project";
-            using var httpresponse = await HttpClient.DeleteAsync($"Project/Delete/{SelectedProject.Id}");
-            var x = await HttpClient.DeleteAsync($"Project/DeleteView/{SelectedProject.Id}");
-            var y = await HttpClient.DeleteAsync($"Project/DeleteApplication/{SelectedProject.Id}");
+            using var httpresponse = await HttpClient.DeleteAsync($"Project/Delete/{_selectedProject.Id}");
+            var x = await HttpClient.DeleteAsync($"Project/DeleteView/{_selectedProject.Id}");
+            var y = await HttpClient.DeleteAsync($"Project/DeleteApplication/{_selectedProject.Id}");
             if (!httpresponse.IsSuccessStatusCode)
             {
                 toastMsg = "An error has occured: " + httpresponse.ReasonPhrase;
@@ -161,12 +161,12 @@
 
     public async void ApplyForProject()
     {
-        var response = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}", currentUser.Id);
+        var response = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}", _currentUser.Id);
 
         if (response.IsSuccessStatusCode)
         {
             MyNavigationManager.NavigateTo("myprojects");
-            toastService.ShowSuccess("You successfully applied to project " + SelectedProject.Name);
+            toastService.ShowSuccess("You successfully applied to project " + _selectedProject.Name);
         }
         else
         {
@@ -176,9 +176,9 @@
 
     public async void isApplied()
     {
-        var studentid = currentUser.Id;
+        var studentid = _currentUser.Id;
         var x = await HttpClient.GetFromJsonAsync<bool>($"Project/IsApplied/{id}/{studentid}");
 
-        Applied = x;
+        _applied = x;
     }
 }

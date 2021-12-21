@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using ProjectBank.Server;
 using ProjectBank.Server.Entities;
 using static ProjectBank.Server.Entities.Response;
 using Xunit;
@@ -14,6 +11,7 @@ namespace Server.Tests;
 public class ApplicantRepositoryTests
 {
     private readonly ProjectBankContext _context;
+
     private readonly ApplicantRepository _repo;
 
     public ApplicantRepositoryTests()
@@ -86,6 +84,7 @@ public class ApplicantRepositoryTests
 
         Assert.Equal(Created, application);
     }
+
     [Fact]
     public async Task ApplyToProjectAsync_returns_conflict_if_relation_already_exists()
     {
@@ -93,6 +92,7 @@ public class ApplicantRepositoryTests
 
         Assert.Equal(Conflict, application);
     }
+
     [Fact]
     public async Task HasAlreadyAppliedToProjectAsync_returns_notFound_if_relation_does_not_exists()
     {
@@ -100,6 +100,7 @@ public class ApplicantRepositoryTests
 
         Assert.Equal(NotFound, application);
     }
+
     [Fact]
     public async Task HasAlreadyAppliedToProjectAsync_returns_exists_if_relation_is_found()
     {
@@ -107,6 +108,7 @@ public class ApplicantRepositoryTests
 
         Assert.Equal(Exists, application);
     }
+
     [Fact]
     public async Task ShowListOfAppliedProjectsAsync_returns_list_of_applied_projects()
     {
@@ -114,6 +116,7 @@ public class ApplicantRepositoryTests
 
         Assert.Equal(new List<SimplifiedProjectDTO> { new SimplifiedProjectDTO(1, "Title1"), new SimplifiedProjectDTO(2, "Title2") }, application);
     }
+
     [Fact]
     public async Task SelectNrOfProjectApplicationsAsync_returns_2_if_project_has_two_applications()
     {
@@ -121,6 +124,7 @@ public class ApplicantRepositoryTests
 
         Assert.Equal(2, application);
     }
+
     [Fact]
     public async Task SelectNrOfProjectApplicationsAsync_returns_null_if_no_applications_to_project_exist()
     {
@@ -128,6 +132,7 @@ public class ApplicantRepositoryTests
 
         Assert.Equal(0, application);
     }
+
     [Fact]
     public async Task DeleteApplicationAsync_returns_deleted_if_project_applications_have_been_deleted()
     {
@@ -135,6 +140,7 @@ public class ApplicantRepositoryTests
 
         Assert.Equal(Deleted, application);
     }
+
     [Fact]
     public async Task DeleteApplicationAsync_returns_notFound_if_project_has_no_applications()
     {

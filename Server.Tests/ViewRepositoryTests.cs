@@ -1,10 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using ProjectBank.Server;
 using ProjectBank.Server.Entities;
 using static ProjectBank.Server.Entities.Response;
 using Xunit;
@@ -14,7 +10,9 @@ namespace Server.Tests;
 public class ViewRepositoryTests
 {
     private readonly ProjectBankContext _context;
+
     private readonly ViewRepository _repo;
+    
     public ViewRepositoryTests()
     {
         var connection = new SqliteConnection("Filename=:memory:");
@@ -80,6 +78,7 @@ public class ViewRepositoryTests
 
         Assert.Equal(Created, response);
     }
+    
     [Fact]
     public async Task AddViewAsync_returns_conflict_if_already_exists()
     {
@@ -87,6 +86,7 @@ public class ViewRepositoryTests
 
         Assert.Equal(Conflict, response);
     }
+    
     [Fact]
     public async Task GetViewAsync_returns_2_if_two_relations_with_projectid_exist()
     {
@@ -94,6 +94,7 @@ public class ViewRepositoryTests
 
         Assert.Equal(2, count);
     }
+    
     [Fact]
     public async Task DeleteViewAsync_returns_deleted()
     {
@@ -101,6 +102,7 @@ public class ViewRepositoryTests
 
         Assert.Equal(Deleted, response);
     }
+    
     [Fact]
     public async Task DeleteViewAsync_returns_notFound_if_relations_with_projectid_do_not_exist()
     {

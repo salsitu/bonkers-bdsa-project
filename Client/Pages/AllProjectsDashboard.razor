@@ -2,29 +2,30 @@
 @inject HttpClient HttpClient
 @attribute [Authorize]
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
 <h1>All Projects</h1>
 <p>These are all projects currently available on Project Bank!</p>
 
- @foreach (var project in Projects)
+@foreach (var project in Projects)
 {
     <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card mt-3 mb-3">
-                <div class="card-header">
-                    <h2><a href="project/@project.Id">@project.Name</a></h2>
-                </div>
-                <div class="card-body">
-                    <h3>@project.Description</h3>
-                </div>
+    <div class="col-md-10">
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <h2><a href="project/@project.Id">@project.Name</a></h2>
+            </div>
+            <div class="card-body">
+                <h3>@project.Description</h3>
             </div>
         </div>
     </div>
+</div>
 
 }
 <style>
-    h1, p, h2 {
+    h1,
+    p,
+    h2 {
         text-align: center !important;
     }
 </style>
@@ -32,12 +33,10 @@
 
 
 @code {
-
     private List<Project> Projects = new();
 
     protected override async Task OnInitializedAsync()
     {
-
         Projects = await HttpClient.GetFromJsonAsync<List<Project>>("Project/List");
     }
 }

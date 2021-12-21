@@ -1,15 +1,8 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Identity.Web;
-using System.Data.SqlClient;
-using System.Data;
-using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using ProjectBank.Server.Entities;
-using ProjectBank.Server;
 using Server.Entities;
-using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 

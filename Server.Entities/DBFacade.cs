@@ -1,20 +1,17 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using static ProjectBank.Server.Entities.Response;
-using ProjectBank.Server;
-using Server.Entities;
-
 namespace ProjectBank.Server.Entities
 {
     public class DBFacade : IDBFacade
     {
         private readonly ProjectBankContext _context;
+        
         private readonly IProjectRepository _projectRepo;
+        
         private readonly IApplicantRepository _applicantRepo;
+        
         private readonly IViewRepository _viewRepo;
+        
         private readonly IUserRepository _userRepo;
+        
         public DBFacade(ProjectBankContext context)
         {
             _context = context;
@@ -110,5 +107,4 @@ namespace ProjectBank.Server.Entities
             return _userRepo.GetUserIdWithEmailAsync(email);
         }
     }
-
 }

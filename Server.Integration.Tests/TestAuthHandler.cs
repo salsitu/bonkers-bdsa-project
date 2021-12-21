@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 //Taken from https://github.com/ondfisk/BDSA2021/blob/main/MyApp.Server.Integration.Tests/TestAuthHandler.cs
 
 namespace Server.Integration.Tests;
+
 internal sealed class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
     public TestAuthHandler(

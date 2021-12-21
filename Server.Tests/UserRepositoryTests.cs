@@ -1,10 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using ProjectBank.Server;
 using ProjectBank.Server.Entities;
 using static ProjectBank.Server.Entities.Response;
 using Xunit;
@@ -14,7 +10,9 @@ namespace Server.Tests;
 public class UserRepositoryTests
 {
     private readonly ProjectBankContext _context;
+
     private readonly UserRepository _repo;
+
     public UserRepositoryTests()
     {
         var connection = new SqliteConnection("Filename=:memory:");
@@ -48,6 +46,7 @@ public class UserRepositoryTests
         _context = context;
         _repo = new UserRepository(_context);
     }
+
     [Fact]
     public async Task CreateUserAsync_returns_created_and_new_user()
     {
@@ -57,6 +56,7 @@ public class UserRepositoryTests
 
         Assert.Equal((Created, new UserDTO(3, "Karl", false, "Email@mei.dk")), created);
     }
+
     [Fact]
     public async Task CreateUserAsync_given_existing_User_returns_Conflict_and_user()
     {
@@ -66,6 +66,7 @@ public class UserRepositoryTests
 
         Assert.Equal((Conflict, new UserDTO(2, "jakob", false, "jakob@")), created);
     }
+
     [Fact]
     public async Task GetUserAsync_returns_requested_user()
     {
@@ -73,6 +74,7 @@ public class UserRepositoryTests
 
         Assert.Equal(new UserDTO(2, "jakob", false, "jakob@"), user);
     }
+
     [Fact]
     public async Task GetUserAsync_returns_null_if_user_doesnt_exists()
     {
@@ -80,6 +82,7 @@ public class UserRepositoryTests
 
         Assert.Null(user);
     }
+
     [Fact]
     public async Task GetUserWithEmailAsync_returns_requested_user()
     {
@@ -87,6 +90,7 @@ public class UserRepositoryTests
 
         Assert.Equal(new UserDTO(2, "jakob", false, "jakob@"), user);
     }
+
     [Fact]
     public async Task GetUserWithEmailAsync_returns_null_if_user_doesnt_exists()
     {

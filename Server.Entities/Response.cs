@@ -1,4 +1,3 @@
-
 namespace ProjectBank.Server.Entities
 {
     public enum Response

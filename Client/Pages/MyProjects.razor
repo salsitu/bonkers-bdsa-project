@@ -8,10 +8,10 @@
 <AuthorizeView Roles="Supervisor">
     <h1>My Projects</h1>
 
-    @if (Projects.Count != 0)
+    @if (_projects.Count != 0)
     {
         <p>These are all your projects on Project Bank!</p>
-        @foreach (var project in Projects)
+        @foreach (var project in _projects)
         {
             <div class="row justify-content-center">
                 <div class="col-md-10">
@@ -36,10 +36,10 @@
 <AuthorizeView Roles="Student">
     <h1>Projects you have applied to</h1>
 
-    @if (Projects.Count != 0)
+    @if (_projects.Count != 0)
     {
         <p>These are all the projects you have applied to!</p>
-        @foreach (var project in Projects)
+        @foreach (var project in _projects)
         {
             <div class="row justify-content-center">
                 <div class="col-md-10">
@@ -64,9 +64,9 @@
 {
 
 
-    private List<SimplifiedProjectDTO> Projects = new();
-    private UserDTO currentUser;
-    private Project currentProject = new();
+    private List<SimplifiedProjectDTO> _projects = new();
+    private UserDTO _currentUser;
+    private Project _currentProject = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -74,16 +74,16 @@
         var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
 
         var user = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
-        currentUser = user;
+        _currentUser = user;
 
-        if (currentUser.IsSupervisor)
+        if (_currentUser.IsSupervisor)
         {
-            Projects = await HttpClient.GetFromJsonAsync<List<SimplifiedProjectDTO>>($"Project/Author/{user.Id}");
+            _projects = await HttpClient.GetFromJsonAsync<List<SimplifiedProjectDTO>>($"Project/Author/{user.Id}");
 
         }
         else
         {
-            Projects = await HttpClient.GetFromJsonAsync<List<SimplifiedProjectDTO>>($"Project/Student/{user.Id}");
+            _projects = await HttpClient.GetFromJsonAsync<List<SimplifiedProjectDTO>>($"Project/Student/{user.Id}");
         }
 
 
@@ -93,7 +93,7 @@
 
     private async Task Selected(Project p)
     {
-        currentProject = p;
+        _currentProject = p;
         await Delete();
     }
 
@@ -102,11 +102,9 @@
         if (await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the project?"))
         {
 
-            await HttpClient.DeleteAsync($"Project/Delete/{currentProject.Id}");
+            await HttpClient.DeleteAsync($"Project/Delete/{_currentProject.Id}");
             string success = "You successfully deleted the project";
 
-
-            //MEGET SCUFFED FIX TIL AT DEN IKKE RELOADER SIDEN - HURTIGT GÅ TIL ANDEN SIDE OG DEREFTER TILBAGE
             MyNavigationManager.NavigateTo("allprojects");
             MyNavigationManager.NavigateTo("myprojects");
             toastService.ShowSuccess(success);

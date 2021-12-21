@@ -5,7 +5,7 @@
 @inject IToastService toastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-<h1>Create a project!</h1>
+<h1>Create a Project!</h1>
 <p>Fill in the form and click create!</p>
 
 
@@ -19,26 +19,26 @@
             <div class="card-body">
 
 
-                <EditForm Model="@project">
+                <EditForm Model="@_project">
                     <DataAnnotationsValidator />
 
 
                     <div>
                         <div class="form-group">
                             <label for="name"><Tooltip Text="Max characters is 50">Title</Tooltip></label>
-                            <InputText id="name" @bind-Value="project.Name" class="form-control" />
+                            <InputText id="name" @bind-Value="_project.Name" class="form-control" />
                         </div>
                     </div>
                     <div class="desc-field">
                         <label class="control-label col-md-12"><Tooltip Text="Max characters is 500">Description</Tooltip></label>
                         <div class="col">
-                            <textarea @bind="project.Description" @bind:event="oninput" style="width: 100%; height: 100%">  </textarea>
+                            <textarea @bind="_project.Description" @bind:event="oninput" style="width: 100%; height: 100%">  </textarea>
                         </div>
                     </div>
 
                 </EditForm>
                 <div>
-                    <button @onclick="createProject">Create Project</button>
+                    <button @onclick="CreateProject">Create Project</button>
                 </div>
             </div>
         </div>
@@ -52,11 +52,11 @@
 @code
 {
 
-    private Project project = new();
+    private Project _project = new();
 
-    public async Task createProject()
+    public async Task CreateProject()
     {   
-        if(project.Name == null || project.Description == null)
+        if(_project.Name == null || _project.Description == null)
         {
             toastService.ShowError("Both a title and a description is needed");
             return;
@@ -66,21 +66,21 @@
         var email = authState.User.Claims.First(cl => cl.Type.ToString() == "email").Value;
         Console.WriteLine(email);
         var e = await HttpClient.GetFromJsonAsync<UserDTO>($"Project/Email/{email}");
-        project.AuthorId = e.Id;
+        _project.AuthorId = e.Id;
 
-        var response = await HttpClient.PostAsJsonAsync("Project/Post", project);
+        var response = await HttpClient.PostAsJsonAsync("Project/Post", _project);
 
 
         if (response.IsSuccessStatusCode)
         {
             MyNavigationManager.NavigateTo("myprojects");
-            toastService.ShowSuccess("You successfully created a project");
+            toastService.ShowSuccess("You successfully created a Project");
         }
         else
         {
-            if (project.Name.Length > 50)
+            if (_project.Name.Length > 50)
                 toastService.ShowError("Error, Title too long");
-            else if (project.Description.Length > 500)
+            else if (_project.Description.Length > 500)
             {
                 toastService.ShowError("Error, Description too long");
             }

@@ -6,7 +6,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <AuthorizeView Roles="Supervisor">
-    <h1>My _projects</h1>
+    <h1>My Projects</h1>
 
     @if (_projects.Count != 0)
     {
@@ -34,7 +34,7 @@
 
 </AuthorizeView>
 <AuthorizeView Roles="Student">
-    <h1>_projects you have applied to</h1>
+    <h1>Projects you have applied to</h1>
 
     @if (_projects.Count != 0)
     {

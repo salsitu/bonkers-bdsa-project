@@ -16,10 +16,10 @@
                     <div class="form-group">
                         <table>
                             <tr>
-                                <th>_views</th>
+                                <th>Views</th>
                                 <AuthorizeView Roles="Supervisor">
-                                    <th>_applications</th>
-                                    <th>_ratio</th>
+                                    <th>Applications</th>
+                                    <th>Ratio</th>
                                 </AuthorizeView>
                             </tr>
                             <tr>
@@ -103,7 +103,7 @@
         else if (_currentUser.IsSupervisor)
         {
             _views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
-            _applications = await HttpClient.GetFromJsonAsync<int>($"Project/_applications/{id}");
+            _applications = await HttpClient.GetFromJsonAsync<int>($"Project/applications/{id}");
             SetRatio();
         }
     }

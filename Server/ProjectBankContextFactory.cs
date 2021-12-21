@@ -1,8 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-using ProjectBank.Server.Entities;
 
 namespace ProjectBank.Server.Entities
 {

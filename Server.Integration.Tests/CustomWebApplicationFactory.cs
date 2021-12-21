@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjectBank.Server.Entities;
-using System;
 using System.Linq;
 
 //CreateHost method from https://github.com/ondfisk/BDSA2021/blob/main/MyApp.Server.Integration.Tests/CustomWebApplicationFactory.cs
 
 namespace Server.Integration.Tests;
+
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override IHost CreateHost(IHostBuilder builder)
@@ -137,8 +137,5 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         });
         context.SaveChanges();
     }
-
-
-
 }
 

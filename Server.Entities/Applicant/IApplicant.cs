@@ -1,6 +1,4 @@
-﻿
-
-namespace ProjectBank.Server.Entities
+﻿namespace ProjectBank.Server.Entities
 {
     public interface IApplicant
     {

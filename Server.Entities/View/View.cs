@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ProjectBank.Server.Entities
 {
@@ -7,6 +6,7 @@ namespace ProjectBank.Server.Entities
     {
         [Required]
         public int ProjectId { get; set; }
+
         [Required]
         public int StudentId { get; set; }
     }

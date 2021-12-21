@@ -1,14 +1,17 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectBank.Server;
 
 namespace ProjectBank.Server.Entities
 {
     public class ProjectBankContext : DbContext
     {
         public DbSet<Project> Projects { get; set; }
+
         public DbSet<User> Users { get; set; }
+
         public DbSet<View> Views { get; set; }
+
         public DbSet<Applicant> Applicants { get; set; }
+
         public ProjectBankContext(DbContextOptions<ProjectBankContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

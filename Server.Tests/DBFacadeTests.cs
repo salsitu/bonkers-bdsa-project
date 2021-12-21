@@ -1,20 +1,17 @@
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using ProjectBank.Server;
 using ProjectBank.Server.Entities;
 using static ProjectBank.Server.Entities.Response;
 using Xunit;
-
 
 namespace Server.Tests;
 
 public class DBFacadeTests
 {
     private readonly ProjectBankContext _context;
+
     private readonly DBFacade _repo;
 
     public DBFacadeTests()
@@ -99,7 +96,6 @@ public class DBFacadeTests
     }
 
     [Fact]
-
     public async Task CreateProject_returns_created_and_project_if_unique_name()
     {
         var created = await _repo.CreateProject("AI", "stuff about AI", 1);
@@ -108,6 +104,7 @@ public class DBFacadeTests
 
         Assert.Equal((Created, expected), created);
     }
+
     [Fact]
     public async Task CreateProject_returns_conflict_if_project_name_exists()
     {
@@ -117,6 +114,7 @@ public class DBFacadeTests
 
         Assert.Equal((Conflict, expected), created);
     }
+
     [Fact]
     public async Task SelectProject_returns_requested_project()
     {
@@ -126,6 +124,7 @@ public class DBFacadeTests
 
         Assert.Equal(expectedProject, project);
     }
+
     [Fact]
     public async Task SelectProject_returns_null_if_project_doesnt_exist()
     {
@@ -133,6 +132,7 @@ public class DBFacadeTests
 
         Assert.Null(project);
     }
+
     [Fact]
     public async Task DeleteProject_returns_deleted_if_project_existed()
     {
@@ -152,7 +152,6 @@ public class DBFacadeTests
     }
 
     [Fact]
-
     public async Task ShowAllProjects_returns_list_of_all_existing_projects()
     {
         var projects = await _repo.GetAllProjects();
@@ -165,7 +164,6 @@ public class DBFacadeTests
     [Fact]
     public async Task ShowAllProjects_returns_empty_list_if_no_projects_exist()
     {
-
         await _repo.DeleteProject(1);
         await _repo.DeleteProject(2);
 
@@ -177,7 +175,6 @@ public class DBFacadeTests
     }
 
     [Fact]
-
     public async Task ShowCreatedProjects_returns_the_authors_projects()
     {
         var projects = await _repo.GetCreatedProjects(1);
@@ -198,7 +195,6 @@ public class DBFacadeTests
         Assert.Equal(emptyListOfDTO, projects);
     }
 
-
     [Fact]
     public async Task ApplyToProject_returns_created_if_application_is_new()
     {
@@ -210,9 +206,7 @@ public class DBFacadeTests
 
     }
 
-
     [Fact]
-
     public async Task ApplyToProject_returns_conflict_if_application_already_exists()
     {
         var application = await _repo.ApplyToProject(1, 2);
@@ -221,14 +215,12 @@ public class DBFacadeTests
     }
 
     [Fact]
-
     public async Task HasAlreadyAppliedToProject_returns_Exists_if_application_exists()
     {
         var application = await _repo.HasAlreadyAppliedToProject(1, 2);
 
         Assert.Equal(Exists, application);
     }
-
 
     [Fact]
     public async Task HasAlreadyAppliedToProject_returns_NotFound_if_student_has_not_applied_yet()
@@ -249,7 +241,6 @@ public class DBFacadeTests
     }
 
     [Fact]
-
     public async Task ShowListOfAppliedProjects_returns_empty_list_if_student_has_no_applications()
     {
         var projects = await _repo.GetAppliedProjects(4);
@@ -292,7 +283,6 @@ public class DBFacadeTests
     }
 
     [Fact]
-
     public async Task AddView_returns_created_if_student_had_not_previously_viewed_the_project()
     {
         var response = await _repo.AddView(3, 4);
@@ -309,7 +299,6 @@ public class DBFacadeTests
     }
 
     [Fact]
-
     public async Task GetViewsOfProject_returns_2_if_two_users_have_viewed_the_project()
     {
         var response = await _repo.GetViewsOfProject(1);
@@ -318,7 +307,6 @@ public class DBFacadeTests
     }
 
     [Fact]
-
     public async Task GetViewsOfProjectReturns_0_If_no_users_have_viewed_the_project()
     {
         var project = _repo.CreateProject("temp project", "body", 1);
@@ -328,21 +316,21 @@ public class DBFacadeTests
     }
 
     [Fact]
-
     public async Task DeleteViews_returns_deleted_if_views_of_project_have_been_deleted()
     {
         var response = await _repo.DeleteViews(1);
 
         Assert.Equal(Deleted, response);
     }
-    [Fact]
 
+    [Fact]
     public async Task DeleteViews_returns_NotFound_if_project_has_no_views()
     {
         var response = await _repo.DeleteViews(4);
 
         Assert.Equal(NotFound, response);
     }
+
     [Fact]
     public async Task CreateUser_returns_created_and_new_user_if_no_user_in_database_with_provided_email()
     {
@@ -350,6 +338,7 @@ public class DBFacadeTests
 
         Assert.Equal((Created, new UserDTO(5, "Karl", false, "Email@mei.dk")), created);
     }
+
     [Fact]
     public async Task CreateUser_given_existing_email_returns_Conflict_and_user()
     {
@@ -364,6 +353,7 @@ public class DBFacadeTests
 
         Assert.Equal(new UserDTO(2, "jakob", false, "jakob@"), user);
     }
+
     [Fact]
     public async Task GetUser_returns_null_if_no_user_with_provided_id_exists()
     {
@@ -371,6 +361,7 @@ public class DBFacadeTests
 
         Assert.Null(user);
     }
+
     [Fact]
     public async Task GetUserWithEmail_returns_requested_user()
     {
@@ -378,6 +369,7 @@ public class DBFacadeTests
 
         Assert.Equal(new UserDTO(2, "jakob", false, "jakob@"), user);
     }
+
     [Fact]
     public async Task GetUserWithEmail_returns_null_if_user_doesnt_exists()
     {
@@ -385,11 +377,4 @@ public class DBFacadeTests
 
         Assert.Null(user);
     }
-
-
-
-
-
-
-
 }

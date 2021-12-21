@@ -69,18 +69,14 @@
 
 
 @code {
-
     [Parameter] public int id { get; set; }
-
 
     private Project SelectedProject = new();
     private bool Applied;
     private int Views = 0;
     private int Applications = 0;
-    private string Ratio;
-    private UserDTO currentUser;
-
-
+    private string? Ratio;
+    private UserDTO? currentUser;
 
     protected override async Task OnInitializedAsync()
     {
@@ -96,12 +92,12 @@
 
 
         if (!currentUser.IsSupervisor)
-        {   
+        {
             isApplied();
             var studentId = user.Id;
             var response = await HttpClient.PutAsJsonAsync($"Project/PutView/{id}", studentId);
             Views = await HttpClient.GetFromJsonAsync<int>($"Project/GetViews/{id}");
-            
+
 
         }
         else if (currentUser.IsSupervisor)
@@ -119,12 +115,12 @@
             Ratio = string.Format("{0}:{1}", Views, Applications);
             return;
         }
+
         var greatestCommonDenominator = GCD(Views, Applications);
         Ratio = string.Format("{0}:{1}", Views / greatestCommonDenominator, Applications / greatestCommonDenominator);
-
     }
-    //https://stackoverflow.com/questions/18541832/c-sharp-find-the-greatest-common-divisor
-    //Finding the Greatest Common Denominator by using the Euclidean Algorithm
+
+    // Inspired by: https://stackoverflow.com/questions/18541832/c-sharp-find-the-greatest-common-divisor
     private int GCD(int Views, int Applications)
     {
         while (Views != 0 && Applications != 0)
@@ -136,7 +132,6 @@
         }
 
         return Views | Applications;
-
     }
 
     private async Task Delete()
@@ -166,8 +161,6 @@
 
     public async void ApplyForProject()
     {
-
-
         var response = await HttpClient.PutAsJsonAsync($"Project/Apply/{id}", currentUser.Id);
 
         if (response.IsSuccessStatusCode)
@@ -179,7 +172,6 @@
         {
             toastService.ShowError("Error");
         }
-
     }
 
     public async void isApplied()
@@ -189,5 +181,4 @@
 
         Applied = x;
     }
-
 }

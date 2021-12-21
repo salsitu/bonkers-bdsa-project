@@ -1,10 +1,7 @@
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using ProjectBank.Server;
 using ProjectBank.Server.Entities;
 using static ProjectBank.Server.Entities.Response;
 using Xunit;
@@ -14,6 +11,7 @@ namespace Server.Tests;
 public class ProjectRepositoryTests
 {
     private readonly ProjectBankContext _context;
+
     private readonly ProjectRepository _repo;
 
     public ProjectRepositoryTests()
@@ -66,6 +64,7 @@ public class ProjectRepositoryTests
 
         Assert.Equal((Created, new ProjectDTO(3, "AI", "stuff about AI", 1)), created);
     }
+
     [Fact]
     public async Task CreateAsync_given_existing_Project_returns_Conflict_with_Project()
     {
@@ -75,6 +74,7 @@ public class ProjectRepositoryTests
 
         Assert.Equal((Conflict, new ProjectDTO(2, "Title2", "Desc2", 2)), created);
     }
+
     [Fact]
     public async Task ReadAsync_given_non_existing_id_returns_null()
     {
@@ -82,6 +82,7 @@ public class ProjectRepositoryTests
 
         Assert.Null(project);
     }
+
     [Fact]
     public async Task ReadAsync_given_existing_id_returns_project()
     {
@@ -89,6 +90,7 @@ public class ProjectRepositoryTests
 
         Assert.Equal(new ProjectDTO(2, "Title2", "Desc2", 2), project);
     }
+
     [Fact]
     public async Task DeleteAsync_given_non_existing_id_returns_notFound()
     {
@@ -96,6 +98,7 @@ public class ProjectRepositoryTests
 
         Assert.Equal(NotFound, response);
     }
+
     [Fact]
     public async Task DeleteAsync_Deletes_existing_project_and_returns_Deleted()
     {
@@ -103,6 +106,7 @@ public class ProjectRepositoryTests
 
         Assert.Equal(Deleted, response);
     }
+
     [Fact]
     public async Task ListAllProjectsAsync_returns_all_existing_projects()
     {
@@ -111,6 +115,7 @@ public class ProjectRepositoryTests
 
         Assert.Equal(new List<SimplifiedProjectDTO> { new SimplifiedProjectDTO(1, "Title1"), new SimplifiedProjectDTO(2, "Title2") }, projectList);
     }
+
     [Fact]
     public async Task ListAllProjectsAsync_with_no_projects_returns_empty_list()
     {
@@ -120,6 +125,7 @@ public class ProjectRepositoryTests
         var emptyList = new List<SimplifiedProjectDTO>();
         Assert.Equal(emptyList, projectList);
     }
+
     [Fact]
     public async Task ShowCreatedProjectsAsync_returns_authors_projects()
     {
@@ -127,5 +133,4 @@ public class ProjectRepositoryTests
 
         Assert.Equal(new List<SimplifiedProjectDTO> { new SimplifiedProjectDTO(1, "Title1") }, createdProjects);
     }
-
 }

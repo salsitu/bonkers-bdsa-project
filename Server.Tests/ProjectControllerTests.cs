@@ -2,11 +2,9 @@
 using Xunit;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Microsoft.Extensions.Logging;
 using static ProjectBank.Server.Entities.Response;
 using ProjectBank.Server.Controllers;
 using ProjectBank.Server.Entities;
-using Server.Entities;
 using System.Collections.Generic;
 
 namespace Server.Tests;
@@ -68,6 +66,7 @@ public class ProjectControllerTests
 
         Assert.Equal(expected, actual);
     }
+
     [Fact]
     public async void GetByEmail_Returns_User_When_Given_Email()
     {
@@ -110,6 +109,7 @@ public class ProjectControllerTests
 
         Assert.Equal(expected, actual);
     }
+
     [Fact]
     public async void ShowListOfAppliedProjects_Returns_Empty_List_Of_Projects_When_Given_UserID_With_No_Applications()
     {
@@ -124,6 +124,7 @@ public class ProjectControllerTests
 
         Assert.Equal(expected, actual);
     }
+
     [Fact]
     public async void Get_Returns_Empty_Array_When_No_Projects_Exist()
     {
@@ -155,6 +156,7 @@ public class ProjectControllerTests
 
         Assert.Equal(expected, actual);
     }
+
     [Fact]
     public async void GetViews_Returns_View_Of_Project()
     {
@@ -167,6 +169,7 @@ public class ProjectControllerTests
 
         Assert.Equal(expected, actual);
     }
+
     [Fact]
     public async void GetViews_Returns_0_As_Default()
     {

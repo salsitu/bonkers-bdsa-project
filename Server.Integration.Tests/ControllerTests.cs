@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using ProjectBank.Server.Entities;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -256,8 +254,4 @@ public class ControllerTests : IClassFixture<CustomWebApplicationFactory>
 
         Assert.False(alreadyApplied);
     }
-
-
-
-
 }

@@ -56,7 +56,7 @@
 
     public async Task CreateProject()
     {   
-        if(_project.Name == null || _project.Description == null)
+        if((_project.Name == null || _project.Description == null) || (_project.Name.Trim().Length<1 || _project.Description.Length<1))
         {
             toastService.ShowError("Both a title and a description is needed");
             return;

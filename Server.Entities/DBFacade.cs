@@ -80,7 +80,6 @@ namespace ProjectBank.Server.Entities
 
         public Task<int> GetViewsOfProject(int projectId)
         {
-            Console.WriteLine("Facade =" + projectId);
             return _viewRepo.GetViewsOfProjectAsync(projectId);
         }
 

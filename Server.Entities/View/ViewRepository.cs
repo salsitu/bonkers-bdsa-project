@@ -38,8 +38,6 @@ namespace ProjectBank.Server.Entities
             var views = (from v in _context.Views
                          where v.ProjectId == projectId
                          select v).Count();
-            Console.WriteLine(projectId);
-            Console.WriteLine(views);
             return views;
         }
         public async Task<Response> DeleteViewAsync(int projectId)

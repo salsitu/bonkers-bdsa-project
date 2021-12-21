@@ -74,7 +74,7 @@
         if (response.IsSuccessStatusCode)
         {
             MyNavigationManager.NavigateTo("myprojects");
-            toastService.ShowSuccess("You successfully created a _project");
+            toastService.ShowSuccess("You successfully created a Project");
         }
         else
         {
@@ -86,7 +86,7 @@
             }
             else
             {
-                toastService.ShowError("Error, Another _project already has that title");
+                toastService.ShowError("Error, Another project already has that title");
             }
         }
 

@@ -40,7 +40,10 @@ $ ./run.sh
 Note: This also works in Windows Subsystem for Linux (WSL).
 
 ## Start client session
-Open you preferred web browser and navigate to the following URL:
+Open your preferred web browser and navigate to the following URL:
 ```text
 https://localhost:5001
 ```
+
+## Please note! 
+If you experience an error running the script, it may be because the program attempts to connect to the database before the docker container has finished initialising. If so, please try increasing the delay in the script and try again. (It can be found on line 16 in the powershell script, and on line 15 in the bash script.)
